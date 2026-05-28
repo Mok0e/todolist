@@ -412,18 +412,18 @@ gantt
 
 #### 작업 목록
 
-- [ ] **테마 변경** `PATCH /users/me/settings`
-  - [ ] `{ theme: 'LIGHT' | 'DARK' }` 입력 검증
-  - [ ] `users.theme` 업데이트
-- [ ] **언어 변경** — 동일 엔드포인트에 `{ language: 'ko' | 'en' }` 포함
-  - [ ] `users.language` 업데이트
-- [ ] (선택) `GET /users/me`에 `theme`, `language` 포함 여부 확인 (이미 포함되어 있으면 별도 엔드포인트 불필요)
+- [x] **테마 변경** `PATCH /users/me/settings`
+  - [x] `{ theme: 'LIGHT' | 'DARK' }` 입력 검증
+  - [x] `users.theme` 업데이트
+- [x] **언어 변경** — 동일 엔드포인트에 `{ language: 'ko' | 'en' }` 포함
+  - [x] `users.language` 업데이트
+- [x] (선택) `GET /users/me`에 `theme`, `language` 포함 여부 확인 (이미 포함되어 있으면 별도 엔드포인트 불필요)
 
 #### 완료 조건
 
-- [ ] `PATCH /users/me/settings { theme: 'DARK' }` → DB 반영 확인
-- [ ] `PATCH /users/me/settings { language: 'en' }` → DB 반영 확인
-- [ ] 허용되지 않은 값 입력 → `400` 응답
+- [x] `PATCH /users/me/settings { theme: 'DARK' }` → DB 반영 확인
+- [x] `PATCH /users/me/settings { language: 'en' }` → DB 반영 확인
+- [x] 허용되지 않은 값 입력 → `400` 응답
 
 ---
 

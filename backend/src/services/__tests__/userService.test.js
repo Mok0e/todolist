@@ -125,6 +125,53 @@ describe('userService.updateMe', () => {
   });
 });
 
+// ─── updateSettings ───────────────────────────────────────────────────────────
+
+describe('userService.updateSettings', () => {
+  test('theme만 변경 → { theme, language } 반환', async () => {
+    userRepository.updateSettings.mockResolvedValue({ theme: 'DARK', language: 'ko' });
+
+    const result = await userService.updateSettings('user-1', { theme: 'DARK' });
+
+    expect(result).toEqual({ theme: 'DARK', language: 'ko' });
+    expect(userRepository.updateSettings).toHaveBeenCalledWith('user-1', { theme: 'DARK', language: undefined });
+  });
+
+  test('language만 변경 → { theme, language } 반환', async () => {
+    userRepository.updateSettings.mockResolvedValue({ theme: 'LIGHT', language: 'en' });
+
+    const result = await userService.updateSettings('user-1', { language: 'en' });
+
+    expect(result).toEqual({ theme: 'LIGHT', language: 'en' });
+  });
+
+  test('theme + language 동시 변경 → 성공', async () => {
+    userRepository.updateSettings.mockResolvedValue({ theme: 'DARK', language: 'en' });
+
+    const result = await userService.updateSettings('user-1', { theme: 'DARK', language: 'en' });
+
+    expect(result).toEqual({ theme: 'DARK', language: 'en' });
+  });
+
+  test('theme/language 둘 다 없으면 → 400 VALIDATION_ERROR', async () => {
+    await expect(
+      userService.updateSettings('user-1', {})
+    ).rejects.toMatchObject({ statusCode: 400, code: 'VALIDATION_ERROR' });
+  });
+
+  test('허용되지 않은 theme 값 → 400 VALIDATION_ERROR', async () => {
+    await expect(
+      userService.updateSettings('user-1', { theme: 'BLUE' })
+    ).rejects.toMatchObject({ statusCode: 400, code: 'VALIDATION_ERROR' });
+  });
+
+  test('허용되지 않은 language 값 → 400 VALIDATION_ERROR', async () => {
+    await expect(
+      userService.updateSettings('user-1', { language: 'jp' })
+    ).rejects.toMatchObject({ statusCode: 400, code: 'VALIDATION_ERROR' });
+  });
+});
+
 // ─── deleteMe ─────────────────────────────────────────────────────────────────
 
 describe('userService.deleteMe', () => {

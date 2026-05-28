@@ -20,6 +20,16 @@ async function updateMe(req, res, next) {
   }
 }
 
+async function updateSettings(req, res, next) {
+  try {
+    const { theme, language } = req.body;
+    const data = await userService.updateSettings(req.userId, { theme, language });
+    res.status(200).json({ data });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function deleteMe(req, res, next) {
   try {
     const data = await userService.deleteMe(req.userId);
@@ -29,4 +39,4 @@ async function deleteMe(req, res, next) {
   }
 }
 
-module.exports = { getMe, updateMe, deleteMe };
+module.exports = { getMe, updateMe, updateSettings, deleteMe };

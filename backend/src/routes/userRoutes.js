@@ -10,6 +10,7 @@ const router = express.Router();
 router.use(auth);
 
 router.get('/me', userController.getMe);
+router.patch('/me/settings', userController.updateSettings);
 router.patch('/me', userController.updateMe);
 router.delete('/me', userController.deleteMe);
 

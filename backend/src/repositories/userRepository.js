@@ -48,8 +48,30 @@ async function update(id, { name, passwordHash }) {
   return result.rows[0];
 }
 
+async function updateSettings(id, { theme, language }) {
+  const fields = [];
+  const values = [];
+  let idx = 1;
+
+  if (theme !== undefined) {
+    fields.push(`theme = $${idx++}`);
+    values.push(theme);
+  }
+  if (language !== undefined) {
+    fields.push(`language = $${idx++}`);
+    values.push(language);
+  }
+
+  values.push(id);
+  const result = await pool.query(
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${idx} RETURNING theme, language`,
+    values
+  );
+  return result.rows[0];
+}
+
 async function deleteById(id) {
   await pool.query('DELETE FROM users WHERE id = $1', [id]);
 }
 
-module.exports = { findByEmail, findById, create, update, deleteById };
+module.exports = { findByEmail, findById, create, update, updateSettings, deleteById };

@@ -87,6 +87,38 @@ describe('PATCH /users/me', () => {
   });
 });
 
+// ─── PATCH /users/me/settings ─────────────────────────────────────────────────
+
+describe('PATCH /users/me/settings', () => {
+  test('theme 변경 → 200 { data: { theme, language } }', async () => {
+    userService.updateSettings.mockResolvedValue({ theme: 'DARK', language: 'ko' });
+
+    const res = await request(app)
+      .patch('/users/me/settings')
+      .set('Authorization', 'Bearer fake-valid-token')
+      .send({ theme: 'DARK' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ data: { theme: 'DARK', language: 'ko' } });
+    expect(userService.updateSettings).toHaveBeenCalledWith('test-user-id', { theme: 'DARK', language: undefined });
+  });
+
+  test('허용되지 않은 값 → 400 VALIDATION_ERROR', async () => {
+    const err = new Error('허용되지 않은 theme 값입니다.');
+    err.statusCode = 400;
+    err.code = 'VALIDATION_ERROR';
+    userService.updateSettings.mockRejectedValue(err);
+
+    const res = await request(app)
+      .patch('/users/me/settings')
+      .set('Authorization', 'Bearer fake-valid-token')
+      .send({ theme: 'BLUE' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('VALIDATION_ERROR');
+  });
+});
+
 // ─── DELETE /users/me ─────────────────────────────────────────────────────────
 
 describe('DELETE /users/me', () => {
