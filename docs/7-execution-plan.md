@@ -152,17 +152,17 @@ gantt
 
 #### 작업 목록
 
-- [ ] PostgreSQL 17 로컬 인스턴스 실행 확인
-- [ ] `todolist` 데이터베이스 생성
-- [ ] `.env` 파일 생성 (`DATABASE_URL`, `JWT_SECRET`, `PORT=3000`, `NODE_ENV=development`, `BCRYPT_SALT_ROUNDS=10`, `CORS_ORIGIN=http://localhost:5173`)
-- [ ] `.env.example` 파일 작성 (실제 값 제외)
-- [ ] `.gitignore`에 `.env` 추가 확인
+- [x] PostgreSQL 17 로컬 인스턴스 실행 확인
+- [x] `todolist` 데이터베이스 생성
+- [x] `.env` 파일 생성 (`DATABASE_URL`, `JWT_SECRET`, `PORT=3000`, `NODE_ENV=development`, `BCRYPT_SALT_ROUNDS=10`, `CORS_ORIGIN=http://localhost:5173`)
+- [x] `.env.example` 파일 작성 (실제 값 제외)
+- [x] `.gitignore`에 `.env` 추가 확인
 
 #### 완료 조건
 
-- [ ] `psql -d todolist` 접속 성공
-- [ ] `.env` 파일이 git에 포함되지 않음
-- [ ] `DATABASE_URL` 연결 문자열로 pg 라이브러리 연결 테스트 통과
+- [x] `psql -d todolist` 접속 성공
+- [x] `.env` 파일이 git에 포함되지 않음
+- [x] `DATABASE_URL` 연결 문자열로 pg 라이브러리 연결 테스트 통과
 
 ---
 
@@ -173,17 +173,17 @@ gantt
 
 #### 작업 목록
 
-- [ ] `database/schema.sql` 검토 (users, categories, todos 테이블)
-- [ ] `psql -d todolist -f database/schema.sql` 실행
-- [ ] `migrations/001_init.sql` 파일로 복사 (마이그레이션 이력 관리)
-- [ ] `scripts/migrate.js` Node.js 실행 스크립트 작성 (Windows 호환)
+- [x] `database/schema.sql` 검토 (users, categories, todos 테이블)
+- [x] `psql -d todolist -f database/schema.sql` 실행
+- [x] `migrations/001_init.sql` 파일로 복사 (마이그레이션 이력 관리)
+- [x] `scripts/migrate.js` Node.js 실행 스크립트 작성 (Windows 호환)
 
 #### 완료 조건
 
-- [ ] 3개 테이블 (`users`, `categories`, `todos`) 생성 확인
-- [ ] 7개 인덱스 생성 확인 (`uk_categories_user_name` LOWER 함수 인덱스 포함)
-- [ ] 3개 `updated_at` 트리거 동작 확인 (UPDATE 후 `updated_at` 변경 검증)
-- [ ] CHECK 제약 조건 동작 확인 (`status`, `theme`, `language`, `dates`)
+- [x] 3개 테이블 (`users`, `categories`, `todos`) 생성 확인
+- [x] 7개 인덱스 생성 확인 (`uk_categories_user_name` LOWER 함수 인덱스 포함)
+- [x] 3개 `updated_at` 트리거 동작 확인 (UPDATE 후 `updated_at` 변경 검증)
+- [x] CHECK 제약 조건 동작 확인 (`status`, `theme`, `language`, `dates`)
 
 ---
 
@@ -194,24 +194,24 @@ gantt
 
 #### 작업 목록
 
-- [ ] `backend/src/utils/statusCalculator.js` 파일 생성
-- [ ] `calculateStatus(todo, now)` 함수 구현 — `now`를 인자로 받아 테스트 가능하게 작성
-- [ ] 4가지 상태 계산 로직 구현:
+- [x] `backend/src/utils/statusCalculator.js` 파일 생성
+- [x] `calculateStatus(todo, now)` 함수 구현 — `now`를 인자로 받아 테스트 가능하게 작성
+- [x] 4가지 상태 계산 로직 구현:
   - `DONE`: `status === 'DONE'`
   - `IN_PROGRESS`: `startDate <= today <= endDate`
   - `OVERDUE`: `today > endDate && status !== 'DONE'`
   - `NOT_STARTED`: 그 외 (날짜 없음 포함)
-- [ ] 날짜 엣지 케이스 처리:
-  - [ ] 날짜 없음 → `NOT_STARTED`
-  - [ ] 시작일만 있음 → IN_PROGRESS/NOT_STARTED (OVERDUE 없음)
-  - [ ] 종료일만 있음 → OVERDUE/NOT_STARTED (IN_PROGRESS 없음)
-  - [ ] 시작일=종료일 → 당일 IN_PROGRESS, 익일 OVERDUE
+- [x] 날짜 엣지 케이스 처리:
+  - [x] 날짜 없음 → `NOT_STARTED`
+  - [x] 시작일만 있음 → IN_PROGRESS/NOT_STARTED (OVERDUE 없음)
+  - [x] 종료일만 있음 → OVERDUE/NOT_STARTED (IN_PROGRESS 없음)
+  - [x] 시작일=종료일 → 당일 IN_PROGRESS, 익일 OVERDUE
 
 #### 완료 조건
 
-- [ ] 모든 날짜 조합 단위 테스트 통과 (최소 8개 케이스)
-- [ ] `now` 인자 주입으로 특정 날짜 기준 테스트 가능
-- [ ] `DONE` 상태는 날짜 무관하게 항상 `DONE` 반환
+- [x] 모든 날짜 조합 단위 테스트 통과 (최소 8개 케이스)
+- [x] `now` 인자 주입으로 특정 날짜 기준 테스트 가능
+- [x] `DONE` 상태는 날짜 무관하게 항상 `DONE` 반환
 
 ---
 
