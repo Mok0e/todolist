@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const REQUIRED = ['DATABASE_URL', 'JWT_SECRET', 'PORT', 'NODE_ENV', 'BCRYPT_SALT_ROUNDS', 'CORS_ORIGIN'];
 
