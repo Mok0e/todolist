@@ -8,9 +8,9 @@
 
 ## 변경 이력
 
-| 버전 | 날짜       | 변경 내용     | 작성자 |
-| ---- | ---------- | ------------- | ------ |
-| 1.0  | 2026-05-28 | 최초 작성     | -      |
+| 버전 | 날짜       | 변경 내용 | 작성자 |
+| ---- | ---------- | --------- | ------ |
+| 1.0  | 2026-05-28 | 최초 작성 | -      |
 
 ---
 
@@ -25,25 +25,25 @@
 
 ## 전체 Task 목록
 
-| Task ID | 영역 | 이름 | 의존성 |
-|---------|------|------|--------|
-| DB-01 | Database | 개발 환경 초기화 | 없음 |
-| DB-02 | Database | 스키마 마이그레이션 적용 | DB-01 |
-| DB-03 | Database | statusCalculator.js 구현 | DB-02 |
-| BE-01 | Backend | 프로젝트 초기화 | 없음 |
-| BE-02 | Backend | DB 연결 설정 | DB-01, BE-01 |
-| BE-03 | Backend | 공통 미들웨어 구현 | BE-01 |
-| BE-04 | Backend | 인증 API 구현 | DB-02, BE-02, BE-03 |
-| BE-05 | Backend | 카테고리 API 구현 | BE-04 |
-| BE-06 | Backend | 할 일 API 구현 | DB-03, BE-04, BE-05 |
-| BE-07 | Backend | 설정 API 구현 | BE-04 |
-| FE-01 | Frontend | 프로젝트 초기화 | 없음 |
-| FE-02 | Frontend | 공통 인프라 구성 | FE-01 |
-| FE-03 | Frontend | API Client 레이어 구현 | FE-02 |
-| FE-04 | Frontend | 인증 기능 구현 | FE-03, BE-04 |
-| FE-05 | Frontend | 할 일 기능 구현 | FE-04, BE-06 |
-| FE-06 | Frontend | 카테고리 기능 구현 | FE-04, BE-05 |
-| FE-07 | Frontend | 설정 기능 구현 | FE-04, BE-07 |
+| Task ID | 영역     | 이름                     | 의존성              |
+| ------- | -------- | ------------------------ | ------------------- |
+| DB-01   | Database | 개발 환경 초기화         | 없음                |
+| DB-02   | Database | 스키마 마이그레이션 적용 | DB-01               |
+| DB-03   | Database | statusCalculator.js 구현 | DB-02               |
+| BE-01   | Backend  | 프로젝트 초기화          | 없음                |
+| BE-02   | Backend  | DB 연결 설정             | DB-01, BE-01        |
+| BE-03   | Backend  | 공통 미들웨어 구현       | BE-01               |
+| BE-04   | Backend  | 인증 API 구현            | DB-02, BE-02, BE-03 |
+| BE-05   | Backend  | 카테고리 API 구현        | BE-04               |
+| BE-06   | Backend  | 할 일 API 구현           | DB-03, BE-04, BE-05 |
+| BE-07   | Backend  | 설정 API 구현            | BE-04               |
+| FE-01   | Frontend | 프로젝트 초기화          | 없음                |
+| FE-02   | Frontend | 공통 인프라 구성         | FE-01               |
+| FE-03   | Frontend | API Client 레이어 구현   | FE-02               |
+| FE-04   | Frontend | 인증 기능 구현           | FE-03, BE-04        |
+| FE-05   | Frontend | 할 일 기능 구현          | FE-04, BE-06        |
+| FE-06   | Frontend | 카테고리 기능 구현       | FE-04, BE-05        |
+| FE-07   | Frontend | 설정 기능 구현           | FE-04, BE-07        |
 
 ---
 
