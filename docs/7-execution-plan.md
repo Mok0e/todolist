@@ -258,16 +258,16 @@ gantt
 
 #### 작업 목록
 
-- [ ] `backend/src/config/db.js` 작성 — pg Pool 설정
-- [ ] `DATABASE_URL` 환경변수 기반 연결 (`.env` 로드)
-- [ ] `backend/src/config/env.js` 작성 — 필수 환경변수 검증 (없으면 서버 시작 실패)
-- [ ] DB 연결 실패 시 서버 시작 거부 처리
+- [x] `backend/src/config/db.js` 작성 — pg Pool 설정
+- [x] `DATABASE_URL` 환경변수 기반 연결 (`.env` 로드)
+- [x] `backend/src/config/env.js` 작성 — 필수 환경변수 검증 (없으면 서버 시작 실패)
+- [x] DB 연결 실패 시 서버 시작 거부 처리
 
 #### 완료 조건
 
-- [ ] `db.query('SELECT 1')` 성공
-- [ ] `DATABASE_URL` 누락 시 서버 시작 시 명확한 오류 메시지 출력 후 종료
-- [ ] Pool 객체가 `config/db.js`에서만 export되어 다른 파일에서 import 가능
+- [x] `db.query('SELECT 1')` 성공
+- [x] `DATABASE_URL` 누락 시 서버 시작 시 명확한 오류 메시지 출력 후 종료
+- [x] Pool 객체가 `config/db.js`에서만 export되어 다른 파일에서 import 가능
 
 ---
 
