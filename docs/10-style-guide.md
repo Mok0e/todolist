@@ -1,6 +1,6 @@
 # TodoList 프론트엔드 스타일 가이드
 
-**버전**: 1.0  
+**버전**: 1.1  
 **작성일**: 2026-05-28  
 **디자인 레퍼런스**: Apple Human Interface Guidelines, Apple.com 디자인 언어  
 **참조 문서**: docs/8-wireframes.md (v1.3), docs/2-PRD.md (v2.2)
@@ -978,32 +978,48 @@ import { Plus, Search, Settings, Calendar, Tag, Check, Trash2, Pencil } from 'lu
 
 ---
 
-## 9. Tailwind CSS 설정
+## 9. CSS 변수 사용 가이드
 
-프로젝트는 Tailwind CSS v4를 사용하며, CSS 변수와 연동하여 사용한다.
+프로젝트는 Tailwind CSS를 사용하지 않으며, **순수 CSS 변수 기반**으로 스타일을 적용한다. 모든 디자인 토큰은 `src/index.css`의 `:root`에 정의되어 있다.
 
-```css
-/* tailwind.config 대신 CSS @theme 사용 (Tailwind v4) */
-@theme {
-  --color-bg-primary:   var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-text-primary: var(--text-primary);
-  --color-blue:         var(--color-blue);
-  --color-green:        var(--color-green);
-  --color-red:          var(--color-red);
-  --color-orange:       var(--color-orange);
-  --color-gray:         var(--color-gray);
+### 사용 방법
 
-  --radius-sm:   var(--radius-sm);
-  --radius-md:   var(--radius-md);
-  --radius-lg:   var(--radius-lg);
-  --radius-xl:   var(--radius-xl);
-  --radius-full: var(--radius-full);
+인라인 스타일 또는 CSS 모듈에서 `var(--token-name)` 형식으로 참조한다.
 
-  --font-sans: var(--font-text);
-  --font-mono: var(--font-mono);
+```tsx
+// 컴포넌트 인라인 스타일
+<div style={{ color: 'var(--text-primary)', background: 'var(--bg-secondary)' }} />
+
+// CSS 모듈 (.module.css)
+.card {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-md);
 }
+
+// 상태 배지 — 상태별 색상 토큰
+.badge-done       { color: var(--color-green); }
+.badge-progress   { color: var(--color-blue);  }
+.badge-overdue    { color: var(--color-red);   }
+.badge-notstarted { color: var(--color-gray);  }
 ```
+
+### 주요 토큰 참조 빠른 표
+
+| 용도 | 토큰 |
+|------|------|
+| 본문 텍스트 | `var(--text-primary)` |
+| 보조 텍스트 | `var(--text-secondary)` |
+| 페이지 배경 | `var(--bg-primary)` |
+| 카드/섹션 배경 | `var(--bg-secondary)` |
+| 액션 버튼 | `var(--color-blue)` |
+| 완료 상태 | `var(--color-green)` |
+| 위험/삭제 | `var(--color-red)` |
+| 카드 모서리 | `var(--radius-md)` / `var(--radius-lg)` |
+| Pill 버튼 | `var(--radius-full)` |
+| 카드 그림자 | `var(--shadow-md)` |
+| 기본 간격 | `var(--spacing-md)` (16px) |
 
 ---
 

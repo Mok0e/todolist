@@ -1,0 +1,95 @@
+{
+  "auth": {
+    "login": "Sign In",
+    "register": "Sign Up",
+    "logout": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "errors": {
+      "invalidCredentials": "Email or password is incorrect",
+      "emailDuplicate": "This email is already in use",
+      "passwordWeak": "Password must be 8–128 characters and include at least one letter and one number",
+      "nameTooLong": "Name must be 1–50 characters"
+    }
+  },
+  "todos": {
+    "title": "Todos",
+    "add": "Add Todo",
+    "edit": "Edit",
+    "delete": "Delete",
+    "complete": "Complete",
+    "incomplete": "Undo Complete",
+    "empty": "No todos yet",
+    "filters": {
+      "all": "All",
+      "notStarted": "Not Started",
+      "inProgress": "In Progress",
+      "overdue": "Overdue",
+      "done": "Done"
+    },
+    "form": {
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "categoryLabel": "Category",
+      "startDateLabel": "Start Date",
+      "endDateLabel": "End Date",
+      "titleRequired": "Title is required",
+      "titleTooLong": "Title must be 100 characters or less",
+      "descriptionTooLong": "Description must be 1000 characters or less",
+      "endDateBeforeStart": "End date must be after start date"
+    }
+  },
+  "categories": {
+    "title": "Categories",
+    "add": "Add Category",
+    "edit": "Edit",
+    "delete": "Delete",
+    "default": "Default",
+    "deleteConfirm": "Deleting this category will move its todos to the default category",
+    "errors": {
+      "nameDuplicate": "A category with this name already exists",
+      "nameTooLong": "Category name must be 30 characters or less",
+      "defaultImmutable": "The default category cannot be modified or deleted"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "themeLight": "Light Mode",
+    "themeDark": "Dark Mode",
+    "langKo": "한국어",
+    "langEn": "English"
+  },
+  "profile": {
+    "title": "Profile",
+    "editName": "Change Name",
+    "editPassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "deleteAccount": "Delete Account",
+    "deleteConfirm": "Are you sure you want to delete your account? All data will be permanently deleted",
+    "save": "Save"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "today": "Today",
+    "noTodos": "No todos for this date"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "retry": "Retry"
+  }
+}

@@ -8,19 +8,91 @@
 
 ## 목차
 
-1. [API 개요](#1-api-개요)
-2. [인증 흐름](#2-인증-흐름)
-3. [공통 응답 형식](#3-공통-응답-형식)
-4. [에러 코드 목록](#4-에러-코드-목록)
-5. [엔드포인트 상세](#5-엔드포인트-상세)
-6. [할 일 상태 계산 규칙](#6-할-일-상태-계산-규칙)
-7. [프론트엔드 구현 패턴](#7-프론트엔드-구현-패턴)
-8. [화면별 연동 가이드](#8-화면별-연동-가이드)
-9. [TypeScript 타입 정의](#9-typescript-타입-정의)
+1. [기술 스택](#1-기술-스택)
+2. [API 개요](#2-api-개요)
+3. [인증 흐름](#3-인증-흐름)
+4. [공통 응답 형식](#4-공통-응답-형식)
+5. [에러 코드 목록](#5-에러-코드-목록)
+6. [엔드포인트 상세](#6-엔드포인트-상세)
+7. [할 일 상태 계산 규칙](#7-할-일-상태-계산-규칙)
+8. [프론트엔드 구현 패턴](#8-프론트엔드-구현-패턴)
+9. [화면별 연동 가이드](#9-화면별-연동-가이드)
+10. [TypeScript 타입 정의](#10-typescript-타입-정의)
 
 ---
 
-## 1. API 개요
+## 1. 기술 스택
+
+### 핵심 프레임워크
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| UI 프레임워크 | React | 19 | Concurrent 기능, Server Components 대비 |
+| 언어 | TypeScript | 5 | strict mode + `noUncheckedIndexedAccess` |
+| 빌드 도구 | Vite | 5 | 빠른 HMR, ESM 네이티브 |
+
+### 상태 관리
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| 클라이언트 상태 | Zustand | 5 | 경량, boilerplate 최소, persist 미들웨어 내장 |
+| 서버 상태 / 캐싱 | TanStack Query | 5 | 자동 캐시, 낙관적 업데이트, 401 retry 제어 |
+
+### 라우팅 & HTTP
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| 라우팅 | React Router DOM | 7 | Nested route, lazy loading, PrivateRoute 패턴 |
+| HTTP 클라이언트 | **axios** | 1 | 인터셉터(401 자동처리), 요청/응답 변환, 타입 안전성 |
+
+### 국제화 & 스타일
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| i18n | i18next + react-i18next | 26 / 17 | 브라우저 언어 감지, namespace 분리, TypeScript 지원 |
+| 스타일 | CSS Variables (Apple Design Tokens) | — | 런타임 테마 전환, 번들 추가 없음 |
+| 아이콘 | Lucide React | latest | 일관된 선형 아이콘, tree-shakeable |
+
+### 폼 & 유효성 검사
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| 폼 관리 | React Hook Form | 7 | 비제어 컴포넌트, 성능 최적화, 유효성 검사 통합 |
+| 스키마 검증 | Zod | 3 | TypeScript-first 런타임 검증, RHF resolver 연동 |
+
+### 날짜 처리
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| 날짜 유틸 | date-fns | 4 | 함수형, tree-shakeable, 경량 (moment 대비 80% 작음) |
+
+### 테스트
+
+| 영역 | 라이브러리 | 버전 | 선택 이유 |
+|------|-----------|------|-----------|
+| 테스트 러너 | Vitest | 4 | Vite 네이티브, Jest 호환 API |
+| DOM 테스트 | Testing Library (React) | 16 | 사용자 관점 테스트, `jsdom` 환경 |
+| 단언 | jest-dom matchers | 6 | DOM 특화 matcher (`toBeInTheDocument` 등) |
+
+### 전체 패키지 설치 명령
+
+```bash
+# 핵심 (이미 설치됨)
+npm install zustand @tanstack/react-query react-router-dom i18next react-i18next axios
+
+# 폼 & 유효성
+npm install react-hook-form zod @hookform/resolvers
+
+# 날짜 & 아이콘
+npm install date-fns lucide-react
+
+# 테스트 (devDependencies — 이미 설치됨)
+npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
+```
+
+---
+
+## 2. API 개요
 
 | 항목 | 값 |
 |------|----|
@@ -33,7 +105,7 @@
 
 ---
 
-## 2. 인증 흐름
+## 3. 인증 흐름
 
 ### 토큰 획득
 
@@ -70,7 +142,7 @@ clearToken() → localStorage 제거 → /login 리다이렉트
 
 ---
 
-## 3. 공통 응답 형식
+## 4. 공통 응답 형식
 
 ### 성공 응답
 
@@ -95,7 +167,7 @@ clearToken() → localStorage 제거 → /login 리다이렉트
 
 ---
 
-## 4. 에러 코드 목록
+## 5. 에러 코드 목록
 
 ### 인증 관련
 
@@ -142,7 +214,7 @@ clearToken() → localStorage 제거 → /login 리다이렉트
 
 ---
 
-## 5. 엔드포인트 상세
+## 6. 엔드포인트 상세
 
 ### 5.1 인증 API
 
@@ -573,7 +645,7 @@ clearToken() → localStorage 제거 → /login 리다이렉트
 
 ---
 
-## 6. 할 일 상태 계산 규칙
+## 7. 할 일 상태 계산 규칙
 
 상태는 서버가 계산하여 응답에 포함합니다. 프론트엔드는 **API 응답 `status` 값을 그대로 표시**하면 됩니다.
 
@@ -596,46 +668,70 @@ clearToken() → localStorage 제거 → /login 리다이렉트
 
 ---
 
-## 7. 프론트엔드 구현 패턴
+## 8. 프론트엔드 구현 패턴
 
-### 7.1 API Client 구조 (`lib/apiClient.ts`)
+### 8.1 API Client 구조 (`lib/apiClient.ts`)
+
+axios 인스턴스 + 인터셉터 패턴으로 구현합니다.
 
 ```typescript
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import axios from 'axios'
+import { useAuthStore } from '@/store/authStore'
 
-async function request<T>(
-  path: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const token = useAuthStore.getState().accessToken;
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...options.headers,
-  };
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+})
 
-  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
+// 요청 인터셉터: 토큰 자동 주입
+apiClient.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().accessToken
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
 
-  if (res.status === 401) {
-    useAuthStore.getState().clearToken();
-    window.location.href = '/login';
-    throw new Error('Unauthorized');
+// 응답 인터셉터: 401 자동 로그아웃, data 언래핑
+apiClient.interceptors.response.use(
+  (res) => res.data.data,   // { data: T } → T
+  (error) => {
+    if (error.response?.status === 401) {
+      useAuthStore.getState().clearToken()
+      window.location.href = '/login'
+    }
+    // error.response.data.error.code 를 throw
+    return Promise.reject(error.response?.data?.error ?? error)
   }
+)
+```
 
-  const json = await res.json();
+**feature별 API 함수 예시** (`features/todos/api.ts`):
 
-  if (!res.ok) {
-    // error.code를 에러 객체에 포함해서 throw
-    const err = new Error(json.error?.message ?? 'Unknown error');
-    (err as any).code = json.error?.code;
-    throw err;
-  }
+```typescript
+import { apiClient } from '@/lib/apiClient'
+import type { Todo, TodoFilters } from '@/types'
 
-  return json.data as T;
+export const todosApi = {
+  list: (filters?: TodoFilters) =>
+    apiClient.get<never, Todo[]>('/todos', { params: filters }),
+
+  create: (body: Omit<Todo, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'category'>) =>
+    apiClient.post<never, Todo>('/todos', body),
+
+  update: (id: string, body: Partial<Todo>) =>
+    apiClient.patch<never, Todo>(`/todos/${id}`, body),
+
+  remove: (id: string) =>
+    apiClient.delete(`/todos/${id}`),
+
+  complete: (id: string) =>
+    apiClient.patch<never, Todo>(`/todos/${id}/complete`),
+
+  incomplete: (id: string) =>
+    apiClient.patch<never, Todo>(`/todos/${id}/incomplete`),
 }
 ```
 
-### 7.2 Zustand Auth Store (`store/authStore.ts`)
+### 8.2 Zustand Auth Store (`store/authStore.ts`)
 
 ```typescript
 interface AuthState {
@@ -656,7 +752,7 @@ const useAuthStore = create<AuthState>()(
 );
 ```
 
-### 7.3 TanStack Query 키 규칙
+### 8.3 TanStack Query 키 규칙
 
 일관된 캐시 무효화를 위해 쿼리 키를 계층 구조로 정의합니다.
 
@@ -676,7 +772,7 @@ export const queryKeys = {
 };
 ```
 
-### 7.4 캐시 무효화 패턴
+### 8.4 캐시 무효화 패턴
 
 ```typescript
 // 할 일 생성/수정/삭제 후
@@ -690,7 +786,7 @@ queryClient.invalidateQueries({ queryKey: queryKeys.todos.all });
 queryClient.invalidateQueries({ queryKey: queryKeys.user.me() });
 ```
 
-### 7.5 완료 토글 낙관적 업데이트
+### 8.5 완료 토글 낙관적 업데이트
 
 ```typescript
 const completeMutation = useMutation({
@@ -712,7 +808,7 @@ const completeMutation = useMutation({
 });
 ```
 
-### 7.6 설정 낙관적 업데이트 (테마)
+### 8.6 설정 낙관적 업데이트 (테마)
 
 ```typescript
 const settingsMutation = useMutation({
@@ -735,7 +831,7 @@ const settingsMutation = useMutation({
 });
 ```
 
-### 7.7 Private Route 패턴
+### 8.7 Private Route 패턴
 
 ```typescript
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -745,7 +841,7 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 ```
 
-### 7.8 401 에러 전역 처리 (TanStack Query)
+### 8.8 401 에러 전역 처리 (TanStack Query)
 
 ```typescript
 const queryClient = new QueryClient({
@@ -762,7 +858,7 @@ const queryClient = new QueryClient({
 
 ---
 
-## 8. 화면별 연동 가이드
+## 9. 화면별 연동 가이드
 
 ### 8.1 로그인 페이지 (`/login`)
 
@@ -913,7 +1009,7 @@ const todosByDate = todos.reduce((acc, todo) => {
 
 ---
 
-## 9. TypeScript 타입 정의
+## 10. TypeScript 타입 정의
 
 ```typescript
 // types/index.ts
@@ -985,3 +1081,4 @@ export interface ApiErrorResponse {
 | 버전 | 날짜 | 변경 내용 |
 |------|------|-----------|
 | 1.0 | 2026-05-28 | 최초 작성 |
+| 1.1 | 2026-05-28 | 기술 스택 섹션 추가, API Client axios 전환, 섹션 번호 재정렬 |

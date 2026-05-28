@@ -1,6 +1,6 @@
 # TodoList 실행계획서
 
-**버전**: 1.2  
+**버전**: 1.3  
 **작성일**: 2026-05-28  
 **참조 문서**: docs/1-domain-definition.md (v2.1), docs/2-PRD.md (v2.2), docs/4-project-structure.md (v1.2)
 
@@ -13,6 +13,7 @@
 | 1.0  | 2026-05-28 | 최초 작성                                              | -      |
 | 1.1  | 2026-05-28 | Gantt 차트 및 일자별 일정 추가, 와이어프레임 참조 반영 | -      |
 | 1.2  | 2026-05-28 | 캘린더 뷰 FE-08 Task 추가, 월별 달력 일정표 추가, 구현 사실 반영 (auth.js 파일명, accessToken 필드명, GET /users/me 응답 필드) | -      |
+| 1.3  | 2026-05-28 | FE-02 완료 체크, FE-03 API Client fetch → axios 인터셉터 방식으로 업데이트 | -      |
 
 ---
 
@@ -478,32 +479,32 @@ gantt
 
 #### 작업 목록
 
-- [ ] **Zustand store** (`store/authStore.ts`)
-  - [ ] `accessToken`, `userId` 상태
-  - [ ] `setToken`, `clearToken` 액션
-  - [ ] localStorage 연동 (persist)
-- [ ] **TanStack Query 설정** (`lib/queryClient.ts`)
-  - [ ] `QueryClient` 생성 (staleTime, retry 설정)
-  - [ ] `QueryClientProvider`를 `main.tsx`에 적용
-- [ ] **React Router 설정** (`router.tsx`)
-  - [ ] `PrivateRoute` 컴포넌트 — Zustand store에서 토큰 확인, 없으면 `/login` 리다이렉트
-  - [ ] 라우트 정의: `/login`, `/register`, `/todos`, `/categories`, `/settings`
-- [ ] **i18n 설정** (`lib/i18n.ts`)
-  - [ ] `ko`, `en` 기본 네임스페이스 생성
-  - [ ] 브라우저 언어 감지 (미지원 시 `ko` 기본)
-- [ ] **공통 타입 정의** (`types/index.ts`)
-  - [ ] `User`, `Todo`, `Category`, `TodoStatus` 타입
-  - [ ] API 응답 래퍼 타입 `ApiResponse<T>`, `ApiError`
-- [ ] Apple Design Tokens CSS 변수 정의 (`color-blue`, `color-green`, `color-red`, `color-orange`, `bg-*`, `text-*`, `radius-*`, `spacing-*`)
-- [ ] 다크 모드 CSS 변수 (`@media prefers-color-scheme: dark`)
-- [ ] SF Pro 폰트 스택 설정 (`-apple-system`, `BlinkMacSystemFont`, `'SF Pro Display'`)
+- [x] **Zustand store** (`store/authStore.ts`)
+  - [x] `accessToken`, `userId` 상태
+  - [x] `setToken`, `clearToken` 액션
+  - [x] localStorage 연동 (persist)
+- [x] **TanStack Query 설정** (`lib/queryClient.ts`)
+  - [x] `QueryClient` 생성 (staleTime, retry 설정)
+  - [x] `QueryClientProvider`를 `main.tsx`에 적용
+- [x] **React Router 설정** (`router.tsx`)
+  - [x] `PrivateRoute` 컴포넌트 — Zustand store에서 토큰 확인, 없으면 `/login` 리다이렉트
+  - [x] 라우트 정의: `/login`, `/register`, `/todos`, `/categories`, `/settings`
+- [x] **i18n 설정** (`lib/i18n.ts`)
+  - [x] `ko`, `en` 기본 네임스페이스 생성
+  - [x] 브라우저 언어 감지 (미지원 시 `ko` 기본)
+- [x] **공통 타입 정의** (`types/index.ts`)
+  - [x] `User`, `Todo`, `Category`, `TodoStatus` 타입
+  - [x] API 응답 래퍼 타입 `ApiResponse<T>`, `ApiError`
+- [x] Apple Design Tokens CSS 변수 정의 (`color-blue`, `color-green`, `color-red`, `color-orange`, `bg-*`, `text-*`, `radius-*`, `spacing-*`)
+- [x] 다크 모드 CSS 변수 (`@media prefers-color-scheme: dark`)
+- [x] SF Pro 폰트 스택 설정 (`-apple-system`, `BlinkMacSystemFont`, `'SF Pro Display'`)
 
 #### 완료 조건
 
-- [ ] 토큰 없이 `/todos` 접근 시 `/login`으로 리다이렉트
-- [ ] 토큰 있을 때 `/login` 접근 시 `/todos`로 리다이렉트
-- [ ] `QueryClientProvider` 정상 적용 (React Query DevTools 확인)
-- [ ] `useTranslation` 훅으로 `t('key')` 호출 가능
+- [x] 토큰 없이 `/todos` 접근 시 `/login`으로 리다이렉트
+- [x] 토큰 있을 때 `/login` 접근 시 `/todos`로 리다이렉트
+- [x] `QueryClientProvider` 정상 적용 (React Query DevTools 확인)
+- [x] `useTranslation` 훅으로 `t('key')` 호출 가능
 
 ---
 
@@ -514,11 +515,11 @@ gantt
 
 #### 작업 목록
 
-- [ ] `lib/apiClient.ts` — 기본 fetch 래퍼
+- [ ] `lib/apiClient.ts` — axios 인스턴스 + 인터셉터
   - [ ] `VITE_API_BASE_URL` 기반 baseURL 설정
-  - [ ] 모든 요청에 `Authorization: Bearer {token}` 헤더 자동 추가
-  - [ ] `401` 응답 시 자동 로그아웃 처리 (토큰 클리어 + `/login` 리다이렉트)
-  - [ ] 응답 파싱: 성공 시 `data`, 실패 시 `error.code` 추출
+  - [ ] 요청 인터셉터: `Authorization: Bearer {token}` 헤더 자동 주입
+  - [ ] 응답 인터셉터: `401` 시 `clearToken()` + `/login` 리다이렉트
+  - [ ] 응답 언래핑: `{ data: T }` → `T`, 에러 시 `error.code` 추출
 - [ ] `features/auth/api.ts` — 인증 API 함수
 - [ ] `features/todos/api.ts` — 할 일 API 함수
 - [ ] `features/categories/api.ts` — 카테고리 API 함수
