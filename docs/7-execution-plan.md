@@ -226,11 +226,11 @@ gantt
 
 #### 작업 목록
 
-- [ ] `backend/` 디렉토리 생성
-- [ ] `npm init -y` 실행
-- [ ] 의존성 설치: `express`, `pg`, `bcrypt`, `jsonwebtoken`, `dotenv`, `cors`
-- [ ] 개발 의존성 설치: `nodemon`, `jest` (또는 `vitest`)
-- [ ] 디렉토리 구조 생성:
+- [x] `backend/` 디렉토리 생성
+- [x] `npm init -y` 실행
+- [x] 의존성 설치: `express`, `pg`, `bcrypt`, `jsonwebtoken`, `dotenv`, `cors`
+- [x] 개발 의존성 설치: `nodemon`, `jest` (또는 `vitest`)
+- [x] 디렉토리 구조 생성:
   ```
   backend/src/
   ├── config/
@@ -241,13 +241,13 @@ gantt
   ├── repositories/
   └── utils/
   ```
-- [ ] `backend/src/app.js` 기본 Express 앱 작성 (포트 3000)
-- [ ] `package.json` scripts 설정: `start`, `dev` (nodemon), `test`
+- [x] `backend/src/app.js` 기본 Express 앱 작성 (포트 3000)
+- [x] `package.json` scripts 설정: `start`, `dev` (nodemon), `test`
 
 #### 완료 조건
 
-- [ ] `npm run dev` 실행 후 `http://localhost:3000/health` → `200 OK` 응답
-- [ ] 디렉토리 구조가 `docs/4-project-structure.md`와 일치
+- [x] `npm run dev` 실행 후 `http://localhost:3000/health` → `200 OK` 응답
+- [x] 디렉토리 구조가 `docs/4-project-structure.md`와 일치
 
 ---
 
