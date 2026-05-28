@@ -306,34 +306,34 @@ gantt
 
 #### 작업 목록
 
-- [ ] **회원가입** `POST /auth/register`
-  - [ ] 이메일 형식 검증
-  - [ ] 비밀번호 규칙: 8~128자, 영문+숫자 포함 (`AUTH_PASSWORD_WEAK`)
-  - [ ] 이메일 중복 확인 (`AUTH_EMAIL_DUPLICATE` 409)
-  - [ ] bcrypt 해싱 후 저장
-  - [ ] 트랜잭션: users INSERT + "기본" 카테고리 INSERT 동시 처리
-  - [ ] 응답: `201 { data: { id, email, name } }`
-- [ ] **로그인** `POST /auth/login`
-  - [ ] 이메일 조회 후 bcrypt 비교
-  - [ ] 불일치 → `401 AUTH_INVALID_CREDENTIALS`
-  - [ ] JWT 생성 (payload: `{ userId }`, 24시간 만료)
-  - [ ] 응답: `200 { data: { access_token } }`
-- [ ] **내 정보 조회** `GET /users/me` (인증 필요)
-  - [ ] `req.userId`로 users 조회
-  - [ ] 응답: `200 { data: { id, email, name, theme, language } }`
-- [ ] **프로필 수정** `PATCH /users/me` (인증 필요)
-  - [ ] 이름 또는 비밀번호만 수정 가능 (이메일 변경 불가)
-  - [ ] 비밀번호 수정 시 bcrypt 재해싱
-- [ ] **회원 탈퇴** `DELETE /users/me` (인증 필요)
-  - [ ] users DELETE → CASCADE로 categories, todos 자동 삭제
+- [x] **회원가입** `POST /auth/register`
+  - [x] 이메일 형식 검증
+  - [x] 비밀번호 규칙: 8~128자, 영문+숫자 포함 (`AUTH_PASSWORD_WEAK`)
+  - [x] 이메일 중복 확인 (`AUTH_EMAIL_DUPLICATE` 409)
+  - [x] bcrypt 해싱 후 저장
+  - [x] 트랜잭션: users INSERT + "기본" 카테고리 INSERT 동시 처리
+  - [x] 응답: `201 { data: { id, email, name } }`
+- [x] **로그인** `POST /auth/login`
+  - [x] 이메일 조회 후 bcrypt 비교
+  - [x] 불일치 → `401 AUTH_INVALID_CREDENTIALS`
+  - [x] JWT 생성 (payload: `{ userId }`, 24시간 만료)
+  - [x] 응답: `200 { data: { access_token } }`
+- [x] **내 정보 조회** `GET /users/me` (인증 필요)
+  - [x] `req.userId`로 users 조회
+  - [x] 응답: `200 { data: { id, email, name, theme, language } }`
+- [x] **프로필 수정** `PATCH /users/me` (인증 필요)
+  - [x] 이름 또는 비밀번호만 수정 가능 (이메일 변경 불가)
+  - [x] 비밀번호 수정 시 bcrypt 재해싱
+- [x] **회원 탈퇴** `DELETE /users/me` (인증 필요)
+  - [x] users DELETE → CASCADE로 categories, todos 자동 삭제
 
 #### 완료 조건
 
-- [ ] `POST /auth/register` 성공 시 `users` + `categories(기본)` 동시 생성
-- [ ] 중복 이메일 등록 → `409` 응답
-- [ ] 약한 비밀번호 → `400 AUTH_PASSWORD_WEAK`
-- [ ] 로그인 성공 → JWT 발급, 실패 → `401`
-- [ ] `GET /users/me` 토큰 없이 호출 → `401`
+- [x] `POST /auth/register` 성공 시 `users` + `categories(기본)` 동시 생성
+- [x] 중복 이메일 등록 → `409` 응답
+- [x] 약한 비밀번호 → `400 AUTH_PASSWORD_WEAK`
+- [x] 로그인 성공 → JWT 발급, 실패 → `401`
+- [x] `GET /users/me` 토큰 없이 호출 → `401`
 
 ---
 
