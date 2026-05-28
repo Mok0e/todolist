@@ -278,24 +278,24 @@ gantt
 
 #### 작업 목록
 
-- [ ] `middleware/authMiddleware.js` — JWT 검증 미들웨어
-  - [ ] `Authorization: Bearer {token}` 헤더 파싱
-  - [ ] 토큰 없음 → `401 AUTH_REQUIRED`
-  - [ ] 토큰 만료/위조 → `401 AUTH_TOKEN_EXPIRED` / `AUTH_TOKEN_INVALID`
-  - [ ] 유효 시 `req.userId` 주입
-- [ ] `middleware/errorHandler.js` — 전역 오류 핸들러
-  - [ ] 표준 오류 응답 형식: `{ "error": { "code": "...", "message": "..." } }`
-  - [ ] 알 수 없는 오류 → `500 INTERNAL_ERROR` (스택 트레이스는 개발 환경에서만 노출)
-- [ ] `middleware/validate.js` — 입력 검증 미들웨어 (선택: express-validator 또는 수동)
-- [ ] `utils/jwtUtils.js` — `signToken`, `verifyToken` 함수
-- [ ] `utils/passwordUtils.js` — `hashPassword`, `comparePassword` 함수 (bcrypt, salt rounds env)
+- [x] `middleware/authMiddleware.js` — JWT 검증 미들웨어
+  - [x] `Authorization: Bearer {token}` 헤더 파싱
+  - [x] 토큰 없음 → `401 AUTH_REQUIRED`
+  - [x] 토큰 만료/위조 → `401 AUTH_TOKEN_EXPIRED` / `AUTH_TOKEN_INVALID`
+  - [x] 유효 시 `req.userId` 주입
+- [x] `middleware/errorHandler.js` — 전역 오류 핸들러
+  - [x] 표준 오류 응답 형식: `{ "error": { "code": "...", "message": "..." } }`
+  - [x] 알 수 없는 오류 → `500 INTERNAL_ERROR` (스택 트레이스는 개발 환경에서만 노출)
+- [x] `middleware/validate.js` — 입력 검증 미들웨어 (선택: express-validator 또는 수동)
+- [x] `utils/jwtUtils.js` — `signToken`, `verifyToken` 함수
+- [x] `utils/passwordUtils.js` — `hashPassword`, `comparePassword` 함수 (bcrypt, salt rounds env)
 
 #### 완료 조건
 
-- [ ] 유효한 JWT로 보호된 라우트 접근 시 `req.userId` 설정됨
-- [ ] 만료된 JWT → `401` 응답
-- [ ] 존재하지 않는 라우트 → `404` 응답
-- [ ] 처리되지 않은 오류 → `500` 응답 (스택 트레이스 미노출)
+- [x] 유효한 JWT로 보호된 라우트 접근 시 `req.userId` 설정됨
+- [x] 만료된 JWT → `401` 응답
+- [x] 존재하지 않는 라우트 → `404` 응답
+- [x] 처리되지 않은 오류 → `500` 응답 (스택 트레이스 미노출)
 
 ---
 
