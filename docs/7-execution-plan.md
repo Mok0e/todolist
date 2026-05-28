@@ -1,0 +1,603 @@
+# TodoList 실행계획서
+
+**버전**: 1.0  
+**작성일**: 2026-05-28  
+**참조 문서**: docs/1-domain-definition.md (v2.1), docs/2-PRD.md (v2.1), docs/4-project-structure.md (v1.2)
+
+---
+
+## 변경 이력
+
+| 버전 | 날짜       | 변경 내용     | 작성자 |
+| ---- | ---------- | ------------- | ------ |
+| 1.0  | 2026-05-28 | 최초 작성     | -      |
+
+---
+
+## 읽는 법
+
+- 각 Task의 **완료 조건**을 만족해야 다음 단계로 진행한다.
+- **의존성**에 명시된 Task가 완료되지 않으면 해당 Task를 시작하지 않는다.
+- 의존성이 없는 Task는 병렬 진행 가능하다.
+- 체크박스 상태: `[ ]` 미완료 · `[x]` 완료
+
+---
+
+## 전체 Task 목록
+
+| Task ID | 영역 | 이름 | 의존성 |
+|---------|------|------|--------|
+| DB-01 | Database | 개발 환경 초기화 | 없음 |
+| DB-02 | Database | 스키마 마이그레이션 적용 | DB-01 |
+| DB-03 | Database | statusCalculator.js 구현 | DB-02 |
+| BE-01 | Backend | 프로젝트 초기화 | 없음 |
+| BE-02 | Backend | DB 연결 설정 | DB-01, BE-01 |
+| BE-03 | Backend | 공통 미들웨어 구현 | BE-01 |
+| BE-04 | Backend | 인증 API 구현 | DB-02, BE-02, BE-03 |
+| BE-05 | Backend | 카테고리 API 구현 | BE-04 |
+| BE-06 | Backend | 할 일 API 구현 | DB-03, BE-04, BE-05 |
+| BE-07 | Backend | 설정 API 구현 | BE-04 |
+| FE-01 | Frontend | 프로젝트 초기화 | 없음 |
+| FE-02 | Frontend | 공통 인프라 구성 | FE-01 |
+| FE-03 | Frontend | API Client 레이어 구현 | FE-02 |
+| FE-04 | Frontend | 인증 기능 구현 | FE-03, BE-04 |
+| FE-05 | Frontend | 할 일 기능 구현 | FE-04, BE-06 |
+| FE-06 | Frontend | 카테고리 기능 구현 | FE-04, BE-05 |
+| FE-07 | Frontend | 설정 기능 구현 | FE-04, BE-07 |
+
+---
+
+## Phase 1 — 기반 구성 (병렬 진행 가능)
+
+> DB-01, BE-01, FE-01은 의존성 없음 → 동시에 시작 가능
+
+---
+
+## 🗄️ Database Tasks
+
+---
+
+### DB-01: 개발 환경 초기화
+
+**의존성**: 없음  
+**예상 소요**: 1시간
+
+#### 작업 목록
+
+- [ ] PostgreSQL 17 로컬 인스턴스 실행 확인
+- [ ] `todolist` 데이터베이스 생성
+- [ ] `.env` 파일 생성 (`DATABASE_URL`, `JWT_SECRET`, `PORT=3000`, `NODE_ENV=development`, `BCRYPT_SALT_ROUNDS=10`, `CORS_ORIGIN=http://localhost:5173`)
+- [ ] `.env.example` 파일 작성 (실제 값 제외)
+- [ ] `.gitignore`에 `.env` 추가 확인
+
+#### 완료 조건
+
+- [ ] `psql -d todolist` 접속 성공
+- [ ] `.env` 파일이 git에 포함되지 않음
+- [ ] `DATABASE_URL` 연결 문자열로 pg 라이브러리 연결 테스트 통과
+
+---
+
+### DB-02: 스키마 마이그레이션 적용
+
+**의존성**: DB-01  
+**예상 소요**: 30분
+
+#### 작업 목록
+
+- [ ] `database/schema.sql` 검토 (users, categories, todos 테이블)
+- [ ] `psql -d todolist -f database/schema.sql` 실행
+- [ ] `migrations/001_init.sql` 파일로 복사 (마이그레이션 이력 관리)
+- [ ] `scripts/migrate.js` Node.js 실행 스크립트 작성 (Windows 호환)
+
+#### 완료 조건
+
+- [ ] 3개 테이블 (`users`, `categories`, `todos`) 생성 확인
+- [ ] 7개 인덱스 생성 확인 (`uk_categories_user_name` LOWER 함수 인덱스 포함)
+- [ ] 3개 `updated_at` 트리거 동작 확인 (UPDATE 후 `updated_at` 변경 검증)
+- [ ] CHECK 제약 조건 동작 확인 (`status`, `theme`, `language`, `dates`)
+
+---
+
+### DB-03: statusCalculator.js 구현
+
+**의존성**: DB-02  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] `backend/src/utils/statusCalculator.js` 파일 생성
+- [ ] `calculateStatus(todo, now)` 함수 구현 — `now`를 인자로 받아 테스트 가능하게 작성
+- [ ] 4가지 상태 계산 로직 구현:
+  - `DONE`: `status === 'DONE'`
+  - `IN_PROGRESS`: `startDate <= today <= endDate`
+  - `OVERDUE`: `today > endDate && status !== 'DONE'`
+  - `NOT_STARTED`: 그 외 (날짜 없음 포함)
+- [ ] 날짜 엣지 케이스 처리:
+  - [ ] 날짜 없음 → `NOT_STARTED`
+  - [ ] 시작일만 있음 → IN_PROGRESS/NOT_STARTED (OVERDUE 없음)
+  - [ ] 종료일만 있음 → OVERDUE/NOT_STARTED (IN_PROGRESS 없음)
+  - [ ] 시작일=종료일 → 당일 IN_PROGRESS, 익일 OVERDUE
+
+#### 완료 조건
+
+- [ ] 모든 날짜 조합 단위 테스트 통과 (최소 8개 케이스)
+- [ ] `now` 인자 주입으로 특정 날짜 기준 테스트 가능
+- [ ] `DONE` 상태는 날짜 무관하게 항상 `DONE` 반환
+
+---
+
+## ⚙️ Backend Tasks
+
+---
+
+### BE-01: 프로젝트 초기화
+
+**의존성**: 없음  
+**예상 소요**: 1시간
+
+#### 작업 목록
+
+- [ ] `backend/` 디렉토리 생성
+- [ ] `npm init -y` 실행
+- [ ] 의존성 설치: `express`, `pg`, `bcrypt`, `jsonwebtoken`, `dotenv`, `cors`
+- [ ] 개발 의존성 설치: `nodemon`, `jest` (또는 `vitest`)
+- [ ] 디렉토리 구조 생성:
+  ```
+  backend/src/
+  ├── config/
+  ├── middleware/
+  ├── routes/
+  ├── controllers/
+  ├── services/
+  ├── repositories/
+  └── utils/
+  ```
+- [ ] `backend/src/app.js` 기본 Express 앱 작성 (포트 3000)
+- [ ] `package.json` scripts 설정: `start`, `dev` (nodemon), `test`
+
+#### 완료 조건
+
+- [ ] `npm run dev` 실행 후 `http://localhost:3000/health` → `200 OK` 응답
+- [ ] 디렉토리 구조가 `docs/4-project-structure.md`와 일치
+
+---
+
+### BE-02: DB 연결 설정
+
+**의존성**: DB-01, BE-01  
+**예상 소요**: 1시간
+
+#### 작업 목록
+
+- [ ] `backend/src/config/db.js` 작성 — pg Pool 설정
+- [ ] `DATABASE_URL` 환경변수 기반 연결 (`.env` 로드)
+- [ ] `backend/src/config/env.js` 작성 — 필수 환경변수 검증 (없으면 서버 시작 실패)
+- [ ] DB 연결 실패 시 서버 시작 거부 처리
+
+#### 완료 조건
+
+- [ ] `db.query('SELECT 1')` 성공
+- [ ] `DATABASE_URL` 누락 시 서버 시작 시 명확한 오류 메시지 출력 후 종료
+- [ ] Pool 객체가 `config/db.js`에서만 export되어 다른 파일에서 import 가능
+
+---
+
+### BE-03: 공통 미들웨어 구현
+
+**의존성**: BE-01  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] `middleware/authMiddleware.js` — JWT 검증 미들웨어
+  - [ ] `Authorization: Bearer {token}` 헤더 파싱
+  - [ ] 토큰 없음 → `401 AUTH_REQUIRED`
+  - [ ] 토큰 만료/위조 → `401 AUTH_TOKEN_EXPIRED` / `AUTH_TOKEN_INVALID`
+  - [ ] 유효 시 `req.userId` 주입
+- [ ] `middleware/errorHandler.js` — 전역 오류 핸들러
+  - [ ] 표준 오류 응답 형식: `{ "error": { "code": "...", "message": "..." } }`
+  - [ ] 알 수 없는 오류 → `500 INTERNAL_ERROR` (스택 트레이스는 개발 환경에서만 노출)
+- [ ] `middleware/validate.js` — 입력 검증 미들웨어 (선택: express-validator 또는 수동)
+- [ ] `utils/jwtUtils.js` — `signToken`, `verifyToken` 함수
+- [ ] `utils/passwordUtils.js` — `hashPassword`, `comparePassword` 함수 (bcrypt, salt rounds env)
+
+#### 완료 조건
+
+- [ ] 유효한 JWT로 보호된 라우트 접근 시 `req.userId` 설정됨
+- [ ] 만료된 JWT → `401` 응답
+- [ ] 존재하지 않는 라우트 → `404` 응답
+- [ ] 처리되지 않은 오류 → `500` 응답 (스택 트레이스 미노출)
+
+---
+
+### BE-04: 인증 API 구현
+
+**의존성**: DB-02, BE-02, BE-03  
+**예상 소요**: 3시간
+
+#### 작업 목록
+
+- [ ] **회원가입** `POST /auth/register`
+  - [ ] 이메일 형식 검증
+  - [ ] 비밀번호 규칙: 8~128자, 영문+숫자 포함 (`AUTH_PASSWORD_WEAK`)
+  - [ ] 이메일 중복 확인 (`AUTH_EMAIL_DUPLICATE` 409)
+  - [ ] bcrypt 해싱 후 저장
+  - [ ] 트랜잭션: users INSERT + "기본" 카테고리 INSERT 동시 처리
+  - [ ] 응답: `201 { data: { id, email, name } }`
+- [ ] **로그인** `POST /auth/login`
+  - [ ] 이메일 조회 후 bcrypt 비교
+  - [ ] 불일치 → `401 AUTH_INVALID_CREDENTIALS`
+  - [ ] JWT 생성 (payload: `{ userId }`, 24시간 만료)
+  - [ ] 응답: `200 { data: { access_token } }`
+- [ ] **내 정보 조회** `GET /users/me` (인증 필요)
+  - [ ] `req.userId`로 users 조회
+  - [ ] 응답: `200 { data: { id, email, name, theme, language } }`
+- [ ] **프로필 수정** `PATCH /users/me` (인증 필요)
+  - [ ] 이름 또는 비밀번호만 수정 가능 (이메일 변경 불가)
+  - [ ] 비밀번호 수정 시 bcrypt 재해싱
+- [ ] **회원 탈퇴** `DELETE /users/me` (인증 필요)
+  - [ ] users DELETE → CASCADE로 categories, todos 자동 삭제
+
+#### 완료 조건
+
+- [ ] `POST /auth/register` 성공 시 `users` + `categories(기본)` 동시 생성
+- [ ] 중복 이메일 등록 → `409` 응답
+- [ ] 약한 비밀번호 → `400 AUTH_PASSWORD_WEAK`
+- [ ] 로그인 성공 → JWT 발급, 실패 → `401`
+- [ ] `GET /users/me` 토큰 없이 호출 → `401`
+
+---
+
+### BE-05: 카테고리 API 구현
+
+**의존성**: BE-04  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] **카테고리 목록 조회** `GET /categories` (인증 필요)
+  - [ ] `req.userId`의 카테고리만 반환
+- [ ] **카테고리 생성** `POST /categories` (인증 필요)
+  - [ ] 이름 1~30자 검증
+  - [ ] 동일 사용자 내 대소문자 무시 중복 확인 (`CATEGORY_NAME_DUPLICATE` 409)
+- [ ] **카테고리 수정** `PATCH /categories/:id` (인증 필요)
+  - [ ] 기본 카테고리 수정 시도 → `400 CATEGORY_DEFAULT_IMMUTABLE`
+  - [ ] 타인 카테고리 수정 → `403 FORBIDDEN`
+- [ ] **카테고리 삭제** `DELETE /categories/:id` (인증 필요)
+  - [ ] 기본 카테고리 삭제 시도 → `400 CATEGORY_DEFAULT_IMMUTABLE`
+  - [ ] 삭제 전 해당 카테고리의 todos → 기본 카테고리로 `category_id` 업데이트 (트랜잭션)
+  - [ ] 타인 카테고리 삭제 → `403 FORBIDDEN`
+
+#### 완료 조건
+
+- [ ] 카테고리 삭제 시 todos가 기본 카테고리로 자동 이동됨
+- [ ] 기본 카테고리(`is_default=true`) 수정/삭제 시 `400` 응답
+- [ ] 타인 카테고리에 CRUD 시도 → `403` 응답
+- [ ] 동명 카테고리 생성 시 `409` 응답 (대소문자 무시)
+
+---
+
+### BE-06: 할 일 API 구현
+
+**의존성**: DB-03, BE-04, BE-05  
+**예상 소요**: 4시간
+
+#### 작업 목록
+
+- [ ] **할 일 목록 조회** `GET /todos` (인증 필요)
+  - [ ] `req.userId`의 todos만 조회
+  - [ ] 쿼리 파라미터: `?status=NOT_STARTED|IN_PROGRESS|DONE|OVERDUE&categoryId=UUID`
+  - [ ] AND 조건 필터링
+  - [ ] 각 todo에 `statusCalculator.js`로 런타임 상태 계산 후 응답에 포함
+- [ ] **할 일 등록** `POST /todos` (인증 필요)
+  - [ ] 제목 필수, 1~100자 (`TODO_TITLE_TOO_LONG` 400)
+  - [ ] `categoryId` 미전달 시 기본 카테고리 자동 사용
+  - [ ] `startDate`, `endDate` 선택 — `endDate >= startDate` 검증
+  - [ ] 응답에 계산된 status 포함
+- [ ] **할 일 수정** `PATCH /todos/:id` (인증 필요)
+  - [ ] 타인 todo 수정 → `403 FORBIDDEN`
+  - [ ] 존재하지 않는 todo → `404 TODO_NOT_FOUND`
+  - [ ] 응답에 계산된 status 포함
+- [ ] **할 일 삭제** `DELETE /todos/:id` (인증 필요)
+  - [ ] 타인 todo 삭제 → `403 FORBIDDEN`
+- [ ] **완료 처리** `PATCH /todos/:id/complete` (인증 필요)
+  - [ ] `status = 'DONE'` 저장
+- [ ] **완료 취소** `PATCH /todos/:id/incomplete` (인증 필요)
+  - [ ] `status = NULL` 저장 → 날짜 기준으로 재계산된 상태 응답
+
+#### 완료 조건
+
+- [ ] `GET /todos?status=OVERDUE` → 오늘 기준 OVERDUE todo만 반환
+- [ ] `GET /todos?status=IN_PROGRESS&categoryId=UUID` → AND 조건 필터 동작
+- [ ] todo 등록/수정/조회 응답에 `status` 필드 항상 포함 (4가지 값 중 하나)
+- [ ] 완료 취소 후 날짜 기준 상태 재계산 확인
+- [ ] 타인 todo CRUD → `403`
+- [ ] 존재하지 않는 todo → `404`
+
+---
+
+### BE-07: 설정 API 구현
+
+**의존성**: BE-04  
+**예상 소요**: 1시간
+
+#### 작업 목록
+
+- [ ] **테마 변경** `PATCH /users/me/settings`
+  - [ ] `{ theme: 'LIGHT' | 'DARK' }` 입력 검증
+  - [ ] `users.theme` 업데이트
+- [ ] **언어 변경** — 동일 엔드포인트에 `{ language: 'ko' | 'en' }` 포함
+  - [ ] `users.language` 업데이트
+- [ ] (선택) `GET /users/me`에 `theme`, `language` 포함 여부 확인 (이미 포함되어 있으면 별도 엔드포인트 불필요)
+
+#### 완료 조건
+
+- [ ] `PATCH /users/me/settings { theme: 'DARK' }` → DB 반영 확인
+- [ ] `PATCH /users/me/settings { language: 'en' }` → DB 반영 확인
+- [ ] 허용되지 않은 값 입력 → `400` 응답
+
+---
+
+## 🖥️ Frontend Tasks
+
+---
+
+### FE-01: 프로젝트 초기화
+
+**의존성**: 없음  
+**예상 소요**: 1시간
+
+#### 작업 목록
+
+- [ ] `npm create vite@latest frontend -- --template react-ts` 실행
+- [ ] 의존성 설치: `zustand`, `@tanstack/react-query`, `react-router-dom`, `i18next`, `react-i18next`
+- [ ] `frontend/.env` 생성: `VITE_API_BASE_URL=http://localhost:3000`
+- [ ] `frontend/.env.example` 생성
+- [ ] TypeScript strict mode 설정 (`tsconfig.json`)
+- [ ] 절대 경로 alias 설정 (`@/` → `src/`)
+- [ ] 디렉토리 구조 생성:
+  ```
+  frontend/src/
+  ├── features/
+  │   ├── auth/
+  │   ├── todos/
+  │   ├── categories/
+  │   └── settings/
+  ├── components/ui/
+  ├── hooks/
+  ├── store/
+  ├── pages/
+  ├── types/
+  ├── constants/
+  ├── utils/
+  ├── router.tsx
+  └── lib/
+  ```
+
+#### 완료 조건
+
+- [ ] `npm run dev` 실행 후 `http://localhost:5173` 접속 성공
+- [ ] TypeScript 컴파일 오류 없음
+- [ ] `@/` 경로 alias 동작 확인
+
+---
+
+### FE-02: 공통 인프라 구성
+
+**의존성**: FE-01  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] **Zustand store** (`store/authStore.ts`)
+  - [ ] `accessToken`, `userId` 상태
+  - [ ] `setToken`, `clearToken` 액션
+  - [ ] localStorage 연동 (persist)
+- [ ] **TanStack Query 설정** (`lib/queryClient.ts`)
+  - [ ] `QueryClient` 생성 (staleTime, retry 설정)
+  - [ ] `QueryClientProvider`를 `main.tsx`에 적용
+- [ ] **React Router 설정** (`router.tsx`)
+  - [ ] `PrivateRoute` 컴포넌트 — Zustand store에서 토큰 확인, 없으면 `/login` 리다이렉트
+  - [ ] 라우트 정의: `/login`, `/register`, `/todos`, `/categories`, `/settings`
+- [ ] **i18n 설정** (`lib/i18n.ts`)
+  - [ ] `ko`, `en` 기본 네임스페이스 생성
+  - [ ] 브라우저 언어 감지 (미지원 시 `ko` 기본)
+- [ ] **공통 타입 정의** (`types/index.ts`)
+  - [ ] `User`, `Todo`, `Category`, `TodoStatus` 타입
+  - [ ] API 응답 래퍼 타입 `ApiResponse<T>`, `ApiError`
+
+#### 완료 조건
+
+- [ ] 토큰 없이 `/todos` 접근 시 `/login`으로 리다이렉트
+- [ ] 토큰 있을 때 `/login` 접근 시 `/todos`로 리다이렉트
+- [ ] `QueryClientProvider` 정상 적용 (React Query DevTools 확인)
+- [ ] `useTranslation` 훅으로 `t('key')` 호출 가능
+
+---
+
+### FE-03: API Client 레이어 구현
+
+**의존성**: FE-02  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] `lib/apiClient.ts` — 기본 fetch 래퍼
+  - [ ] `VITE_API_BASE_URL` 기반 baseURL 설정
+  - [ ] 모든 요청에 `Authorization: Bearer {token}` 헤더 자동 추가
+  - [ ] `401` 응답 시 자동 로그아웃 처리 (토큰 클리어 + `/login` 리다이렉트)
+  - [ ] 응답 파싱: 성공 시 `data`, 실패 시 `error.code` 추출
+- [ ] `features/auth/api.ts` — 인증 API 함수
+- [ ] `features/todos/api.ts` — 할 일 API 함수
+- [ ] `features/categories/api.ts` — 카테고리 API 함수
+- [ ] `features/settings/api.ts` — 설정 API 함수
+
+#### 완료 조건
+
+- [ ] 유효한 토큰으로 API 호출 시 정상 응답
+- [ ] 만료된 토큰으로 API 호출 시 로그아웃 처리됨
+- [ ] 네트워크 오류 시 적절한 오류 객체 반환
+- [ ] `VITE_API_BASE_URL` 변경만으로 API 서버 전환 가능
+
+---
+
+### FE-04: 인증 기능 구현
+
+**의존성**: FE-03, BE-04  
+**예상 소요**: 3시간
+
+#### 작업 목록
+
+- [ ] **회원가입 페이지** (`pages/RegisterPage.tsx`)
+  - [ ] 이메일, 비밀번호, 이름 입력 폼
+  - [ ] 클라이언트 사이드 검증 (비밀번호 규칙 안내)
+  - [ ] 성공 시 자동 로그인 또는 `/login`으로 이동
+  - [ ] `AUTH_EMAIL_DUPLICATE` → 이메일 중복 안내 메시지
+- [ ] **로그인 페이지** (`pages/LoginPage.tsx`)
+  - [ ] 이메일, 비밀번호 입력 폼
+  - [ ] 성공 시 토큰 저장 (Zustand) → `/todos` 이동
+  - [ ] `AUTH_INVALID_CREDENTIALS` → 오류 메시지 표시
+- [ ] **로그아웃**
+  - [ ] 토큰 클리어 후 `/login` 이동 (서버 요청 불필요)
+- [ ] **프로필 수정** (`features/auth/ProfileForm.tsx`)
+  - [ ] 이름, 비밀번호 수정 폼 (이메일 수정 필드 없음)
+
+#### 완료 조건
+
+- [ ] 회원가입 → 자동 로그인 → `/todos` 이동
+- [ ] 잘못된 자격증명 로그인 → 오류 메시지 표시 (로딩 상태 포함)
+- [ ] 로그아웃 후 보호된 라우트 접근 시 `/login` 리다이렉트
+- [ ] 브라우저 새로고침 후 로그인 상태 유지 (localStorage persist)
+
+---
+
+### FE-05: 할 일 기능 구현
+
+**의존성**: FE-04, BE-06  
+**예상 소요**: 5시간
+
+#### 작업 목록
+
+- [ ] **할 일 목록 페이지** (`pages/TodosPage.tsx`)
+  - [ ] TanStack Query로 `GET /todos` 조회 및 캐싱
+  - [ ] 상태 필터 UI (NOT_STARTED / IN_PROGRESS / DONE / OVERDUE)
+  - [ ] 카테고리 필터 UI (드롭다운)
+  - [ ] 필터 AND 조건 적용
+- [ ] **할 일 카드 컴포넌트** (`features/todos/TodoCard.tsx`)
+  - [ ] 상태 배지 색상 구분 (상태별 색상 정의)
+  - [ ] 완료/취소 토글 버튼
+  - [ ] 수정/삭제 버튼
+- [ ] **할 일 등록 폼** (`features/todos/TodoForm.tsx`)
+  - [ ] 제목(필수), 설명(선택), 카테고리 선택, 시작일/종료일 선택
+  - [ ] 종료일 < 시작일 선택 불가 처리
+  - [ ] TanStack Query Mutation으로 등록 후 목록 캐시 무효화
+- [ ] **할 일 수정 폼** — 등록 폼 재사용 또는 별도 모달
+- [ ] **할 일 삭제** — 확인 다이얼로그 후 삭제
+- [ ] **완료 처리/취소** — 낙관적 업데이트 (옵션)
+
+#### 완료 조건
+
+- [ ] 할 일 등록 후 목록에 즉시 반영 (캐시 무효화 또는 낙관적 업데이트)
+- [ ] 상태 필터 변경 시 목록 즉시 갱신
+- [ ] 완료 처리 후 상태가 `DONE`으로 변경됨
+- [ ] `TODO_TITLE_TOO_LONG` → 클라이언트에서 사전 차단
+- [ ] 백엔드가 계산한 `status` 값을 그대로 표시 (프론트 재계산 없음)
+
+---
+
+### FE-06: 카테고리 기능 구현
+
+**의존성**: FE-04, BE-05  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] **카테고리 목록** (`pages/CategoriesPage.tsx` 또는 설정 내 섹션)
+  - [ ] 카테고리 목록 조회
+  - [ ] 기본 카테고리는 수정/삭제 버튼 비활성화
+- [ ] **카테고리 생성 폼**
+  - [ ] 이름 1~30자 검증
+  - [ ] `CATEGORY_NAME_DUPLICATE` → 중복 안내
+- [ ] **카테고리 수정**
+  - [ ] 이름 수정 (기본 카테고리 제외)
+- [ ] **카테고리 삭제**
+  - [ ] 삭제 시 "해당 카테고리의 할 일이 기본으로 이동됩니다" 안내 다이얼로그
+  - [ ] 삭제 후 할 일 목록 캐시 무효화
+
+#### 완료 조건
+
+- [ ] 카테고리 삭제 후 해당 todos가 기본 카테고리로 이동됨 (목록 갱신 확인)
+- [ ] 기본 카테고리 수정/삭제 버튼 UI에서 비활성화
+- [ ] 동명 카테고리 생성 시 `409` 응답 후 오류 메시지 표시
+
+---
+
+### FE-07: 설정 기능 구현
+
+**의존성**: FE-04, BE-07  
+**예상 소요**: 2시간
+
+#### 작업 목록
+
+- [ ] **설정 페이지** (`pages/SettingsPage.tsx`)
+  - [ ] 테마 전환 토글 (LIGHT/DARK) — 낙관적 업데이트 적용
+  - [ ] 언어 선택 드롭다운 (ko/en) — 변경 즉시 i18n 적용
+- [ ] **테마 적용**
+  - [ ] Zustand store에 `theme` 상태 저장
+  - [ ] CSS class 또는 CSS 변수로 테마 전환
+- [ ] **언어 적용**
+  - [ ] `i18next.changeLanguage()` 호출
+  - [ ] 변경된 언어 서버 저장 후 localStorage 동기화
+
+#### 완료 조건
+
+- [ ] 테마 변경 즉시 UI 반영 (서버 응답 대기 없이 낙관적 업데이트)
+- [ ] 언어 변경 시 모든 UI 텍스트 즉시 전환
+- [ ] 새로고침 후에도 설정 유지 (DB 저장 확인)
+- [ ] 허용되지 않은 테마/언어 값 전송 → `400` 응답
+
+---
+
+## 실행 순서 요약 (Phase별)
+
+```
+Phase 1 (병렬)
+├── DB-01: 개발 환경 초기화
+├── BE-01: 백엔드 프로젝트 초기화
+└── FE-01: 프론트엔드 프로젝트 초기화
+
+Phase 2 (병렬, Phase 1 완료 후)
+├── DB-02: 스키마 마이그레이션 (DB-01 후)
+├── BE-02: DB 연결 설정 (DB-01, BE-01 후)
+├── BE-03: 공통 미들웨어 (BE-01 후)
+└── FE-02: 공통 인프라 구성 (FE-01 후)
+
+Phase 3 (순차)
+├── DB-03: statusCalculator.js (DB-02 후)
+├── BE-04: 인증 API (DB-02, BE-02, BE-03 후)
+└── FE-03: API Client 레이어 (FE-02 후)
+
+Phase 4 (병렬)
+├── BE-05: 카테고리 API (BE-04 후)
+├── BE-07: 설정 API (BE-04 후)
+├── FE-04: 인증 기능 (FE-03, BE-04 후)
+└── DB-03 → BE-06 준비
+
+Phase 5 (병렬)
+├── BE-06: 할 일 API (DB-03, BE-04, BE-05 후)
+├── FE-05: 할 일 기능 (FE-04, BE-06 후)
+├── FE-06: 카테고리 기능 (FE-04, BE-05 후)
+└── FE-07: 설정 기능 (FE-04, BE-07 후)
+```
+
+---
+
+## 다음 참조
+
+- 도메인 규칙: `docs/1-domain-definition.md`
+- 제품 요구사항: `docs/2-PRD.md`
+- 프로젝트 구조: `docs/4-project-structure.md`
+- 기술 아키텍처: `docs/5-arch-diagram.md`
+- ERD: `docs/6-erd.md`
+- DB 스키마: `database/schema.sql`
