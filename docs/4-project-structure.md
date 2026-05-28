@@ -676,6 +676,22 @@ psql $DATABASE_URL -f migrations/001_init.sql
 
 ---
 
+## 캘린더 뷰 컴포넌트 구조
+
+```
+frontend/src/
+├── pages/
+│   └── CalendarPage.tsx          (* 월별 캘린더 뷰 페이지)
+├── features/
+│   └── calendar/
+│       ├── api.ts                (* GET /todos?dueDateFrom&dueDateTo)
+│       ├── CalendarGrid.tsx      (* 7열×5행 월별 달력 그리드)
+│       ├── CalendarCell.tsx      (* 날짜 셀 + dot indicator)
+│       └── DayDetail.tsx         (* 선택된 날짜 할 일 목록 패널)
+```
+
+---
+
 ## 변경 이력
 
 | 버전 | 날짜       | 변경 내용                                                                                                                                                                 |

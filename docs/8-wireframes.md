@@ -1,6 +1,6 @@
 # TodoList 와이어프레임
 
-**버전**: 1.2
+**버전**: 1.3
 **작성일**: 2026-05-28
 **디자인 철학**: Apple Human Interface Guidelines (HIG) 반영
 **참조 문서**: docs/1-domain-definition.md (v2.1), docs/2-PRD.md (v2.1), docs/3-user-scenarios.md (v1.3), docs/4-project-structure.md (v1.2)
@@ -14,6 +14,7 @@
 | 1.0  | 2026-05-28 | 최초 작성                                         | -      |
 | 1.1  | 2026-05-28 | Apple HIG 디자인 철학 전면 반영, 디자인 토큰 추가 | -      |
 | 1.2  | 2026-05-28 | DatePicker 달력 팝업 추가 (WF-04), 날짜 범위 필터 추가 (WF-03) | -      |
+| 1.3  | 2026-05-28 | WF-08 캘린더 뷰 추가 (월별 할 일 일정 시각화) | -      |
 
 ---
 
@@ -136,6 +137,7 @@ graph TD
     Categories["카테고리 관리\n/categories\n(Inset Grouped List)"]:::page
     Settings["설정\n/settings\n(Grouped Settings List)"]:::page
     Profile["프로필\n/profile\n(Grouped Form)"]:::page
+    Calendar["캘린더\n/calendar\n(Monthly Grid)"]:::page
 
     Login -->|"로그인 성공\n→ spring 전환"| Todos
     Login -->|"회원가입 링크\n→ push 전환"| Register
@@ -146,6 +148,7 @@ graph TD
     Todos -->|"TabBar 카테고리"| Categories
     Todos -->|"TabBar 설정"| Settings
     Todos -->|"TabBar 프로필"| Profile
+    Todos -->|"TabBar 캘린더"| Calendar
     Profile -->|"로그아웃·탈퇴\n→ root 전환"| Login
 ```
 
@@ -153,8 +156,8 @@ graph TD
 
 ## 레이아웃 공통 원칙
 
-- **Desktop / iPad** (≥ 768px): 좌측 Inset Sidebar (200px) + 우측 메인 콘텐츠. 선택 항목 파란 pill 하이라이트.
-- **Mobile** (< 768px): 하단 TabBar 4탭 + 단일 컬럼. 현재 탭 System Blue, 미선택 회색.
+- **Desktop / iPad** (≥ 768px): 좌측 Inset Sidebar (200px) + 우측 메인 콘텐츠. 선택 항목 파란 pill 하이라이트. Sidebar 메뉴: 할 일, 캘린더, 카테고리, 설정.
+- **Mobile** (< 768px): 하단 TabBar 5탭(할일/캘린더/카테고리/설정/프로필) + 단일 컬럼. 현재 탭 System Blue, 미선택 회색.
 - **인증 화면** (`/login`, `/register`): 사이드바/TabBar 없음, 중앙 카드 레이아웃. 블러 배경 오버레이.
 - **Large Title**: 페이지 진입 시 34pt Bold 제목, 스크롤 시 NavigationBar inline 제목(17pt Semibold)으로 자동 전환.
 - **NavigationBar**: 반투명(blur) 배경 (`bg-overlay-blur`), 스크롤 시 separator 노출.
@@ -1627,6 +1630,179 @@ graph TD
 
 ---
 
+## WF-08: 캘린더 뷰 (`/calendar`)
+
+### 데스크톱 전체 레이아웃
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ [반투명 blur NavigationBar — bg-overlay-blur]                    │
+│  TodoList                         [홍길동]  [⚙]  [→ 로그아웃]   │
+├────────────────────┬─────────────────────────────────────────────┤
+│                    │                                             │
+│  [Inset Sidebar]   │  캘린더                      ← 2026년 5월 → │
+│                    │  (* Large Title 34pt Bold)  (* navigation)  │
+│    할 일            │                                             │
+│    캘린더           │  ┌──────────────────────────────────────┐  │
+│                    │  │  일    월    화    수    목    금    토  │  │
+│  ╭──────────────╮  │  │  (* caption 12pt, text-secondary)    │  │
+│  │ ⬤ 캘린더     │  │  ├──────────────────────────────────────┤  │
+│  ╰──────────────╯  │  │                               1    2  │  │
+│                    │  │   3     4     5     6     7    8    9  │  │
+│    카테고리        │  │  10    11    12    13    14   15   16  │  │
+│    설정            │  │  17    18    19    20    21   22   23  │  │
+│                    │  │  24    25    26    27   [28]  29   30  │  │
+│                    │  │  (* [28] 오늘: System Blue 외곽선 원)  │  │
+│                    │  │  31                                    │  │
+│                    │  └──────────────────────────────────────┘  │
+│                    │  (* Inset Grouped, radius-lg)              │
+│                    │                                             │
+│                    │  ╭────────────────────────────────────────╮ │
+│                    │  │  28일 (목) 할 일                       │ │
+│                    │  │                                        │ │
+│                    │  │  ◉  오늘 마감 리포트 작성    업무      │ │
+│                    │  │     ⬤ 완료  (* green)                  │ │
+│                    │  │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─  │ │
+│                    │  │  ○  API 명세서 검토          업무      │ │
+│                    │  │     ⬤ 진행중  (* blue)                 │ │
+│                    │  ╰────────────────────────────────────────╯ │
+│                    │  (* 선택된 날짜의 할 일 목록 패널)           │
+└────────────────────┴─────────────────────────────────────────────┘
+```
+
+날짜 셀 내 할 일 표시 (각 셀에 dot indicator):
+
+```
+│  24    25    26    27   [28]   29    30  │
+│                          ⬤              │  ← 28일에 할일 있음
+│  (* ⬤: 있으면 dot, 완료=green, 미완=blue) │
+```
+
+### 날짜 셀 상세 — 할 일 Dot Indicator
+
+```
+  ╭─────────────╮
+  │     28      │  ← 오늘: 외곽선 원 (color-blue border)
+  │  ⬤ ⬤ ⬤   │  ← 할 일 dot들 (최대 3개 표시, 초과 시 "+N")
+  ╰─────────────╯
+
+  (* ⬤: DONE → color-green, IN_PROGRESS → color-blue,
+         OVERDUE → color-red, NOT_STARTED → color-gray)
+```
+
+### 모바일 레이아웃
+
+```
+╔═════════════════════════════════╗
+║  [← ]  캘린더              [＋] ║
+║  (* blur NavigationBar)         ║
+╠═════════════════════════════════╣
+║  ←      2026년 5월       →     ║
+║  (* headline 17pt Semibold)     ║
+╠═════════════════════════════════╣
+║  일  월  화  수  목  금  토     ║
+║  (* caption 12pt, secondary)    ║
+╠═════════════════════════════════╣
+║                        1    2  ║
+║   3   4   5   6   7   8    9  ║
+║  10  11  12  13  14  15   16  ║
+║  17  18  19  20  21  22   23  ║
+║  24  25  26  27 [28] 29   30  ║
+║  31                            ║
+║  (* [28]: System Blue 외곽선 원)║
+║  (* 각 날짜 셀 아래 dot 표시)   ║
+╠═════════════════════════════════╣
+║  (* TabBar — blur 배경)         ║
+║  할일  📅캘린더 카테고리 설정  ║
+║  (* gray  blue   gray    gray) ║
+╚═════════════════════════════════╝
+```
+
+날짜 탭 → Bottom Sheet (일별 할 일 목록):
+
+```
+╔═════════════════════════════════════════╗
+║  (* 블러 딤 오버레이)                    ║
+║                                         ║
+║  ╭─────────────────────────────────────╮║
+║  │          ━━━━━                      │║
+║  │  (* grabber handle 4×36px)          │║
+║  │                                     │║
+║  │  5월 28일 (목) — 할 일 2개          │║
+║  │  (* title-3 20pt Semibold)          │║
+║  │                                     │║
+║  │  ◉  오늘 마감 리포트 작성   업무    │║
+║  │     ⬤ 완료  (* green)               │║
+║  │  ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─   │║
+║  │  ○  API 명세서 검토         업무    │║
+║  │     ⬤ 진행중  (* blue)  ~05-29     │║
+║  │                                     │║
+║  │  [──────────── + 할 일 추가 ───────] │║
+║  │  (* Secondary CTA, tint)            │║
+║  │                                     │║
+║  ╰─────────────────────────────────────╯║
+║  (* radius-xl, spring(0.4,0,0.2,1) 400ms)║
+╚═════════════════════════════════════════╝
+```
+
+### 빈 날짜 (할 일 없음)
+
+```
+│  5월 30일 (토) — 할 일 없음             │
+│                                        │
+│              📅                         │
+│     (* SF Symbol: calendar, 40pt)      │
+│                                        │
+│       이 날의 할 일이 없습니다.          │
+│       (* callout 16pt, text-secondary) │
+│                                        │
+│  [──────────── + 할 일 추가 ──────────] │
+│  (* Secondary CTA, tint)               │
+```
+
+### Apple HIG 적용 사항
+
+| 패턴 | 적용 내용 |
+|------|-----------|
+| Large Title | 34pt Bold "캘린더", 스크롤 시 inline 17pt 전환 |
+| Calendar Grid | 7열(일~토) × 5행, 각 셀 최소 44×44px 터치 영역 |
+| Dot Indicator | 할 일 상태별 color-green/blue/red/gray dot |
+| Day Detail (데스크톱) | 우측 패널, Inset Grouped List |
+| Bottom Sheet (모바일) | 날짜 탭 → spring 400ms 슬라이드업, grabber handle |
+| 오늘 강조 | System Blue 외곽선 원 (border만, filled 아님) |
+| 월 이동 | ← → 탭 시 달력 슬라이드 전환 spring 250ms |
+| TabBar (모바일) | 캘린더 탭 추가 (5번째 탭) |
+
+### 인터랙션 노트
+
+| 상황 | 동작 |
+|------|------|
+| 날짜 셀 탭 (모바일) | Bottom Sheet 슬라이드업, 해당 날짜 할 일 목록 표시 |
+| 날짜 셀 클릭 (데스크톱) | 우측 Day Detail 패널 업데이트 |
+| 월 이동 (← →) | 달력 슬라이드 전환 spring 250ms, selection haptic |
+| + 할 일 추가 | WF-04 Bottom Sheet / Center Modal 팝업 (해당 날짜 자동 입력) |
+| Dot 탭 | 해당 할 일 WF-04 수정 모달 열기 |
+| 오늘 날짜 자동 선택 | 캘린더 진입 시 오늘 날짜 자동 선택 + Day Detail 표시 |
+| end_date 기준 표시 | 종료일(end_date)이 있는 할 일만 달력에 표시, 없으면 미표시 |
+
+### API 매핑
+
+| UI 액션 | API 호출 |
+|---------|----------|
+| 월 로드 | `GET /todos?dueDateFrom=2026-05-01&dueDateTo=2026-05-31` |
+| 날짜 선택 | 프론트 필터링 (추가 API 호출 없음) |
+| + 추가 | `POST /todos` (end_date = 선택 날짜) |
+
+### 다크 모드 고려사항
+
+- 캘린더 배경: `bg-secondary` dark (`#1c1c1e`)
+- 날짜 셀 배경: `bg-tertiary` dark (`#2c2c2e`)
+- 오늘 강조 원: `color-blue` dark (`#0a84ff`) border
+- Dot Indicator: 각 상태 dark 토큰 그대로 사용
+- Day Detail 패널: `bg-grouped` dark (`#1c1c1e`)
+
+---
+
 ## 화면별 API 매핑 요약
 
 | 화면             | 진입 시 API                     | 사용자 액션 → API                                                                           |
@@ -1638,6 +1814,7 @@ graph TD
 | WF-05 카테고리   | `GET /categories`               | 추가: `POST /categories`<br>수정: `PATCH /categories/:id`<br>삭제: `DELETE /categories/:id` |
 | WF-06 설정       | `GET /users/me`                 | `PATCH /users/me/settings`                                                                  |
 | WF-07 프로필     | `GET /users/me`                 | 수정: `PATCH /users/me`<br>탈퇴: `DELETE /users/me`                                         |
+| WF-08 캘린더     | `GET /todos?dueDateFrom=&dueDateTo=` | 날짜 선택: 프론트 필터링<br>+ 추가: `POST /todos` (end_date = 선택 날짜)               |
 
 ---
 
