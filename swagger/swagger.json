@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "TodoList API",
-    "version": "1.0.0",
-    "description": "TodoList 서비스 REST API. JWT Bearer 인증 필요 (24시간 만료)."
+    "version": "1.1.0",
+    "description": "TodoList 서비스 REST API. JWT Bearer 인증 필요 (24시간 만료). 날짜 범위 필터(dueDateFrom / dueDateTo) 지원."
   },
   "servers": [
     {
@@ -12,10 +12,22 @@
     }
   ],
   "tags": [
-    { "name": "auth", "description": "인증 관련 API" },
-    { "name": "users", "description": "사용자 정보 관련 API" },
-    { "name": "categories", "description": "카테고리 관련 API" },
-    { "name": "todos", "description": "할 일 관련 API" }
+    {
+      "name": "auth",
+      "description": "인증 관련 API"
+    },
+    {
+      "name": "users",
+      "description": "사용자 정보 관련 API"
+    },
+    {
+      "name": "categories",
+      "description": "카테고리 관련 API"
+    },
+    {
+      "name": "todos",
+      "description": "할 일 관련 API"
+    }
   ],
   "components": {
     "securitySchemes": {
@@ -52,14 +64,20 @@
           },
           "theme": {
             "type": "string",
-            "enum": ["LIGHT", "DARK"],
+            "enum": [
+              "LIGHT",
+              "DARK"
+            ],
             "default": "LIGHT",
             "description": "UI 테마",
             "example": "LIGHT"
           },
           "language": {
             "type": "string",
-            "enum": ["ko", "en"],
+            "enum": [
+              "ko",
+              "en"
+            ],
             "default": "ko",
             "description": "언어 설정",
             "example": "ko"
@@ -77,7 +95,15 @@
             "example": "2026-05-28T09:00:00.000Z"
           }
         },
-        "required": ["id", "email", "name", "theme", "language", "createdAt", "updatedAt"]
+        "required": [
+          "id",
+          "email",
+          "name",
+          "theme",
+          "language",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "Category": {
         "type": "object",
@@ -114,7 +140,13 @@
             "example": "2026-05-28T09:00:00.000Z"
           }
         },
-        "required": ["id", "name", "isDefault", "createdAt", "updatedAt"]
+        "required": [
+          "id",
+          "name",
+          "isDefault",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "Todo": {
         "type": "object",
@@ -142,7 +174,12 @@
           },
           "status": {
             "type": "string",
-            "enum": ["NOT_STARTED", "IN_PROGRESS", "OVERDUE", "DONE"],
+            "enum": [
+              "NOT_STARTED",
+              "IN_PROGRESS",
+              "OVERDUE",
+              "DONE"
+            ],
             "readOnly": true,
             "description": "할 일 상태 (읽기 전용, 백엔드에서 날짜 기반 자동 계산)",
             "example": "IN_PROGRESS"
@@ -177,7 +214,10 @@
                 "example": "업무"
               }
             },
-            "required": ["id", "name"]
+            "required": [
+              "id",
+              "name"
+            ]
           },
           "createdAt": {
             "type": "string",
@@ -192,7 +232,14 @@
             "example": "2026-05-28T09:00:00.000Z"
           }
         },
-        "required": ["id", "title", "status", "category", "createdAt", "updatedAt"]
+        "required": [
+          "id",
+          "title",
+          "status",
+          "category",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "ApiError": {
         "type": "object",
@@ -212,17 +259,24 @@
                 "example": "이메일 또는 비밀번호가 올바르지 않습니다."
               }
             },
-            "required": ["code", "message"]
+            "required": [
+              "code",
+              "message"
+            ]
           }
         },
-        "required": ["error"]
+        "required": [
+          "error"
+        ]
       }
     }
   },
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["auth"],
+        "tags": [
+          "auth"
+        ],
         "operationId": "registerUser",
         "summary": "회원가입",
         "description": "새 계정을 생성합니다. 가입 성공 시 '기본' 카테고리가 자동으로 생성됩니다.",
@@ -255,7 +309,11 @@
                     "example": "홍길동"
                   }
                 },
-                "required": ["email", "password", "name"]
+                "required": [
+                  "email",
+                  "password",
+                  "name"
+                ]
               },
               "example": {
                 "email": "user@example.com",
@@ -309,7 +367,9 @@
             "x-korean-error-guide": "비밀번호는 영문과 숫자를 포함하여 최소 8자 이상이어야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "AUTH_PASSWORD_WEAK",
@@ -324,7 +384,9 @@
             "x-korean-error-guide": "해당 이메일로 이미 가입된 계정이 존재합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "AUTH_EMAIL_DUPLICATE",
@@ -339,7 +401,9 @@
     },
     "/auth/login": {
       "post": {
-        "tags": ["auth"],
+        "tags": [
+          "auth"
+        ],
         "operationId": "loginUser",
         "summary": "로그인",
         "description": "이메일과 비밀번호로 로그인하여 JWT 액세스 토큰을 발급받습니다.",
@@ -362,7 +426,10 @@
                     "example": "password1"
                   }
                 },
-                "required": ["email", "password"]
+                "required": [
+                  "email",
+                  "password"
+                ]
               },
               "example": {
                 "email": "user@example.com",
@@ -404,7 +471,9 @@
             "x-korean-error-guide": "이메일 또는 비밀번호를 다시 확인해주세요.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "AUTH_INVALID_CREDENTIALS",
@@ -419,11 +488,17 @@
     },
     "/users/me": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "operationId": "getMe",
         "summary": "내 정보 조회",
         "description": "현재 로그인한 사용자의 프로필 정보를 조회합니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "사용자 정보 조회 성공",
@@ -432,7 +507,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/User" }
+                    "data": {
+                      "$ref": "#/components/schemas/User"
+                    }
                   }
                 },
                 "example": {
@@ -454,7 +531,9 @@
             "x-korean-error-guide": "Authorization 헤더에 유효한 Bearer 토큰을 포함해야 합니다. 토큰이 만료된 경우 재로그인이 필요합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "tokenMissing": {
                     "summary": "토큰 누락",
@@ -490,11 +569,17 @@
         }
       },
       "patch": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "operationId": "updateMe",
         "summary": "프로필 수정 (이름 또는 비밀번호)",
         "description": "이름 또는 비밀번호를 수정합니다. 이메일은 변경할 수 없습니다. 비밀번호 변경 시 currentPassword가 필수입니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -576,7 +661,9 @@
             "x-korean-error-guide": "새 비밀번호는 영문과 숫자를 포함하여 최소 8자 이상이어야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "AUTH_PASSWORD_WEAK",
@@ -591,7 +678,9 @@
             "x-korean-error-guide": "현재 비밀번호가 올바르지 않거나 인증 토큰이 유효하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "AUTH_PASSWORD_MISMATCH",
@@ -604,11 +693,17 @@
         }
       },
       "delete": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "operationId": "deleteMe",
         "summary": "회원 탈퇴",
         "description": "계정을 삭제합니다. 연관된 모든 데이터(카테고리, 할 일 등)가 cascade 삭제됩니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "회원 탈퇴 성공",
@@ -634,7 +729,9 @@
             "x-korean-error-guide": "Authorization 헤더에 유효한 Bearer 토큰을 포함해야 합니다. 토큰이 만료된 경우 재로그인이 필요합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "tokenMissing": {
                     "summary": "토큰 누락",
@@ -672,11 +769,17 @@
     },
     "/users/me/settings": {
       "patch": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "operationId": "updateMySettings",
         "summary": "테마 / 언어 설정 변경",
         "description": "사용자의 UI 테마 또는 언어 설정을 변경합니다. theme 또는 language 중 적어도 하나는 포함되어야 합니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -686,13 +789,19 @@
                 "properties": {
                   "theme": {
                     "type": "string",
-                    "enum": ["LIGHT", "DARK"],
+                    "enum": [
+                      "LIGHT",
+                      "DARK"
+                    ],
                     "description": "UI 테마 (선택)",
                     "example": "DARK"
                   },
                   "language": {
                     "type": "string",
-                    "enum": ["ko", "en"],
+                    "enum": [
+                      "ko",
+                      "en"
+                    ],
                     "description": "언어 설정 (선택)",
                     "example": "en"
                   }
@@ -718,12 +827,18 @@
                       "properties": {
                         "theme": {
                           "type": "string",
-                          "enum": ["LIGHT", "DARK"],
+                          "enum": [
+                            "LIGHT",
+                            "DARK"
+                          ],
                           "example": "DARK"
                         },
                         "language": {
                           "type": "string",
-                          "enum": ["ko", "en"],
+                          "enum": [
+                            "ko",
+                            "en"
+                          ],
                           "example": "en"
                         }
                       }
@@ -744,7 +859,9 @@
             "x-korean-error-guide": "theme 또는 language 중 적어도 하나의 유효한 값을 포함해야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "VALIDATION_ERROR",
@@ -759,11 +876,17 @@
     },
     "/categories": {
       "get": {
-        "tags": ["categories"],
+        "tags": [
+          "categories"
+        ],
         "operationId": "getCategories",
         "summary": "카테고리 목록 조회",
         "description": "현재 로그인한 사용자의 카테고리 목록을 조회합니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "카테고리 목록 조회 성공",
@@ -774,7 +897,9 @@
                   "properties": {
                     "data": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/Category" }
+                      "items": {
+                        "$ref": "#/components/schemas/Category"
+                      }
                     }
                   }
                 },
@@ -804,7 +929,9 @@
             "x-korean-error-guide": "Authorization 헤더에 유효한 Bearer 토큰을 포함해야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "tokenMissing": {
                     "summary": "토큰 누락",
@@ -831,11 +958,17 @@
         }
       },
       "post": {
-        "tags": ["categories"],
+        "tags": [
+          "categories"
+        ],
         "operationId": "createCategory",
         "summary": "카테고리 생성",
         "description": "새 카테고리를 생성합니다. 동일 사용자 내에서 대소문자 구분 없이 중복된 이름은 사용할 수 없습니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -851,7 +984,9 @@
                     "example": "업무"
                   }
                 },
-                "required": ["name"]
+                "required": [
+                  "name"
+                ]
               },
               "example": {
                 "name": "업무"
@@ -867,7 +1002,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/Category" }
+                    "data": {
+                      "$ref": "#/components/schemas/Category"
+                    }
                   }
                 },
                 "example": {
@@ -887,7 +1024,9 @@
             "x-korean-error-guide": "카테고리 이름은 최대 30자까지 입력 가능합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "CATEGORY_NAME_TOO_LONG",
@@ -902,7 +1041,9 @@
             "x-korean-error-guide": "동일한 이름의 카테고리가 이미 존재합니다. 대소문자 구분 없이 중복 검사가 적용됩니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "CATEGORY_NAME_DUPLICATE",
@@ -917,11 +1058,17 @@
     },
     "/categories/{categoryId}": {
       "patch": {
-        "tags": ["categories"],
+        "tags": [
+          "categories"
+        ],
         "operationId": "updateCategory",
         "summary": "카테고리 이름 수정",
         "description": "카테고리 이름을 수정합니다. 기본 카테고리는 수정할 수 없습니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "categoryId",
@@ -950,7 +1097,9 @@
                     "example": "개인"
                   }
                 },
-                "required": ["name"]
+                "required": [
+                  "name"
+                ]
               },
               "example": {
                 "name": "개인"
@@ -966,7 +1115,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/Category" }
+                    "data": {
+                      "$ref": "#/components/schemas/Category"
+                    }
                   }
                 },
                 "example": {
@@ -986,7 +1137,9 @@
             "x-korean-error-guide": "기본 카테고리는 수정할 수 없습니다. 카테고리 이름은 최대 30자까지 입력 가능합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "defaultImmutable": {
                     "summary": "기본 카테고리 수정 불가",
@@ -1015,7 +1168,9 @@
             "x-korean-error-guide": "본인 소유의 카테고리만 수정할 수 있습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "FORBIDDEN",
@@ -1030,7 +1185,9 @@
             "x-korean-error-guide": "요청한 categoryId에 해당하는 카테고리가 존재하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "NOT_FOUND",
@@ -1045,7 +1202,9 @@
             "x-korean-error-guide": "동일한 이름의 카테고리가 이미 존재합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "CATEGORY_NAME_DUPLICATE",
@@ -1058,11 +1217,17 @@
         }
       },
       "delete": {
-        "tags": ["categories"],
+        "tags": [
+          "categories"
+        ],
         "operationId": "deleteCategory",
         "summary": "카테고리 삭제",
         "description": "카테고리를 삭제합니다. 기본 카테고리는 삭제할 수 없습니다. 삭제된 카테고리에 소속된 할 일은 자동으로 '기본' 카테고리로 이동됩니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "categoryId",
@@ -1101,7 +1266,9 @@
             "x-korean-error-guide": "기본 카테고리는 삭제할 수 없습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "CATEGORY_DEFAULT_IMMUTABLE",
@@ -1116,7 +1283,9 @@
             "x-korean-error-guide": "본인 소유의 카테고리만 삭제할 수 있습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "FORBIDDEN",
@@ -1131,7 +1300,9 @@
             "x-korean-error-guide": "요청한 categoryId에 해당하는 카테고리가 존재하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "NOT_FOUND",
@@ -1146,11 +1317,17 @@
     },
     "/todos": {
       "get": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "operationId": "getTodos",
         "summary": "할 일 목록 조회",
-        "description": "현재 로그인한 사용자의 할 일 목록을 조회합니다. 필터 조건은 AND로 적용됩니다.",
-        "security": [{ "BearerAuth": [] }],
+        "description": "로그인한 사용자의 할 일 목록을 조회합니다. status, categoryId, dueDateFrom, dueDateTo 파라미터로 AND 조건 필터링이 가능합니다. 날짜 범위 필터는 종료일(endDate) 기준으로 적용됩니다.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "status",
@@ -1158,7 +1335,12 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": ["NOT_STARTED", "IN_PROGRESS", "OVERDUE", "DONE"]
+              "enum": [
+                "NOT_STARTED",
+                "IN_PROGRESS",
+                "OVERDUE",
+                "DONE"
+              ]
             },
             "description": "백엔드 계산 상태 기준 필터 (선택)",
             "example": "IN_PROGRESS"
@@ -1173,6 +1355,28 @@
             },
             "description": "카테고리 ID 기준 필터 (선택)",
             "example": "660e8400-e29b-41d4-a716-446655440001"
+          },
+          {
+            "name": "dueDateFrom",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "마감일(종료일) 범위 시작 — 이 날짜 이후의 할 일만 반환 (inclusive)",
+            "example": "2026-05-01"
+          },
+          {
+            "name": "dueDateTo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "마감일(종료일) 범위 끝 — 이 날짜 이전의 할 일만 반환 (inclusive)",
+            "example": "2026-05-31"
           }
         ],
         "responses": {
@@ -1185,7 +1389,9 @@
                   "properties": {
                     "data": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/Todo" }
+                      "items": {
+                        "$ref": "#/components/schemas/Todo"
+                      }
                     }
                   }
                 },
@@ -1215,7 +1421,9 @@
             "x-korean-error-guide": "Authorization 헤더에 유효한 Bearer 토큰을 포함해야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "tokenMissing": {
                     "summary": "토큰 누락",
@@ -1242,11 +1450,17 @@
         }
       },
       "post": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "operationId": "createTodo",
         "summary": "할 일 등록",
         "description": "새 할 일을 등록합니다. categoryId를 지정하지 않으면 기본 카테고리에 추가됩니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1286,7 +1500,9 @@
                     "example": "2026-05-29"
                   }
                 },
-                "required": ["title"]
+                "required": [
+                  "title"
+                ]
               },
               "example": {
                 "title": "API 명세서 작성",
@@ -1306,7 +1522,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/Todo" }
+                    "data": {
+                      "$ref": "#/components/schemas/Todo"
+                    }
                   }
                 },
                 "example": {
@@ -1333,7 +1551,9 @@
             "x-korean-error-guide": "title은 필수입니다. 최대 100자. description은 최대 1000자. endDate는 startDate보다 같거나 늦어야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "titleRequired": {
                     "summary": "제목 누락",
@@ -1380,11 +1600,17 @@
     },
     "/todos/{todoId}": {
       "patch": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "operationId": "updateTodo",
         "summary": "할 일 수정",
         "description": "할 일의 내용을 수정합니다. 모든 필드는 선택 사항입니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "todoId",
@@ -1453,7 +1679,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/Todo" }
+                    "data": {
+                      "$ref": "#/components/schemas/Todo"
+                    }
                   }
                 },
                 "example": {
@@ -1480,7 +1708,9 @@
             "x-korean-error-guide": "제목은 최대 100자, 종료일은 시작일보다 같거나 늦어야 합니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "examples": {
                   "titleTooLong": {
                     "summary": "제목이 너무 긺",
@@ -1509,7 +1739,9 @@
             "x-korean-error-guide": "본인 소유의 할 일만 수정할 수 있습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "FORBIDDEN",
@@ -1524,7 +1756,9 @@
             "x-korean-error-guide": "요청한 todoId에 해당하는 할 일이 존재하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "NOT_FOUND",
@@ -1537,11 +1771,17 @@
         }
       },
       "delete": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "operationId": "deleteTodo",
         "summary": "할 일 삭제",
         "description": "할 일을 삭제합니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "todoId",
@@ -1580,7 +1820,9 @@
             "x-korean-error-guide": "본인 소유의 할 일만 삭제할 수 있습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "FORBIDDEN",
@@ -1595,7 +1837,9 @@
             "x-korean-error-guide": "요청한 todoId에 해당하는 할 일이 존재하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "NOT_FOUND",
@@ -1610,11 +1854,17 @@
     },
     "/todos/{todoId}/complete": {
       "patch": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "operationId": "completeTodo",
         "summary": "할 일 완료 처리",
         "description": "할 일의 상태를 DONE으로 변경합니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "todoId",
@@ -1636,7 +1886,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/Todo" }
+                    "data": {
+                      "$ref": "#/components/schemas/Todo"
+                    }
                   }
                 },
                 "example": {
@@ -1663,7 +1915,9 @@
             "x-korean-error-guide": "본인 소유의 할 일만 완료 처리할 수 있습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "FORBIDDEN",
@@ -1678,7 +1932,9 @@
             "x-korean-error-guide": "요청한 todoId에 해당하는 할 일이 존재하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "NOT_FOUND",
@@ -1693,11 +1949,17 @@
     },
     "/todos/{todoId}/incomplete": {
       "patch": {
-        "tags": ["todos"],
+        "tags": [
+          "todos"
+        ],
         "operationId": "incompleteTodo",
         "summary": "할 일 완료 취소",
         "description": "할 일의 완료 상태를 취소합니다. status가 NULL로 초기화되어 날짜 기반으로 NOT_STARTED, IN_PROGRESS, OVERDUE 중 하나로 재계산됩니다.",
-        "security": [{ "BearerAuth": [] }],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "todoId",
@@ -1719,7 +1981,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": { "$ref": "#/components/schemas/Todo" }
+                    "data": {
+                      "$ref": "#/components/schemas/Todo"
+                    }
                   }
                 },
                 "example": {
@@ -1746,7 +2010,9 @@
             "x-korean-error-guide": "본인 소유의 할 일만 완료 취소할 수 있습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "FORBIDDEN",
@@ -1761,7 +2027,9 @@
             "x-korean-error-guide": "요청한 todoId에 해당하는 할 일이 존재하지 않습니다.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ApiError" },
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                },
                 "example": {
                   "error": {
                     "code": "NOT_FOUND",
