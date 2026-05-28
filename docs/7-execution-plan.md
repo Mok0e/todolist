@@ -344,25 +344,25 @@ gantt
 
 #### 작업 목록
 
-- [ ] **카테고리 목록 조회** `GET /categories` (인증 필요)
-  - [ ] `req.userId`의 카테고리만 반환
-- [ ] **카테고리 생성** `POST /categories` (인증 필요)
-  - [ ] 이름 1~30자 검증
-  - [ ] 동일 사용자 내 대소문자 무시 중복 확인 (`CATEGORY_NAME_DUPLICATE` 409)
-- [ ] **카테고리 수정** `PATCH /categories/:id` (인증 필요)
-  - [ ] 기본 카테고리 수정 시도 → `400 CATEGORY_DEFAULT_IMMUTABLE`
-  - [ ] 타인 카테고리 수정 → `403 FORBIDDEN`
-- [ ] **카테고리 삭제** `DELETE /categories/:id` (인증 필요)
-  - [ ] 기본 카테고리 삭제 시도 → `400 CATEGORY_DEFAULT_IMMUTABLE`
-  - [ ] 삭제 전 해당 카테고리의 todos → 기본 카테고리로 `category_id` 업데이트 (트랜잭션)
-  - [ ] 타인 카테고리 삭제 → `403 FORBIDDEN`
+- [x] **카테고리 목록 조회** `GET /categories` (인증 필요)
+  - [x] `req.userId`의 카테고리만 반환
+- [x] **카테고리 생성** `POST /categories` (인증 필요)
+  - [x] 이름 1~30자 검증
+  - [x] 동일 사용자 내 대소문자 무시 중복 확인 (`CATEGORY_NAME_DUPLICATE` 409)
+- [x] **카테고리 수정** `PATCH /categories/:id` (인증 필요)
+  - [x] 기본 카테고리 수정 시도 → `400 CATEGORY_DEFAULT_IMMUTABLE`
+  - [x] 타인 카테고리 수정 → `403 FORBIDDEN`
+- [x] **카테고리 삭제** `DELETE /categories/:id` (인증 필요)
+  - [x] 기본 카테고리 삭제 시도 → `400 CATEGORY_DEFAULT_IMMUTABLE`
+  - [x] 삭제 전 해당 카테고리의 todos → 기본 카테고리로 `category_id` 업데이트 (트랜잭션)
+  - [x] 타인 카테고리 삭제 → `403 FORBIDDEN`
 
 #### 완료 조건
 
-- [ ] 카테고리 삭제 시 todos가 기본 카테고리로 자동 이동됨
-- [ ] 기본 카테고리(`is_default=true`) 수정/삭제 시 `400` 응답
-- [ ] 타인 카테고리에 CRUD 시도 → `403` 응답
-- [ ] 동명 카테고리 생성 시 `409` 응답 (대소문자 무시)
+- [x] 카테고리 삭제 시 todos가 기본 카테고리로 자동 이동됨
+- [x] 기본 카테고리(`is_default=true`) 수정/삭제 시 `400` 응답
+- [x] 타인 카테고리에 CRUD 시도 → `403` 응답
+- [x] 동명 카테고리 생성 시 `409` 응답 (대소문자 무시)
 
 ---
 
