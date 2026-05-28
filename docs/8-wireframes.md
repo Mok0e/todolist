@@ -9,9 +9,9 @@
 
 ## 변경 이력
 
-| 버전 | 날짜       | 변경 내용                                      | 작성자 |
-| ---- | ---------- | ---------------------------------------------- | ------ |
-| 1.0  | 2026-05-28 | 최초 작성                                      | -      |
+| 버전 | 날짜       | 변경 내용                                         | 작성자 |
+| ---- | ---------- | ------------------------------------------------- | ------ |
+| 1.0  | 2026-05-28 | 최초 작성                                         | -      |
 | 1.1  | 2026-05-28 | Apple HIG 디자인 철학 전면 반영, 디자인 토큰 추가 | -      |
 
 ---
@@ -20,65 +20,65 @@
 
 ### 색상 팔레트
 
-| 토큰명              | Light Mode  | Dark Mode   | 용도                        |
-| ------------------- | ----------- | ----------- | --------------------------- |
-| `color-blue`        | `#0071e3`   | `#0a84ff`   | System Blue, Primary CTA    |
-| `color-green`       | `#28cd41`   | `#30d158`   | 완료 상태, 성공 피드백       |
-| `color-red`         | `#ff3b30`   | `#ff453a`   | 삭제, 오류, Destructive 액션 |
-| `color-orange`      | `#ff9500`   | `#ff9f0a`   | 기한 초과 경고, 주의         |
-| `color-gray`        | `#8e8e93`   | `#636366`   | 비활성, 보조 텍스트          |
-| `bg-primary`        | `#ffffff`   | `#000000`   | 주 배경                      |
-| `bg-secondary`      | `#f5f5f7`   | `#1c1c1e`   | 섹션 배경, 카드 배경         |
-| `bg-tertiary`       | `#ffffff`   | `#2c2c2e`   | 카드 내부, 입력 필드 배경    |
-| `bg-grouped`        | `#f2f2f7`   | `#1c1c1e`   | Grouped List 배경            |
-| `text-primary`      | `#1d1d1f`   | `#f5f5f7`   | 본문 텍스트                  |
-| `text-secondary`    | `#86868b`   | `#ebebf5`   | 보조 텍스트, 힌트            |
-| `text-tint`         | `#0071e3`   | `#0a84ff`   | 링크, Tint 버튼 텍스트       |
-| `separator`         | `#c6c6c8`   | `#38383a`   | 구분선 (1px)                 |
-| `overlay-blur`      | `rgba(255,255,255,0.72)` | `rgba(28,28,30,0.72)` | 반투명 블러 배경 |
+| 토큰명           | Light Mode               | Dark Mode             | 용도                         |
+| ---------------- | ------------------------ | --------------------- | ---------------------------- |
+| `color-blue`     | `#0071e3`                | `#0a84ff`             | System Blue, Primary CTA     |
+| `color-green`    | `#28cd41`                | `#30d158`             | 완료 상태, 성공 피드백       |
+| `color-red`      | `#ff3b30`                | `#ff453a`             | 삭제, 오류, Destructive 액션 |
+| `color-orange`   | `#ff9500`                | `#ff9f0a`             | 기한 초과 경고, 주의         |
+| `color-gray`     | `#8e8e93`                | `#636366`             | 비활성, 보조 텍스트          |
+| `bg-primary`     | `#ffffff`                | `#000000`             | 주 배경                      |
+| `bg-secondary`   | `#f5f5f7`                | `#1c1c1e`             | 섹션 배경, 카드 배경         |
+| `bg-tertiary`    | `#ffffff`                | `#2c2c2e`             | 카드 내부, 입력 필드 배경    |
+| `bg-grouped`     | `#f2f2f7`                | `#1c1c1e`             | Grouped List 배경            |
+| `text-primary`   | `#1d1d1f`                | `#f5f5f7`             | 본문 텍스트                  |
+| `text-secondary` | `#86868b`                | `#ebebf5`             | 보조 텍스트, 힌트            |
+| `text-tint`      | `#0071e3`                | `#0a84ff`             | 링크, Tint 버튼 텍스트       |
+| `separator`      | `#c6c6c8`                | `#38383a`             | 구분선 (1px)                 |
+| `overlay-blur`   | `rgba(255,255,255,0.72)` | `rgba(28,28,30,0.72)` | 반투명 블러 배경             |
 
 ### 타이포그래피
 
-| 토큰명                 | 폰트                  | 크기  | 굵기      | 용도                    |
-| ---------------------- | --------------------- | ----- | --------- | ----------------------- |
-| `type-large-title`     | SF Pro Display        | 34pt  | Bold      | Large Title (진입 시)   |
-| `type-title-1`         | SF Pro Display        | 28pt  | Bold      | 섹션 제목               |
-| `type-title-2`         | SF Pro Display        | 22pt  | Bold      | 카드 제목               |
-| `type-title-3`         | SF Pro Display        | 20pt  | Semibold  | 서브 섹션 제목          |
-| `type-headline`        | SF Pro Text           | 17pt  | Semibold  | 항목 제목               |
-| `type-body`            | SF Pro Text           | 17pt  | Regular   | 본문                    |
-| `type-callout`         | SF Pro Text           | 16pt  | Regular   | 설명 텍스트             |
-| `type-subheadline`     | SF Pro Text           | 15pt  | Regular   | 보조 정보               |
-| `type-footnote`        | SF Pro Text           | 13pt  | Regular   | 메타 정보, 글자수       |
-| `type-caption`         | SF Pro Text           | 12pt  | Regular   | 배지, 라벨              |
-| `type-code`            | SF Mono               | 13pt  | Regular   | 코드, 날짜 (고정폭)     |
+| 토큰명             | 폰트           | 크기 | 굵기     | 용도                  |
+| ------------------ | -------------- | ---- | -------- | --------------------- |
+| `type-large-title` | SF Pro Display | 34pt | Bold     | Large Title (진입 시) |
+| `type-title-1`     | SF Pro Display | 28pt | Bold     | 섹션 제목             |
+| `type-title-2`     | SF Pro Display | 22pt | Bold     | 카드 제목             |
+| `type-title-3`     | SF Pro Display | 20pt | Semibold | 서브 섹션 제목        |
+| `type-headline`    | SF Pro Text    | 17pt | Semibold | 항목 제목             |
+| `type-body`        | SF Pro Text    | 17pt | Regular  | 본문                  |
+| `type-callout`     | SF Pro Text    | 16pt | Regular  | 설명 텍스트           |
+| `type-subheadline` | SF Pro Text    | 15pt | Regular  | 보조 정보             |
+| `type-footnote`    | SF Pro Text    | 13pt | Regular  | 메타 정보, 글자수     |
+| `type-caption`     | SF Pro Text    | 12pt | Regular  | 배지, 라벨            |
+| `type-code`        | SF Mono        | 13pt | Regular  | 코드, 날짜 (고정폭)   |
 
 ### 간격 및 Border Radius
 
-| 토큰명           | 값       | 용도                          |
-| ---------------- | -------- | ----------------------------- |
-| `radius-sm`      | 8px      | 소형 배지, 태그               |
-| `radius-md`      | 12px     | 입력 필드, 소형 카드          |
-| `radius-lg`      | 16px     | Inset Grouped List 섹션       |
-| `radius-xl`      | 20px     | 모달 카드, Bottom Sheet       |
-| `radius-full`    | 9999px   | Pill 버튼, 토글, Search Bar   |
-| `spacing-xs`     | 4px      | 요소 내부 미세 간격           |
-| `spacing-sm`     | 8px      | 관련 요소 간격                |
-| `spacing-md`     | 16px     | 기본 패딩, 섹션 내부 패딩     |
-| `spacing-lg`     | 20px     | 섹션 간 간격                  |
-| `spacing-xl`     | 32px     | 페이지 상단 여백              |
-| `touch-target`   | 44×44px  | 최소 터치/클릭 영역           |
+| 토큰명         | 값      | 용도                        |
+| -------------- | ------- | --------------------------- |
+| `radius-sm`    | 8px     | 소형 배지, 태그             |
+| `radius-md`    | 12px    | 입력 필드, 소형 카드        |
+| `radius-lg`    | 16px    | Inset Grouped List 섹션     |
+| `radius-xl`    | 20px    | 모달 카드, Bottom Sheet     |
+| `radius-full`  | 9999px  | Pill 버튼, 토글, Search Bar |
+| `spacing-xs`   | 4px     | 요소 내부 미세 간격         |
+| `spacing-sm`   | 8px     | 관련 요소 간격              |
+| `spacing-md`   | 16px    | 기본 패딩, 섹션 내부 패딩   |
+| `spacing-lg`   | 20px    | 섹션 간 간격                |
+| `spacing-xl`   | 32px    | 페이지 상단 여백            |
+| `touch-target` | 44×44px | 최소 터치/클릭 영역         |
 
 ### 애니메이션
 
-| 토큰명                  | 값                                   | 용도                       |
-| ----------------------- | ------------------------------------ | -------------------------- |
-| `spring-default`        | spring(0.4, 0, 0.2, 1) 300ms        | 기본 트랜지션              |
-| `spring-sheet`          | spring(0.4, 0, 0.2, 1) 400ms        | Bottom Sheet 슬라이드업    |
-| `spring-modal`          | spring(0.5, 0, 0.2, 1) 350ms        | Center Modal 등장          |
-| `ease-toast`            | ease-out 250ms                       | Toast 슬라이드다운         |
-| `ease-toggle`           | ease-in-out 200ms                    | 토글 스위치 전환           |
-| `ease-context-menu`     | spring(0.3, 0, 0.2, 1) 280ms        | Context Menu 팝업          |
+| 토큰명              | 값                           | 용도                    |
+| ------------------- | ---------------------------- | ----------------------- |
+| `spring-default`    | spring(0.4, 0, 0.2, 1) 300ms | 기본 트랜지션           |
+| `spring-sheet`      | spring(0.4, 0, 0.2, 1) 400ms | Bottom Sheet 슬라이드업 |
+| `spring-modal`      | spring(0.5, 0, 0.2, 1) 350ms | Center Modal 등장       |
+| `ease-toast`        | ease-out 250ms               | Toast 슬라이드다운      |
+| `ease-toggle`       | ease-in-out 200ms            | 토글 스위치 전환        |
+| `ease-context-menu` | spring(0.3, 0, 0.2, 1) 280ms | Context Menu 팝업       |
 
 ---
 
@@ -221,25 +221,88 @@ graph TD
 │   [────────────── 로그인 ──────────────]                         │
 ```
 
+### 모바일
+
+```
+┌─────────────────────────────────┐
+│                                 │
+│                                 │
+│           TodoList              │
+│      (SF Pro Display 28pt)      │
+│                                 │
+│  ╭───────────────────────────╮  │
+│  │                           │  │
+│  │  이메일                    │  │
+│  │  ╭─────────────────────╮  │  │
+│  │  │  user@example.com   │  │  │
+│  │  ╰─────────────────────╯  │  │
+│  │  (* Floating Label)       │  │
+│  │                           │  │
+│  │  비밀번호                  │  │
+│  │  ╭─────────────────────╮  │  │
+│  │  │  ••••••••      [👁] │  │  │
+│  │  ╰─────────────────────╯  │  │
+│  │                           │  │
+│  │  [───────── 로그인 ──────] │  │
+│  │  (* 풀너비, 50px, pill)    │  │
+│  │                           │  │
+│  │  계정이 없으신가요? [회원가입]│  │
+│  │                           │  │
+│  ╰───────────────────────────╯  │
+│  (* 좌우 16px padding, 풀너비)  │
+│                                 │
+│          [한국어  ▾]             │
+│                                 │
+└─────────────────────────────────┘
+```
+
+> **반응형 동작**: 카드가 좌우 `spacing-md(16px)` padding을 유지하며 화면 너비에 맞게 늘어남. 데스크톱 고정 너비(480px) → 모바일 풀너비.
+
+### 모바일 — 오류 상태
+
+```
+┌─────────────────────────────────┐
+│  ╭─────────────────────────╮    │
+│  │  이메일                  │    │
+│  │  ╭───────────────────╮  │    │
+│  │  │  user@example.com │  │    │  ← border: color-red
+│  │  ╰───────────────────╯  │    │
+│  │  비밀번호               │    │
+│  │  ╭───────────────────╮  │    │
+│  │  │  ••••••••    [👁] │  │    │  ← border: color-red
+│  │  ╰───────────────────╯  │    │
+│  │                         │    │
+│  │  ╭─────────────────────╮│    │
+│  │  │ ⚠ 이메일 또는        ││    │
+│  │  │   비밀번호가          ││    │
+│  │  │   올바르지 않습니다.  ││    │
+│  │  ╰─────────────────────╯│    │
+│  │                         │    │
+│  │  [───────── 로그인 ─────]│    │
+│  ╰─────────────────────────╯    │
+└─────────────────────────────────┘
+```
+
 ### Apple HIG 적용 사항
 
-| 패턴                  | 적용 내용                                                         |
-| --------------------- | ----------------------------------------------------------------- |
-| Center Modal 레이아웃 | radius-xl(20px) 카드, bg-secondary 배경, 블러 딤 효과             |
-| Floating Label 입력   | 포커스 시 레이블 위로 이동, spring(0.4,0,0.2,1) 200ms 애니메이션  |
-| Primary CTA           | 풀너비, 50px 높이, radius-full, System Blue 배경                  |
-| Tint Button           | 회원가입 링크, System Blue 텍스트만                               |
-| SF Symbol             | 비밀번호 보기/숨기기 eye 아이콘 (44×44px 터치 영역)               |
+| 패턴                  | 적용 내용                                                        |
+| --------------------- | ---------------------------------------------------------------- |
+| Center Card 레이아웃  | 데스크톱: radius-xl(20px) 고정 카드 / 모바일: 풀너비 + 16px 패딩 |
+| Floating Label 입력   | 포커스 시 레이블 위로 이동, spring(0.4,0,0.2,1) 200ms 애니메이션 |
+| Primary CTA           | 풀너비, 50px 높이, radius-full, System Blue 배경                 |
+| Tint Button           | 회원가입 링크, System Blue 텍스트만                              |
+| SF Symbol             | 비밀번호 보기/숨기기 eye 아이콘 (44×44px 터치 영역)              |
+| 반응형 카드           | ≥768px: 480px 고정폭 중앙 카드 / <768px: 좌우 16px margin 풀너비 |
 
 ### 인터랙션 노트
 
-| 상황                            | 동작                                                               |
-| ------------------------------- | ------------------------------------------------------------------ |
-| 로그인 성공                     | JWT 저장 → `/todos` spring 전환, 성공 haptic feedback (medium)     |
-| 이미 로그인됨                   | 자동으로 `/todos` 리다이렉트                                       |
-| 오류 `AUTH_INVALID_CREDENTIALS` | 인라인 오류 메시지 표시 (이메일 존재 여부 미노출), error haptic     |
-| 언어 선택                       | 드롭다운 변경 시 즉시 UI 언어 전환 (서버 저장 없음)                |
-| 버튼 로딩 중                    | 로그인 버튼 내 ActivityIndicator 표시, 버튼 비활성화               |
+| 상황                            | 동작                                                            |
+| ------------------------------- | --------------------------------------------------------------- |
+| 로그인 성공                     | JWT 저장 → `/todos` spring 전환, 성공 haptic feedback (medium)  |
+| 이미 로그인됨                   | 자동으로 `/todos` 리다이렉트                                    |
+| 오류 `AUTH_INVALID_CREDENTIALS` | 인라인 오류 메시지 표시 (이메일 존재 여부 미노출), error haptic |
+| 언어 선택                       | 드롭다운 변경 시 즉시 UI 언어 전환 (서버 저장 없음)             |
+| 버튼 로딩 중                    | 로그인 버튼 내 ActivityIndicator 표시, 버튼 비활성화            |
 
 ### 다크 모드 고려사항
 
@@ -310,24 +373,92 @@ graph TD
 │   (* color-red, footnote 13pt)                                   │
 ```
 
+### 모바일
+
+```
+┌─────────────────────────────────┐
+│                                 │
+│           TodoList              │
+│      (SF Pro Display 28pt)      │
+│                                 │
+│  ╭───────────────────────────╮  │
+│  │                           │  │
+│  │  이름                      │  │
+│  │  ╭─────────────────────╮  │  │
+│  │  │  홍길동              │  │  │
+│  │  ╰─────────────────────╯  │  │
+│  │                           │  │
+│  │  이메일                    │  │
+│  │  ╭─────────────────────╮  │  │
+│  │  │  user@example.com   │  │  │
+│  │  ╰─────────────────────╯  │  │
+│  │                           │  │
+│  │  비밀번호                  │  │
+│  │  ╭─────────────────────╮  │  │
+│  │  │  ••••••••      [👁] │  │  │
+│  │  ╰─────────────────────╯  │  │
+│  │  영문자+숫자 8자 이상       │  │
+│  │  (* footnote, secondary)  │  │
+│  │                           │  │
+│  │  [──────── 회원가입 ──────]│  │
+│  │  (* 풀너비, 50px, pill)    │  │
+│  │                           │  │
+│  │  이미 계정이 있으신가요?    │  │
+│  │  [로그인]                  │  │
+│  │                           │  │
+│  ╰───────────────────────────╯  │
+│  (* 좌우 16px padding, 풀너비)  │
+│                                 │
+└─────────────────────────────────┘
+```
+
+> **반응형 동작**: 데스크톱과 동일한 구조, 카드만 풀너비로 확장. 소프트 키보드 등장 시 화면이 스크롤되어 입력 필드가 가려지지 않도록 `scroll-padding-bottom` 적용.
+
+### 모바일 — 실시간 검증 상태
+
+```
+┌─────────────────────────────────┐
+│  ╭─────────────────────────╮    │
+│  │  비밀번호               │    │
+│  │  ╭───────────────────╮  │    │
+│  │  │  ••••••      [👁] │  │    │  ← border: color-orange
+│  │  ╰───────────────────╯  │    │
+│  │  ⚠ 영문자와 숫자를       │    │
+│  │    포함하여 8자 이상      │    │
+│  │                         │    │
+│  │  이메일                  │    │
+│  │  ╭───────────────────╮  │    │
+│  │  │  test@email.com   │  │    │  ← border: color-red
+│  │  ╰───────────────────╯  │    │
+│  │  ⚠ 이미 사용 중인        │    │
+│  │    이메일입니다.          │    │
+│  │                         │    │
+│  │  [──────── 회원가입 ────] │    │  ← opacity 0.4 (비활성)
+│  ╰─────────────────────────╯    │
+└─────────────────────────────────┘
+```
+
 ### Apple HIG 적용 사항
 
-| 패턴                  | 적용 내용                                                          |
-| --------------------- | ------------------------------------------------------------------ |
-| Floating Label 입력   | 모든 필드 포커스 시 레이블 위로 이동 애니메이션                     |
-| 실시간 검증 피드백    | 타이핑 중 비밀번호 강도 즉시 표시 (색상 변화 + footnote 안내)      |
-| Primary CTA 비활성화  | 검증 미통과 시 버튼 opacity 0.4, pointer-events: none              |
-| SF Symbol 아이콘      | eye.fill / eye.slash.fill 비밀번호 토글 (44×44px 영역)            |
+| 패턴                 | 적용 내용                                                      |
+| -------------------- | -------------------------------------------------------------- |
+| Center Card 레이아웃 | 데스크톱: radius-xl(20px) 고정 카드 / 모바일: 풀너비 + 16px 패딩 |
+| Floating Label 입력  | 모든 필드 포커스 시 레이블 위로 이동 애니메이션                |
+| 실시간 검증 피드백   | 타이핑 중 비밀번호 강도 즉시 표시 (색상 변화 + footnote 안내)  |
+| Primary CTA 비활성화 | 검증 미통과 시 버튼 opacity 0.4, pointer-events: none          |
+| SF Symbol 아이콘     | eye.fill / eye.slash.fill 비밀번호 토글 (44×44px 영역)         |
+| 키보드 대응          | 소프트 키보드 등장 시 scroll-padding-bottom으로 필드 가림 방지  |
+| 반응형 카드          | ≥768px: 480px 고정폭 중앙 카드 / <768px: 좌우 16px margin 풀너비 |
 
 ### 인터랙션 노트
 
-| 상황                   | 동작                                                          |
-| ---------------------- | ------------------------------------------------------------- |
-| 가입 성공              | "기본" 카테고리 자동 생성 → `/login` 이동, success haptic     |
-| `AUTH_EMAIL_DUPLICATE` | 이메일 필드 아래 인라인 오류, error haptic                    |
-| `AUTH_PASSWORD_WEAK`   | 비밀번호 필드 아래 규칙 안내 (orange 경고)                    |
-| 비밀번호 실시간 검증   | 타이핑 중 규칙 충족 여부 즉시 표시 (green ✓ / orange ⚠)      |
-| 버튼 로딩 중           | 회원가입 버튼 내 ActivityIndicator, 버튼 비활성화             |
+| 상황                   | 동작                                                      |
+| ---------------------- | --------------------------------------------------------- |
+| 가입 성공              | "기본" 카테고리 자동 생성 → `/login` 이동, success haptic |
+| `AUTH_EMAIL_DUPLICATE` | 이메일 필드 아래 인라인 오류, error haptic                |
+| `AUTH_PASSWORD_WEAK`   | 비밀번호 필드 아래 규칙 안내 (orange 경고)                |
+| 비밀번호 실시간 검증   | 타이핑 중 규칙 충족 여부 즉시 표시 (green ✓ / orange ⚠)   |
+| 버튼 로딩 중           | 회원가입 버튼 내 ActivityIndicator, 버튼 비활성화         |
 
 ### 다크 모드 고려사항
 
@@ -393,12 +524,12 @@ graph TD
 
 ### 상태 배지 색상
 
-| 상태          | 배지                                   | 색상 토큰       |
-| ------------- | -------------------------------------- | --------------- |
-| `NOT_STARTED` | ⬤ 시작전  `○` 체크 원형 (미완료)      | `color-gray`    |
-| `IN_PROGRESS` | ⬤ 진행중  `○` 체크 원형 (미완료)      | `color-blue`    |
-| `OVERDUE`     | ⬤ 기한초과 `○` 체크 원형 (미완료)     | `color-red`     |
-| `DONE`        | ⬤ 완료    `◉` 체크 원형 (완료, 취소선) | `color-green`   |
+| 상태          | 배지                                | 색상 토큰     |
+| ------------- | ----------------------------------- | ------------- |
+| `NOT_STARTED` | ⬤ 시작전 `○` 체크 원형 (미완료)     | `color-gray`  |
+| `IN_PROGRESS` | ⬤ 진행중 `○` 체크 원형 (미완료)     | `color-blue`  |
+| `OVERDUE`     | ⬤ 기한초과 `○` 체크 원형 (미완료)   | `color-red`   |
+| `DONE`        | ⬤ 완료 `◉` 체크 원형 (완료, 취소선) | `color-green` |
 
 ### 할 일 카드 상세 (항목별)
 
@@ -515,32 +646,32 @@ graph TD
 
 ### Apple HIG 적용 사항
 
-| 패턴                    | 적용 내용                                                          |
-| ----------------------- | ------------------------------------------------------------------ |
-| Large Title             | 34pt Bold, 스크롤 시 NavigationBar inline 17pt Semibold 자동 전환  |
-| NavigationBar blur      | 반투명 blur 배경, 스크롤 시 separator 노출                         |
-| Inset Grouped List      | radius-lg(16px) 섹션, bg-secondary 배경                           |
-| Segmented Control       | 상태 필터를 pill 형태 세그먼트 컨트롤로                             |
-| Search Bar              | rounded-full, 돋보기 좌측, 취소 버튼 우측                          |
-| Swipe Actions (모바일)  | 좌측 스와이프 → 빨간 삭제 트레이 (spring 애니메이션)               |
-| Context Menu            | 길게 누르기 → blur 배경 + 팝업 메뉴 (spring 애니메이션)            |
-| TabBar (모바일)         | 하단 4탭, blur 배경, 현재 탭 System Blue                           |
-| Sidebar (데스크톱)      | 좌측 inset sidebar, 선택 항목 파란 pill 하이라이트                 |
-| Empty State             | SF Symbol 아이콘(크게) + 제목 + 부제목 + CTA 버튼                  |
-| 원형 체크               | `◉` 완료 (green) / `○` 미완료 (gray 테두리)                       |
+| 패턴                   | 적용 내용                                                         |
+| ---------------------- | ----------------------------------------------------------------- |
+| Large Title            | 34pt Bold, 스크롤 시 NavigationBar inline 17pt Semibold 자동 전환 |
+| NavigationBar blur     | 반투명 blur 배경, 스크롤 시 separator 노출                        |
+| Inset Grouped List     | radius-lg(16px) 섹션, bg-secondary 배경                           |
+| Segmented Control      | 상태 필터를 pill 형태 세그먼트 컨트롤로                           |
+| Search Bar             | rounded-full, 돋보기 좌측, 취소 버튼 우측                         |
+| Swipe Actions (모바일) | 좌측 스와이프 → 빨간 삭제 트레이 (spring 애니메이션)              |
+| Context Menu           | 길게 누르기 → blur 배경 + 팝업 메뉴 (spring 애니메이션)           |
+| TabBar (모바일)        | 하단 4탭, blur 배경, 현재 탭 System Blue                          |
+| Sidebar (데스크톱)     | 좌측 inset sidebar, 선택 항목 파란 pill 하이라이트                |
+| Empty State            | SF Symbol 아이콘(크게) + 제목 + 부제목 + CTA 버튼                 |
+| 원형 체크              | `◉` 완료 (green) / `○` 미완료 (gray 테두리)                       |
 
 ### 인터랙션 노트
 
-| 상황                   | 동작                                                             |
-| ---------------------- | ---------------------------------------------------------------- |
-| `◉/○` 탭             | 완료 토글, PATCH API 호출, 낙관적 업데이트, light haptic         |
-| 항목 길게 누르기       | Context Menu 팝업 (blur 배경, spring), 배경 blur+scale 처리      |
-| 좌측 스와이프 (모바일) | 빨간 삭제 트레이 노출, spring 애니메이션                         |
-| 삭제 실행              | Confirmation Dialog 표시 후 확인 시 삭제, error haptic           |
-| 저장 성공              | 상단 Toast 슬라이드다운, 3초 후 auto dismiss, success haptic     |
-| 필터 변경              | 즉시 목록 필터링, spring 트랜지션                               |
-| 검색                   | 입력 중 실시간 필터링 (debounce 300ms)                           |
-| 목록 로딩              | Skeleton 카드 3개 표시 (shimmer 애니메이션)                      |
+| 상황                   | 동작                                                         |
+| ---------------------- | ------------------------------------------------------------ |
+| `◉/○` 탭               | 완료 토글, PATCH API 호출, 낙관적 업데이트, light haptic     |
+| 항목 길게 누르기       | Context Menu 팝업 (blur 배경, spring), 배경 blur+scale 처리  |
+| 좌측 스와이프 (모바일) | 빨간 삭제 트레이 노출, spring 애니메이션                     |
+| 삭제 실행              | Confirmation Dialog 표시 후 확인 시 삭제, error haptic       |
+| 저장 성공              | 상단 Toast 슬라이드다운, 3초 후 auto dismiss, success haptic |
+| 필터 변경              | 즉시 목록 필터링, spring 트랜지션                            |
+| 검색                   | 입력 중 실시간 필터링 (debounce 300ms)                       |
+| 목록 로딩              | Skeleton 카드 3개 표시 (shimmer 애니메이션)                  |
 
 ### 다크 모드 고려사항
 
@@ -720,25 +851,25 @@ graph TD
 
 ### Apple HIG 적용 사항
 
-| 패턴                    | 적용 내용                                                           |
-| ----------------------- | ------------------------------------------------------------------- |
-| Bottom Sheet (모바일)   | 하단 슬라이드업, 상단 grabber handle(4×36px pill), spring 400ms     |
-| Center Modal (데스크톱) | blur 딤 오버레이 + radius-xl(20px) 카드, spring 350ms              |
-| Floating Label          | 포커스 시 레이블 위로 이동, 포커스 border System Blue 강조          |
-| Confirmation Dialog     | Native Alert 스타일, 제목+설명+버튼 최대 2개                        |
-| Destructive 버튼        | 삭제하기 = System Red, bold weight                                 |
-| 글자수 카운터           | footnote 13pt, 초과 시 color-red로 전환                             |
+| 패턴                    | 적용 내용                                                       |
+| ----------------------- | --------------------------------------------------------------- |
+| Bottom Sheet (모바일)   | 하단 슬라이드업, 상단 grabber handle(4×36px pill), spring 400ms |
+| Center Modal (데스크톱) | blur 딤 오버레이 + radius-xl(20px) 카드, spring 350ms           |
+| Floating Label          | 포커스 시 레이블 위로 이동, 포커스 border System Blue 강조      |
+| Confirmation Dialog     | Native Alert 스타일, 제목+설명+버튼 최대 2개                    |
+| Destructive 버튼        | 삭제하기 = System Red, bold weight                              |
+| 글자수 카운터           | footnote 13pt, 초과 시 color-red로 전환                         |
 
 ### 인터랙션 노트
 
-| 상황                 | 동작                                                              |
-| -------------------- | ----------------------------------------------------------------- |
-| 제목 100자 초과      | 저장 버튼 비활성화 (opacity 0.4) + 글자수 color-red 표시          |
-| 종료일 < 시작일 선택 | 저장 버튼 비활성화 + 인라인 오류 메시지, error haptic             |
-| 카테고리 미선택      | "기본" 카테고리 자동 적용                                         |
-| 저장 성공            | Sheet dismiss + 목록 즉시 갱신 + 상단 Toast, success haptic       |
-| 배경 클릭/드래그다운 | Sheet dismiss (변경사항 있을 경우 Confirmation Dialog)            |
-| grabber 드래그       | sheet 높이 조절 또는 dismiss (velocity 기반 spring 판정)          |
+| 상황                 | 동작                                                        |
+| -------------------- | ----------------------------------------------------------- |
+| 제목 100자 초과      | 저장 버튼 비활성화 (opacity 0.4) + 글자수 color-red 표시    |
+| 종료일 < 시작일 선택 | 저장 버튼 비활성화 + 인라인 오류 메시지, error haptic       |
+| 카테고리 미선택      | "기본" 카테고리 자동 적용                                   |
+| 저장 성공            | Sheet dismiss + 목록 즉시 갱신 + 상단 Toast, success haptic |
+| 배경 클릭/드래그다운 | Sheet dismiss (변경사항 있을 경우 Confirmation Dialog)      |
+| grabber 드래그       | sheet 높이 조절 또는 dismiss (velocity 기반 spring 판정)    |
 
 ### 다크 모드 고려사항
 
@@ -865,23 +996,23 @@ graph TD
 
 ### Apple HIG 적용 사항
 
-| 패턴                    | 적용 내용                                                          |
-| ----------------------- | ------------------------------------------------------------------ |
-| Inset Grouped List      | radius-lg(16px) 섹션, separator 1px 16px inset                     |
-| Inline Edit 전환        | 수정 클릭 시 텍스트 → 입력 필드로 spring 애니메이션 전환           |
-| Confirmation Dialog     | Native Alert 스타일, 제목+설명+버튼 최대 2개                       |
-| Swipe Actions (모바일)  | 좌측 스와이프 → 빨간 삭제 트레이                                   |
-| 비활성 상태             | 기본 카테고리 버튼 opacity 0.3, pointer-events: none               |
+| 패턴                   | 적용 내용                                                |
+| ---------------------- | -------------------------------------------------------- |
+| Inset Grouped List     | radius-lg(16px) 섹션, separator 1px 16px inset           |
+| Inline Edit 전환       | 수정 클릭 시 텍스트 → 입력 필드로 spring 애니메이션 전환 |
+| Confirmation Dialog    | Native Alert 스타일, 제목+설명+버튼 최대 2개             |
+| Swipe Actions (모바일) | 좌측 스와이프 → 빨간 삭제 트레이                         |
+| 비활성 상태            | 기본 카테고리 버튼 opacity 0.3, pointer-events: none     |
 
 ### 인터랙션 노트
 
-| 상황                      | 동작                                                          |
-| ------------------------- | ------------------------------------------------------------- |
-| `CATEGORY_NAME_DUPLICATE` | 인라인 "이미 존재하는 카테고리 이름입니다", error haptic      |
-| 30자 초과                 | 추가/저장 버튼 비활성화 + 글자수 color-red 표시               |
-| 카테고리 삭제             | 해당 todos → "기본" 카테고리로 자동 이동, Toast 알림          |
-| 기본 카테고리 삭제 시도   | 버튼 비활성화 (opacity 0.3, pointer-events: none)             |
-| 추가/수정 성공            | 인라인 폼 닫힘 + 목록 즉시 갱신, success haptic               |
+| 상황                      | 동작                                                     |
+| ------------------------- | -------------------------------------------------------- |
+| `CATEGORY_NAME_DUPLICATE` | 인라인 "이미 존재하는 카테고리 이름입니다", error haptic |
+| 30자 초과                 | 추가/저장 버튼 비활성화 + 글자수 color-red 표시          |
+| 카테고리 삭제             | 해당 todos → "기본" 카테고리로 자동 이동, Toast 알림     |
+| 기본 카테고리 삭제 시도   | 버튼 비활성화 (opacity 0.3, pointer-events: none)        |
+| 추가/수정 성공            | 인라인 폼 닫힘 + 목록 즉시 갱신, success haptic          |
 
 ### 다크 모드 고려사항
 
@@ -977,21 +1108,21 @@ graph TD
 
 ### Apple HIG 적용 사항
 
-| 패턴                       | 적용 내용                                                         |
-| -------------------------- | ----------------------------------------------------------------- |
-| Grouped Settings List      | iOS 설정 앱 스타일 Inset Grouped List, 카테고리 구분               |
-| Toggle Switch              | iOS 스타일 32×20px 토글, 활성=System Blue, 비활성=회색             |
-| 라디오 선택 (언어)         | `◉` 선택됨(blue) / `○` 미선택, 탭 시 즉시 전환                   |
-| 낙관적 업데이트            | 토글 즉시 전환 후 서버 저장, 실패 시 롤백                         |
+| 패턴                  | 적용 내용                                              |
+| --------------------- | ------------------------------------------------------ |
+| Grouped Settings List | iOS 설정 앱 스타일 Inset Grouped List, 카테고리 구분   |
+| Toggle Switch         | iOS 스타일 32×20px 토글, 활성=System Blue, 비활성=회색 |
+| 라디오 선택 (언어)    | `◉` 선택됨(blue) / `○` 미선택, 탭 시 즉시 전환         |
+| 낙관적 업데이트       | 토글 즉시 전환 후 서버 저장, 실패 시 롤백              |
 
 ### 인터랙션 노트
 
-| 상황             | 동작                                                            |
-| ---------------- | --------------------------------------------------------------- |
-| 테마 토글 클릭   | 낙관적 업데이트 → 즉시 UI 테마 전환 → 서버 저장, light haptic   |
-| 테마 저장 실패   | 이전 테마로 자동 롤백 + 상단 Toast 오류 메시지, error haptic    |
-| 언어 선택 변경   | 즉시 i18n 언어 전환 → 서버 저장, selection haptic               |
-| 새로고침 후      | DB에서 불러온 theme/language 적용                               |
+| 상황           | 동작                                                          |
+| -------------- | ------------------------------------------------------------- |
+| 테마 토글 클릭 | 낙관적 업데이트 → 즉시 UI 테마 전환 → 서버 저장, light haptic |
+| 테마 저장 실패 | 이전 테마로 자동 롤백 + 상단 Toast 오류 메시지, error haptic  |
+| 언어 선택 변경 | 즉시 i18n 언어 전환 → 서버 저장, selection haptic             |
+| 새로고침 후    | DB에서 불러온 theme/language 적용                             |
 
 ### 다크 모드 고려사항
 
@@ -1138,24 +1269,24 @@ graph TD
 
 ### Apple HIG 적용 사항
 
-| 패턴                       | 적용 내용                                                         |
-| -------------------------- | ----------------------------------------------------------------- |
-| Grouped Settings List      | 계정 정보 / 비밀번호 변경 섹션 분리, Inset Grouped 패턴            |
-| Floating Label 입력        | 이름, 비밀번호 필드 Floating Label 애니메이션                      |
-| Read-only 필드             | 이메일 text-secondary, 포커스 불가, 시각적 구분                    |
-| Confirmation Dialog        | 탈퇴 확인 Native Alert 스타일, 비밀번호 입력 포함                  |
-| Destructive 분리           | 위험 영역(탈퇴)을 separator로 명확히 분리, color-red tint 버튼     |
+| 패턴                  | 적용 내용                                                      |
+| --------------------- | -------------------------------------------------------------- |
+| Grouped Settings List | 계정 정보 / 비밀번호 변경 섹션 분리, Inset Grouped 패턴        |
+| Floating Label 입력   | 이름, 비밀번호 필드 Floating Label 애니메이션                  |
+| Read-only 필드        | 이메일 text-secondary, 포커스 불가, 시각적 구분                |
+| Confirmation Dialog   | 탈퇴 확인 Native Alert 스타일, 비밀번호 입력 포함              |
+| Destructive 분리      | 위험 영역(탈퇴)을 separator로 명확히 분리, color-red tint 버튼 |
 
 ### 인터랙션 노트
 
-| 상황                 | 동작                                                          |
-| -------------------- | ------------------------------------------------------------- |
-| 이름만 수정          | 이름만 PATCH, 성공 Toast + success haptic                     |
-| 비밀번호만 수정      | 비밀번호만 PATCH, 성공 Toast + success haptic                 |
-| 이메일 필드          | read-only, 포커스 불가, 탭 시 "변경 불가" 툴팁                |
-| 탈퇴 성공            | 모든 데이터 삭제 → `/login` root 전환                         |
-| 탈퇴 비밀번호 불일치 | 다이얼로그 내 인라인 오류 메시지, error haptic                |
-| 저장 버튼 로딩 중    | ActivityIndicator, 버튼 비활성화                              |
+| 상황                 | 동작                                           |
+| -------------------- | ---------------------------------------------- |
+| 이름만 수정          | 이름만 PATCH, 성공 Toast + success haptic      |
+| 비밀번호만 수정      | 비밀번호만 PATCH, 성공 Toast + success haptic  |
+| 이메일 필드          | read-only, 포커스 불가, 탭 시 "변경 불가" 툴팁 |
+| 탈퇴 성공            | 모든 데이터 삭제 → `/login` root 전환          |
+| 탈퇴 비밀번호 불일치 | 다이얼로그 내 인라인 오류 메시지, error haptic |
+| 저장 버튼 로딩 중    | ActivityIndicator, 버튼 비활성화               |
 
 ### 다크 모드 고려사항
 
@@ -1339,15 +1470,15 @@ graph TD
 
 ### Haptic Feedback 가이드
 
-| 이벤트               | Haptic 종류       | 비고                              |
-| -------------------- | ----------------- | --------------------------------- |
-| 로그인 성공          | medium impact     | 명확한 성공 피드백                |
-| 저장 성공            | light impact      | 부드러운 완료 피드백              |
-| 완료 토글 (`◉/○`)  | light impact      | 체크마크 전환                     |
-| 스와이프 액션 임계점 | rigid impact      | 삭제 트레이 완전히 열림            |
-| 삭제/오류            | notification.error| 진동 패턴으로 실패 전달           |
-| 언어/테마 선택       | selection         | 라디오/토글 전환                  |
-| 길게 누르기 (Context Menu) | impact soft | Context Menu 등장 시              |
+| 이벤트                     | Haptic 종류        | 비고                    |
+| -------------------------- | ------------------ | ----------------------- |
+| 로그인 성공                | medium impact      | 명확한 성공 피드백      |
+| 저장 성공                  | light impact       | 부드러운 완료 피드백    |
+| 완료 토글 (`◉/○`)          | light impact       | 체크마크 전환           |
+| 스와이프 액션 임계점       | rigid impact       | 삭제 트레이 완전히 열림 |
+| 삭제/오류                  | notification.error | 진동 패턴으로 실패 전달 |
+| 언어/테마 선택             | selection          | 라디오/토글 전환        |
+| 길게 누르기 (Context Menu) | impact soft        | Context Menu 등장 시    |
 
 ---
 
