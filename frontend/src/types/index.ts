@@ -45,3 +45,10 @@ export interface ApiError {
     message: string;
   };
 }
+
+export interface TodoFilters {
+  status?: TodoStatus
+  categoryId?: string
+  dueDateFrom?: string
+  dueDateTo?: string
+}

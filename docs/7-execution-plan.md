@@ -515,22 +515,22 @@ gantt
 
 #### 작업 목록
 
-- [ ] `lib/apiClient.ts` — axios 인스턴스 + 인터셉터
-  - [ ] `VITE_API_BASE_URL` 기반 baseURL 설정
-  - [ ] 요청 인터셉터: `Authorization: Bearer {token}` 헤더 자동 주입
-  - [ ] 응답 인터셉터: `401` 시 `clearToken()` + `/login` 리다이렉트
-  - [ ] 응답 언래핑: `{ data: T }` → `T`, 에러 시 `error.code` 추출
-- [ ] `features/auth/api.ts` — 인증 API 함수
-- [ ] `features/todos/api.ts` — 할 일 API 함수
-- [ ] `features/categories/api.ts` — 카테고리 API 함수
-- [ ] `features/settings/api.ts` — 설정 API 함수
+- [x] `lib/apiClient.ts` — axios 인스턴스 + 인터셉터
+  - [x] `VITE_API_BASE_URL` 기반 baseURL 설정
+  - [x] 요청 인터셉터: `Authorization: Bearer {token}` 헤더 자동 주입
+  - [x] 응답 인터셉터: `401` 시 `clearToken()` + `/login` 리다이렉트
+  - [x] 응답 언래핑: `{ data: T }` → `T`, 에러 시 `error.code` 추출
+- [x] `features/auth/api.ts` — 인증 API 함수
+- [x] `features/todos/api.ts` — 할 일 API 함수
+- [x] `features/categories/api.ts` — 카테고리 API 함수
+- [x] `features/settings/api.ts` — 설정 API 함수
 
 #### 완료 조건
 
-- [ ] 유효한 토큰으로 API 호출 시 정상 응답
-- [ ] 만료된 토큰으로 API 호출 시 로그아웃 처리됨
-- [ ] 네트워크 오류 시 적절한 오류 객체 반환
-- [ ] `VITE_API_BASE_URL` 변경만으로 API 서버 전환 가능
+- [x] 유효한 토큰으로 API 호출 시 정상 응답
+- [x] 만료된 토큰으로 API 호출 시 로그아웃 처리됨
+- [x] 네트워크 오류 시 적절한 오류 객체 반환
+- [x] `VITE_API_BASE_URL` 변경만으로 API 서버 전환 가능
 
 ---
 
