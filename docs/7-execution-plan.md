@@ -373,35 +373,35 @@ gantt
 
 #### 작업 목록
 
-- [ ] **할 일 목록 조회** `GET /todos` (인증 필요)
-  - [ ] `req.userId`의 todos만 조회
-  - [ ] 쿼리 파라미터: `?status=NOT_STARTED|IN_PROGRESS|DONE|OVERDUE&categoryId=UUID`
-  - [ ] AND 조건 필터링
-  - [ ] 각 todo에 `statusCalculator.js`로 런타임 상태 계산 후 응답에 포함
-- [ ] **할 일 등록** `POST /todos` (인증 필요)
-  - [ ] 제목 필수, 1~100자 (`TODO_TITLE_TOO_LONG` 400)
-  - [ ] `categoryId` 미전달 시 기본 카테고리 자동 사용
-  - [ ] `startDate`, `endDate` 선택 — `endDate >= startDate` 검증
-  - [ ] 응답에 계산된 status 포함
-- [ ] **할 일 수정** `PATCH /todos/:id` (인증 필요)
-  - [ ] 타인 todo 수정 → `403 FORBIDDEN`
-  - [ ] 존재하지 않는 todo → `404 TODO_NOT_FOUND`
-  - [ ] 응답에 계산된 status 포함
-- [ ] **할 일 삭제** `DELETE /todos/:id` (인증 필요)
-  - [ ] 타인 todo 삭제 → `403 FORBIDDEN`
-- [ ] **완료 처리** `PATCH /todos/:id/complete` (인증 필요)
-  - [ ] `status = 'DONE'` 저장
-- [ ] **완료 취소** `PATCH /todos/:id/incomplete` (인증 필요)
-  - [ ] `status = NULL` 저장 → 날짜 기준으로 재계산된 상태 응답
+- [x] **할 일 목록 조회** `GET /todos` (인증 필요)
+  - [x] `req.userId`의 todos만 조회
+  - [x] 쿼리 파라미터: `?status=NOT_STARTED|IN_PROGRESS|DONE|OVERDUE&categoryId=UUID`
+  - [x] AND 조건 필터링
+  - [x] 각 todo에 `statusCalculator.js`로 런타임 상태 계산 후 응답에 포함
+- [x] **할 일 등록** `POST /todos` (인증 필요)
+  - [x] 제목 필수, 1~100자 (`TODO_TITLE_TOO_LONG` 400)
+  - [x] `categoryId` 미전달 시 기본 카테고리 자동 사용
+  - [x] `startDate`, `endDate` 선택 — `endDate >= startDate` 검증
+  - [x] 응답에 계산된 status 포함
+- [x] **할 일 수정** `PATCH /todos/:id` (인증 필요)
+  - [x] 타인 todo 수정 → `403 FORBIDDEN`
+  - [x] 존재하지 않는 todo → `404 TODO_NOT_FOUND`
+  - [x] 응답에 계산된 status 포함
+- [x] **할 일 삭제** `DELETE /todos/:id` (인증 필요)
+  - [x] 타인 todo 삭제 → `403 FORBIDDEN`
+- [x] **완료 처리** `PATCH /todos/:id/complete` (인증 필요)
+  - [x] `status = 'DONE'` 저장
+- [x] **완료 취소** `PATCH /todos/:id/incomplete` (인증 필요)
+  - [x] `status = NULL` 저장 → 날짜 기준으로 재계산된 상태 응답
 
 #### 완료 조건
 
-- [ ] `GET /todos?status=OVERDUE` → 오늘 기준 OVERDUE todo만 반환
-- [ ] `GET /todos?status=IN_PROGRESS&categoryId=UUID` → AND 조건 필터 동작
-- [ ] todo 등록/수정/조회 응답에 `status` 필드 항상 포함 (4가지 값 중 하나)
-- [ ] 완료 취소 후 날짜 기준 상태 재계산 확인
-- [ ] 타인 todo CRUD → `403`
-- [ ] 존재하지 않는 todo → `404`
+- [x] `GET /todos?status=OVERDUE` → 오늘 기준 OVERDUE todo만 반환
+- [x] `GET /todos?status=IN_PROGRESS&categoryId=UUID` → AND 조건 필터 동작
+- [x] todo 등록/수정/조회 응답에 `status` 필드 항상 포함 (4가지 값 중 하나)
+- [x] 완료 취소 후 날짜 기준 상태 재계산 확인
+- [x] 타인 todo CRUD → `403`
+- [x] 존재하지 않는 todo → `404`
 
 ---
 
