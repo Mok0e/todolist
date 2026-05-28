@@ -60,7 +60,11 @@ async function createTodo(userId, { title, description, categoryId, startDate, e
   validateDates(startDate, endDate);
 
   let resolvedCategoryId = categoryId;
-  if (!resolvedCategoryId) {
+  if (resolvedCategoryId) {
+    const cat = await categoryRepository.findById(resolvedCategoryId);
+    if (!cat) throw makeError(404, 'CATEGORY_NOT_FOUND', '카테고리를 찾을 수 없습니다.');
+    if (cat.user_id !== userId) throw makeError(403, 'FORBIDDEN', '접근 권한이 없습니다.');
+  } else {
     const defaultCat = await categoryRepository.findDefaultByUserId(userId);
     resolvedCategoryId = defaultCat.id;
   }

@@ -20,6 +20,32 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+app.get('/api-docs', (req, res) => {
+  const swaggerDocument = require('../swagger.json');
+  res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <title>TodoList API Docs</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+  <script>
+    SwaggerUIBundle({
+      spec: ${JSON.stringify(swaggerDocument)},
+      dom_id: '#swagger-ui',
+      presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+      layout: 'BaseLayout',
+      deepLinking: true,
+    });
+  </script>
+</body>
+</html>`);
+});
+
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/categories', auth, categoryRoutes);

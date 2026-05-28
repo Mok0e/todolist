@@ -1,8 +1,8 @@
 # TodoList 실행계획서
 
-**버전**: 1.1  
+**버전**: 1.2  
 **작성일**: 2026-05-28  
-**참조 문서**: docs/1-domain-definition.md (v2.1), docs/2-PRD.md (v2.1), docs/4-project-structure.md (v1.2)
+**참조 문서**: docs/1-domain-definition.md (v2.1), docs/2-PRD.md (v2.2), docs/4-project-structure.md (v1.2)
 
 ---
 
@@ -12,7 +12,7 @@
 | ---- | ---------- | ------------------------------------------------------ | ------ |
 | 1.0  | 2026-05-28 | 최초 작성                                              | -      |
 | 1.1  | 2026-05-28 | Gantt 차트 및 일자별 일정 추가, 와이어프레임 참조 반영 | -      |
-| 1.2  | 2026-05-28 | 캘린더 뷰 FE-08 Task 추가, 월별 달력 일정표 추가       | -      |
+| 1.2  | 2026-05-28 | 캘린더 뷰 FE-08 Task 추가, 월별 달력 일정표 추가, 구현 사실 반영 (auth.js 파일명, accessToken 필드명, GET /users/me 응답 필드) | -      |
 
 ---
 
@@ -278,7 +278,7 @@ gantt
 
 #### 작업 목록
 
-- [x] `middleware/authMiddleware.js` — JWT 검증 미들웨어
+- [x] `middleware/auth.js` — JWT 검증 미들웨어
   - [x] `Authorization: Bearer {token}` 헤더 파싱
   - [x] 토큰 없음 → `401 AUTH_REQUIRED`
   - [x] 토큰 만료/위조 → `401 AUTH_TOKEN_EXPIRED` / `AUTH_TOKEN_INVALID`
@@ -317,10 +317,10 @@ gantt
   - [x] 이메일 조회 후 bcrypt 비교
   - [x] 불일치 → `401 AUTH_INVALID_CREDENTIALS`
   - [x] JWT 생성 (payload: `{ userId }`, 24시간 만료)
-  - [x] 응답: `200 { data: { access_token } }`
+  - [x] 응답: `200 { data: { accessToken } }`
 - [x] **내 정보 조회** `GET /users/me` (인증 필요)
   - [x] `req.userId`로 users 조회
-  - [x] 응답: `200 { data: { id, email, name, theme, language } }`
+  - [x] 응답: `200 { data: { id, email, name, theme, language, createdAt, updatedAt } }`
 - [x] **프로필 수정** `PATCH /users/me` (인증 필요)
   - [x] 이름 또는 비밀번호만 수정 가능 (이메일 변경 불가)
   - [x] 비밀번호 수정 시 bcrypt 재해싱
@@ -438,13 +438,13 @@ gantt
 
 #### 작업 목록
 
-- [ ] `npm create vite@latest frontend -- --template react-ts` 실행
-- [ ] 의존성 설치: `zustand`, `@tanstack/react-query`, `react-router-dom`, `i18next`, `react-i18next`
-- [ ] `frontend/.env` 생성: `VITE_API_BASE_URL=http://localhost:3000`
-- [ ] `frontend/.env.example` 생성
-- [ ] TypeScript strict mode 설정 (`tsconfig.json`)
-- [ ] 절대 경로 alias 설정 (`@/` → `src/`)
-- [ ] 디렉토리 구조 생성:
+- [x] `npm create vite@latest frontend -- --template react-ts` 실행
+- [x] 의존성 설치: `zustand`, `@tanstack/react-query`, `react-router-dom`, `i18next`, `react-i18next`
+- [x] `frontend/.env` 생성: `VITE_API_BASE_URL=http://localhost:3000`
+- [x] `frontend/.env.example` 생성
+- [x] TypeScript strict mode 설정 (`tsconfig.json`)
+- [x] 절대 경로 alias 설정 (`@/` → `src/`)
+- [x] 디렉토리 구조 생성:
   ```
   frontend/src/
   ├── features/
@@ -465,9 +465,9 @@ gantt
 
 #### 완료 조건
 
-- [ ] `npm run dev` 실행 후 `http://localhost:5173` 접속 성공
-- [ ] TypeScript 컴파일 오류 없음
-- [ ] `@/` 경로 alias 동작 확인
+- [x] `npm run dev` 실행 후 `http://localhost:5173` 접속 성공
+- [x] TypeScript 컴파일 오류 없음
+- [x] `@/` 경로 alias 동작 확인
 
 ---
 
