@@ -9,6 +9,8 @@ export interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  const mouseDownTarget = useRef<EventTarget | null>(null)
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -75,8 +77,6 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
     cursor: 'pointer',
     flexShrink: 0,
   }
-
-  const mouseDownTarget = useRef<EventTarget | null>(null)
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     mouseDownTarget.current = e.target
