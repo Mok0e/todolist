@@ -3,6 +3,7 @@ import { useAuthStore } from '@/store/authStore'
 import { LoginPage } from '@/pages/LoginPage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ProfilePage } from '@/pages/ProfilePage'
+import { TodosPage } from '@/pages/TodosPage'
 
 function PrivateRoute() {
   const accessToken = useAuthStore((s) => s.accessToken)
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
   {
     element: <PrivateRoute />,
     children: [
-      { path: '/todos', element: <div>Todos</div> },
+      { path: '/todos', element: <TodosPage /> },
       { path: '/categories', element: <div>Categories</div> },
       { path: '/settings', element: <div>Settings</div> },
       { path: '/calendar', element: <div>Calendar</div> },

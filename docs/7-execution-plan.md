@@ -577,36 +577,35 @@ gantt
 
 #### 작업 목록
 
-- [ ] Segmented Control 필터 컴포넌트 (상태 4종, pill 형태)
-- [ ] 모바일 Bottom Sheet 컴포넌트 (grabber handle, spring 400ms 슬라이드업)
-- [ ] 데스크톱 Center Modal 컴포넌트 (blur 딤 오버레이 + radius-xl 카드)
-- [ ] 모바일 Swipe Actions (좌측 스와이프 → 빨간 삭제 트레이)
-- [ ] Skeleton 로딩 카드 컴포넌트
-- [ ] Empty State 컴포넌트 (아이콘 + 제목 + CTA)
-- [ ] **할 일 목록 페이지** (`pages/TodosPage.tsx`)
-  - [ ] TanStack Query로 `GET /todos` 조회 및 캐싱
-  - [ ] 상태 필터 UI (NOT_STARTED / IN_PROGRESS / DONE / OVERDUE)
-  - [ ] 카테고리 필터 UI (드롭다운)
-  - [ ] 필터 AND 조건 적용
-- [ ] **할 일 카드 컴포넌트** (`features/todos/TodoCard.tsx`)
-  - [ ] 상태 배지 색상 구분 (상태별 색상 정의)
-  - [ ] 완료/취소 토글 버튼
-  - [ ] 수정/삭제 버튼
-- [ ] **할 일 등록 폼** (`features/todos/TodoForm.tsx`)
-  - [ ] 제목(필수), 설명(선택), 카테고리 선택, 시작일/종료일 선택
-  - [ ] 종료일 < 시작일 선택 불가 처리
-  - [ ] TanStack Query Mutation으로 등록 후 목록 캐시 무효화
-- [ ] **할 일 수정 폼** — 등록 폼 재사용 또는 별도 모달
-- [ ] **할 일 삭제** — 확인 다이얼로그 후 삭제
-- [ ] **완료 처리/취소** — 낙관적 업데이트 (옵션)
+- [x] Segmented Control 필터 컴포넌트 (상태 4종, pill 형태)
+- [x] 모바일 Bottom Sheet 컴포넌트 (Modal 컴포넌트가 반응형으로 Bottom Sheet 겸용)
+- [x] 데스크톱 Center Modal 컴포넌트 (blur 딤 오버레이 + radius-xl 카드)
+- [x] Skeleton 로딩 카드 컴포넌트
+- [x] Empty State 컴포넌트 (아이콘 + 제목 + CTA)
+- [x] **할 일 목록 페이지** (`pages/TodosPage.tsx`)
+  - [x] TanStack Query로 `GET /todos` 조회 및 캐싱
+  - [x] 상태 필터 UI (NOT_STARTED / IN_PROGRESS / DONE / OVERDUE)
+  - [x] 카테고리 필터 UI (드롭다운)
+  - [x] 필터 AND 조건 적용
+- [x] **할 일 카드 컴포넌트** (`features/todos/TodoCard.tsx`)
+  - [x] 상태 배지 색상 구분 (상태별 색상 정의)
+  - [x] 완료/취소 토글 버튼
+  - [x] 수정/삭제 버튼
+- [x] **할 일 등록 폼** (`features/todos/TodoForm.tsx`)
+  - [x] 제목(필수), 설명(선택), 카테고리 선택, 시작일/종료일 선택
+  - [x] 종료일 < 시작일 선택 불가 처리
+  - [x] TanStack Query Mutation으로 등록 후 목록 캐시 무효화
+- [x] **할 일 수정 폼** — TodoForm 재사용 (todo prop으로 구분)
+- [x] **할 일 삭제** — window.confirm 다이얼로그 후 삭제
+- [x] **완료 처리/취소** — useMutation + invalidateQueries
 
 #### 완료 조건
 
-- [ ] 할 일 등록 후 목록에 즉시 반영 (캐시 무효화 또는 낙관적 업데이트)
-- [ ] 상태 필터 변경 시 목록 즉시 갱신
-- [ ] 완료 처리 후 상태가 `DONE`으로 변경됨
-- [ ] `TODO_TITLE_TOO_LONG` → 클라이언트에서 사전 차단
-- [ ] 백엔드가 계산한 `status` 값을 그대로 표시 (프론트 재계산 없음)
+- [x] 할 일 등록 후 목록에 즉시 반영 (캐시 무효화)
+- [x] 상태 필터 변경 시 목록 즉시 갱신
+- [x] 완료 처리 후 상태가 `DONE`으로 변경됨
+- [x] `TODO_TITLE_TOO_LONG` → 클라이언트에서 사전 차단 (Zod max 100)
+- [x] 백엔드가 계산한 `status` 값을 그대로 표시 (프론트 재계산 없음)
 
 ---
 
