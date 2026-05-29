@@ -232,7 +232,7 @@ export function CalendarGrid({
                       style={{
                         background: STATUS_COLOR[bar.todo.status],
                         height: '100%',
-                        borderRadius: bar.isStart ? '4px 0 0 4px' : bar.isEnd ? '0 4px 4px 0' : '0',
+                        borderRadius: bar.isStart ? '4px' : '0 4px 4px 0',
                         borderLeft: bar.isStart ? 'none' : 'none',
                         marginLeft: bar.isStart ? '2px' : '0',
                         marginRight: bar.isEnd ? '2px' : '0',
@@ -248,7 +248,11 @@ export function CalendarGrid({
                         textOverflow: 'ellipsis'
                       }}
                     >
-                      {bar.isStart && bar.todo.title}
+                      {bar.isStart && (
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
+                          {bar.todo.title}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
