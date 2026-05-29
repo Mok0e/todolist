@@ -27,9 +27,10 @@ interface DayDetailProps {
   isOpen: boolean
   onClose: () => void
   isDesktop: boolean
+  onEditTodo: (todo: Todo) => void
 }
 
-export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop }: DayDetailProps) {
+export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onEditTodo }: DayDetailProps) {
   const dayTodos = selectedDate
     ? todos.filter((t) => t.endDate === selectedDate)
     : []
@@ -70,7 +71,7 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop }: D
         >
           {title}
         </div>
-        <TodoList todos={dayTodos} />
+        <TodoList todos={dayTodos} onEditTodo={onEditTodo} />
       </div>
     )
   }
@@ -135,14 +136,14 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop }: D
           >
             {title}
           </div>
-          <TodoList todos={dayTodos} />
+          <TodoList todos={dayTodos} onEditTodo={onEditTodo} />
         </div>
       </div>
     </>
   )
 }
 
-function TodoList({ todos }: { todos: Todo[] }) {
+function TodoList({ todos, onEditTodo }: { todos: Todo[]; onEditTodo: (todo: Todo) => void }) {
   if (todos.length === 0) {
     return (
       <div
@@ -179,15 +180,35 @@ function TodoList({ todos }: { todos: Todo[] }) {
               }}
             />
             <div style={{ flex: 1 }}>
-              <div
-                style={{
-                  fontSize: '15px',
-                  fontWeight: 500,
-                  color: 'var(--text-primary)',
-                  textDecoration: todo.status === 'DONE' ? 'line-through' : 'none',
-                }}
-              >
-                {todo.title}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
+                <div
+                  style={{
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    color: 'var(--text-primary)',
+                    textDecoration: todo.status === 'DONE' ? 'line-through' : 'none',
+                    flex: 1,
+                  }}
+                >
+                  {todo.title}
+                </div>
+                <button
+                  onClick={() => onEditTodo(todo)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--color-blue)',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    padding: '0',
+                    minHeight: 'unset',
+                    minWidth: 'unset',
+                    flexShrink: 0,
+                  }}
+                >
+                  수정
+                </button>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
                 <span

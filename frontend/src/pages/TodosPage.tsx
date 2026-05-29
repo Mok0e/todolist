@@ -37,19 +37,24 @@ export function TodosPage() {
     queryFn: () => categoriesApi.list(),
   })
 
+  const invalidateAll = () => {
+    void queryClient.invalidateQueries({ queryKey: queryKeys.todos.all })
+    void queryClient.invalidateQueries({ queryKey: ['calendar'] })
+  }
+
   const completeMutation = useMutation({
     mutationFn: (id: string) => todosApi.complete(id),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.todos.all }),
+    onSettled: invalidateAll,
   })
 
   const incompleteMutation = useMutation({
     mutationFn: (id: string) => todosApi.incomplete(id),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.todos.all }),
+    onSettled: invalidateAll,
   })
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => todosApi.remove(id),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.todos.all }),
+    onSettled: invalidateAll,
   })
 
   const handleStatusFilter = (value: string) => {

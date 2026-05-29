@@ -26,7 +26,7 @@ const mockTodo: Todo = {
 
 const mockCategories: Category[] = [
   { id: 'cat1', name: '업무', isDefault: false, createdAt: '2026-05-27T00:00:00.000Z', updatedAt: '2026-05-27T00:00:00.000Z' },
-  { id: 'cat2', name: '개인', isDefault: true, createdAt: '2026-05-27T00:00:00.000Z', updatedAt: '2026-05-27T00:00:00.000Z' },
+  { id: 'cat2', name: '개인', isDefault: false, createdAt: '2026-05-27T00:00:00.000Z', updatedAt: '2026-05-27T00:00:00.000Z' },
 ]
 
 function createWrapper() {

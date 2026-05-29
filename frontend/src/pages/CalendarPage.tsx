@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { calendarApi } from '@/features/calendar/api'
+import { categoriesApi } from '@/features/categories/api'
 import { CalendarGrid } from '@/features/calendar/CalendarGrid'
 import { DayDetail } from '@/features/calendar/DayDetail'
+import { Modal } from '@/components/ui/Modal'
+import { TodoForm } from '@/features/todos/TodoForm'
 import { queryKeys } from '@/lib/queryKeys'
+import type { Todo } from '@/types'
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768)
@@ -30,11 +34,14 @@ const MONTH_NAMES = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8�
 export function CalendarPage() {
   const today = getTodayStr()
   const todayDate = new Date(today + 'T00:00:00')
+  const queryClient = useQueryClient()
 
   const [year, setYear] = useState(todayDate.getFullYear())
   const [month, setMonth] = useState(todayDate.getMonth() + 1)
   const [selectedDate, setSelectedDate] = useState<string | null>(today)
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
+  const [showForm, setShowForm] = useState(false)
   const isDesktop = useIsDesktop()
 
   const dueDateFrom = toISODate(year, month, 1)
@@ -43,6 +50,11 @@ export function CalendarPage() {
   const { data: todos = [], isLoading } = useQuery({
     queryKey: queryKeys.calendar.month(year, month),
     queryFn: () => calendarApi.list(dueDateFrom, dueDateTo),
+  })
+
+  const { data: categories = [] } = useQuery({
+    queryKey: queryKeys.categories.list(),
+    queryFn: () => categoriesApi.list(),
   })
 
   const handlePrevMonth = () => {
@@ -66,6 +78,23 @@ export function CalendarPage() {
   const handleDateSelect = (dateStr: string) => {
     setSelectedDate(dateStr)
     if (!isDesktop) setSheetOpen(true)
+  }
+
+  const handleEditTodo = (todo: Todo) => {
+    setEditingTodo(todo)
+    setShowForm(true)
+    if (!isDesktop) setSheetOpen(false)
+  }
+
+  const handleFormSuccess = () => {
+    setShowForm(false)
+    setEditingTodo(null)
+    void queryClient.invalidateQueries({ queryKey: queryKeys.calendar.month(year, month) })
+  }
+
+  const handleFormCancel = () => {
+    setShowForm(false)
+    setEditingTodo(null)
   }
 
   return (
@@ -182,6 +211,7 @@ export function CalendarPage() {
               isOpen={true}
               onClose={() => setSheetOpen(false)}
               isDesktop={true}
+              onEditTodo={handleEditTodo}
             />
           )}
         </div>
@@ -194,8 +224,22 @@ export function CalendarPage() {
           isOpen={sheetOpen}
           onClose={() => setSheetOpen(false)}
           isDesktop={false}
+          onEditTodo={handleEditTodo}
         />
       )}
+
+      <Modal
+        isOpen={showForm}
+        onClose={handleFormCancel}
+        title="할 일 수정"
+      >
+        <TodoForm
+          todo={editingTodo ?? undefined}
+          categories={categories}
+          onSuccess={handleFormSuccess}
+          onCancel={handleFormCancel}
+        />
+      </Modal>
     </div>
   )
 }

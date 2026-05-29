@@ -67,6 +67,7 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.todos.all })
+      void queryClient.invalidateQueries({ queryKey: ['calendar'] })
       onSuccess()
     },
   })
@@ -175,7 +176,7 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
         <label htmlFor="todo-category" style={labelStyle}>카테고리</label>
         <select id="todo-category" {...register('categoryId')} style={selectStyle}>
           <option value="">기본</option>
-          {categories.map((cat) => (
+          {categories.filter((cat) => !cat.isDefault).map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
             </option>
