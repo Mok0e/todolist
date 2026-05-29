@@ -184,7 +184,7 @@ function TodoList({
             display: 'flex',
             alignItems: 'flex-start',
             gap: '10px',
-            padding: '12px 14px',
+            padding: '12px 12px',
             background: 'var(--bg-elevated)',
             borderRadius: 'var(--radius-md)',
             boxShadow: 'var(--shadow-sm)',
