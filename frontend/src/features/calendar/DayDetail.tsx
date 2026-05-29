@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { 
+  parseISO, 
+  startOfDay, 
+  endOfDay,
+  isSameDay
+} from 'date-fns'
 import { Check, Pencil, Trash2 } from 'lucide-react'
 import type { Todo, TodoStatus } from '@/types'
 
@@ -35,7 +41,13 @@ interface DayDetailProps {
 
 export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onEditTodo, onToggleComplete, onDeleteTodo }: DayDetailProps) {
   const dayTodos = selectedDate
-    ? todos.filter((t) => t.endDate === selectedDate)
+    ? todos.filter((todo) => {
+        const start = todo.startDate ? startOfDay(parseISO(todo.startDate)) : startOfDay(parseISO(todo.endDate))
+        const end = endOfDay(parseISO(todo.endDate))
+        const target = startOfDay(parseISO(selectedDate))
+        
+        return (target >= start && target <= end) || isSameDay(target, start) || isSameDay(target, end)
+      })
     : []
 
   const title = selectedDate
