@@ -1,7 +1,20 @@
 import React, { useState } from 'react'
 import { Check, Pencil, Trash2 } from 'lucide-react'
 import type { Todo } from '@/types'
-import { StatusBadge } from './StatusBadge'
+
+const STATUS_LABEL: Record<Todo['status'], string> = {
+  NOT_STARTED: '시작전',
+  IN_PROGRESS: '진행중',
+  OVERDUE: '기한초과',
+  DONE: '완료',
+}
+
+const STATUS_COLOR: Record<Todo['status'], string> = {
+  NOT_STARTED: 'var(--text-tertiary)',
+  IN_PROGRESS: 'var(--text-secondary)',
+  OVERDUE: 'var(--color-red)',
+  DONE: 'var(--text-tertiary)',
+}
 
 export interface TodoCardProps {
   todo: Todo
@@ -14,139 +27,156 @@ export interface TodoCardProps {
 export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: TodoCardProps) {
   const isDone = todo.status === 'DONE'
   const [isHovered, setIsHovered] = useState(false)
+  const [isEditHovered, setIsEditHovered] = useState(false)
+  const [isDeleteHovered, setIsDeleteHovered] = useState(false)
 
   const cardStyle: React.CSSProperties = {
     background: 'var(--bg-elevated)',
+    padding: '14px 16px',
     borderRadius: 'var(--radius-lg)',
-    padding: 'var(--spacing-md)',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--spacing-sm)',
-    transition: 'transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 200ms ease',
-    transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-    boxShadow: isHovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
     border: '1px solid var(--separator)',
+    boxShadow: isHovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '12px',
+    transition: 'box-shadow 200ms ease',
     cursor: 'default',
   }
 
-  const topRowStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--spacing-sm)',
-  }
-
   const checkButtonStyle: React.CSSProperties = {
-    width: '24px',
-    height: '24px',
-    borderRadius: 'var(--radius-full)',
-    border: isDone ? 'none' : '2px solid var(--color-gray)',
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+    marginTop: '2px',
     background: isDone ? 'var(--color-green)' : 'transparent',
+    border: isDone ? 'none' : '1.5px solid var(--color-gray3)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
     flexShrink: 0,
-    color: '#ffffff',
+  }
+
+  const contentStyle: React.CSSProperties = {
+    flex: 1,
+    minWidth: 0,
   }
 
   const titleStyle: React.CSSProperties = {
-    flex: 1,
-    fontSize: '17px',
+    fontSize: '15px',
     fontWeight: 500,
-    color: isDone ? 'var(--text-secondary)' : 'var(--text-primary)',
+    lineHeight: 1.4,
+    color: isDone ? 'var(--text-tertiary)' : 'var(--text-primary)',
     textDecoration: isDone ? 'line-through' : 'none',
     margin: 0,
   }
 
-  const categoryStyle: React.CSSProperties = {
-    fontSize: '13px',
-    color: 'var(--text-secondary)',
-    flexShrink: 0,
-  }
-
-  const bottomRowStyle: React.CSSProperties = {
+  const metaStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: '6px',
+    marginTop: '5px',
   }
 
-  const leftStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--spacing-sm)',
+  const metaTextStyle: React.CSSProperties = {
+    fontSize: '12px',
+    color: 'var(--text-tertiary)',
   }
 
-  const dateStyle: React.CSSProperties = {
-    fontSize: '13px',
-    fontFamily: 'var(--font-mono)',
-    color: 'var(--text-secondary)',
+  const dotStyle: React.CSSProperties = {
+    fontSize: '10px',
+    color: 'var(--text-tertiary)',
+    opacity: 0.5,
   }
 
   const actionStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: 'var(--spacing-xs)',
-  }
-
-  const iconButtonStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '32px',
-    height: '32px',
-    borderRadius: 'var(--radius-sm)',
-    border: 'none',
-    background: 'transparent',
-    cursor: 'pointer',
+    gap: '4px',
+    flexShrink: 0,
   }
 
   const dateText = (() => {
-    if (todo.startDate && todo.endDate) {
+    if (todo.startDate && todo.endDate && todo.startDate !== todo.endDate) {
       return `${todo.startDate} ~ ${todo.endDate}`
     }
     if (todo.endDate) {
-      return `~ ${todo.endDate}`
+      return todo.endDate
     }
     return null
   })()
 
   return (
     <div style={cardStyle} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <div style={topRowStyle}>
+      <button
+        type="button"
+        style={checkButtonStyle}
+        aria-label={isDone ? '완료 취소' : '완료로 표시'}
+        onClick={() => (isDone ? onIncomplete(todo.id) : onComplete(todo.id))}
+      >
+        {isDone && <Check size={11} strokeWidth={3} color="white" />}
+      </button>
+
+      <div style={contentStyle}>
+        <p style={titleStyle}>{todo.title}</p>
+        <div style={metaStyle}>
+          <span style={metaTextStyle}>{todo.category.name}</span>
+          <span style={dotStyle}>·</span>
+          <span style={{ ...metaTextStyle, color: STATUS_COLOR[todo.status] }}>
+            {STATUS_LABEL[todo.status]}
+          </span>
+          {dateText && (
+            <>
+              <span style={dotStyle}>·</span>
+              <span style={metaTextStyle}>{dateText}</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div style={actionStyle}>
         <button
           type="button"
-          style={checkButtonStyle}
-          aria-label={isDone ? '완료 취소' : '완료로 표시'}
-          onClick={() => (isDone ? onIncomplete(todo.id) : onComplete(todo.id))}
+          style={{
+            width: '32px',
+            height: '32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            borderRadius: 'var(--radius-sm)',
+            cursor: 'pointer',
+            color: isEditHovered ? 'var(--text-secondary)' : 'var(--text-tertiary)',
+          }}
+          aria-label="수정"
+          onClick={() => onEdit(todo)}
+          onMouseEnter={() => setIsEditHovered(true)}
+          onMouseLeave={() => setIsEditHovered(false)}
         >
-          {isDone && <Check size={14} strokeWidth={3} />}
+          <Pencil size={16} />
         </button>
-        <p style={titleStyle}>{todo.title}</p>
-        <span style={categoryStyle}>{todo.category.name}</span>
-      </div>
-      <div style={bottomRowStyle}>
-        <div style={leftStyle}>
-          <StatusBadge status={todo.status} />
-          {dateText && <span style={dateStyle}>{dateText}</span>}
-        </div>
-        <div style={actionStyle}>
-          <button
-            type="button"
-            style={{ ...iconButtonStyle, color: 'var(--text-secondary)' }}
-            aria-label="수정"
-            onClick={() => onEdit(todo)}
-          >
-            <Pencil size={16} />
-          </button>
-          <button
-            type="button"
-            style={{ ...iconButtonStyle, color: 'var(--color-red)' }}
-            aria-label="삭제"
-            onClick={() => onDelete(todo.id)}
-          >
-            <Trash2 size={16} />
-          </button>
-        </div>
+        <button
+          type="button"
+          style={{
+            width: '32px',
+            height: '32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'transparent',
+            border: 'none',
+            borderRadius: 'var(--radius-sm)',
+            cursor: 'pointer',
+            color: isDeleteHovered ? 'var(--color-red)' : 'var(--text-tertiary)',
+          }}
+          aria-label="삭제"
+          onClick={() => onDelete(todo.id)}
+          onMouseEnter={() => setIsDeleteHovered(true)}
+          onMouseLeave={() => setIsDeleteHovered(false)}
+        >
+          <Trash2 size={16} />
+        </button>
       </div>
     </div>
   )

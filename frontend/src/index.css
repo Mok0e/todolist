@@ -52,8 +52,8 @@
   --spacing-3xl: 64px;
 
   /* Typography */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
 
   /* Shadows */

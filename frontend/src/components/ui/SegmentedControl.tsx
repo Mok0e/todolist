@@ -8,11 +8,14 @@ export interface SegmentedControlProps {
 
 export function SegmentedControl({ options, value, onChange }: SegmentedControlProps) {
   const containerStyle: React.CSSProperties = {
-    display: 'flex',
-    flexWrap: 'nowrap',
+    display: 'inline-flex',
+    background: 'var(--bg-tertiary)',
+    borderRadius: 'var(--radius-full)',
+    padding: '2px',
+    gap: '2px',
     overflowX: 'auto',
-    gap: 'var(--spacing-xs)',
-    scrollbarWidth: 'none',
+    scrollbarWidth: 'none' as const,
+    flexWrap: 'nowrap',
   }
 
   return (
@@ -23,18 +26,19 @@ export function SegmentedControl({ options, value, onChange }: SegmentedControlP
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          height: '36px',
-          padding: '0 16px',
+          height: '32px',
+          padding: '0 14px',
           borderRadius: 'var(--radius-full)',
-          border: isActive ? 'none' : '1.5px solid var(--separator)',
-          background: isActive ? 'var(--text-primary)' : 'transparent',
-          color: isActive ? 'var(--bg-primary)' : 'var(--text-primary)',
-          fontSize: '15px',
+          border: 'none',
+          background: isActive ? 'var(--bg-elevated)' : 'transparent',
+          boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
+          color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+          fontSize: '14px',
           fontWeight: isActive ? 600 : 400,
-          fontFamily: 'var(--font-text)',
+          fontFamily: 'var(--font-sans)',
           cursor: 'pointer',
           whiteSpace: 'nowrap',
-          transition: 'background 200ms ease, color 200ms ease',
+          transition: 'background 200ms ease, color 200ms ease, box-shadow 200ms ease',
           flexShrink: 0,
         }
 

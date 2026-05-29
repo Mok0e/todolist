@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import type { Todo, TodoStatus } from '@/types'
 
 const STATUS_COLOR: Record<TodoStatus, string> = {
-  DONE: 'var(--color-green)',
-  IN_PROGRESS: 'var(--color-blue)',
+  DONE: 'var(--text-tertiary)',
+  IN_PROGRESS: 'var(--text-secondary)',
   OVERDUE: 'var(--color-red)',
-  NOT_STARTED: 'var(--color-gray)',
+  NOT_STARTED: 'var(--text-tertiary)',
 }
 
 const STATUS_LABEL: Record<TodoStatus, string> = {

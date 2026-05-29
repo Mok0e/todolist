@@ -33,6 +33,7 @@ export function AppLayout() {
   const clearToken = useAuthStore((s) => s.clearToken)
   const navigate = useNavigate()
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [logoutHovered, setLogoutHovered] = useState(false)
 
   const handleLogout = () => {
     clearToken()
@@ -142,6 +143,8 @@ export function AppLayout() {
 
           <button
             onClick={handleLogout}
+            onMouseEnter={() => setLogoutHovered(true)}
+            onMouseLeave={() => setLogoutHovered(false)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -149,7 +152,7 @@ export function AppLayout() {
               padding: '10px 12px',
               borderRadius: 'var(--radius-full)',
               background: 'transparent',
-              color: 'var(--color-red)',
+              color: logoutHovered ? 'var(--color-red)' : 'var(--text-tertiary)',
               fontSize: '15px',
               fontWeight: 400,
               cursor: 'pointer',
