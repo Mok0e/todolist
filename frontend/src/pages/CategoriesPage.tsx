@@ -1,0 +1,267 @@
+import React, { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { categoriesApi } from '@/features/categories/api'
+import { queryKeys } from '@/lib/queryKeys'
+import { Skeleton } from '@/components/ui/Skeleton'
+import { Button } from '@/components/ui/Button'
+import { CategoryInlineForm } from '@/features/categories/CategoryInlineForm'
+import type { ApiErrorData } from '@/lib/apiClient'
+
+function isDuplicateError(error: unknown): boolean {
+  if (error != null && typeof error === 'object' && 'code' in error) {
+    return (error as ApiErrorData).code === 'CATEGORY_NAME_DUPLICATE'
+  }
+  return false
+}
+
+function getErrorMessage(error: unknown): string {
+  if (isDuplicateError(error)) {
+    return '이미 존재하는 카테고리 이름입니다.'
+  }
+  if (error != null && typeof error === 'object' && 'message' in error) {
+    return String((error as ApiErrorData).message)
+  }
+  return '오류가 발생했습니다.'
+}
+
+export function CategoriesPage() {
+  const queryClient = useQueryClient()
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [addError, setAddError] = useState<string | undefined>(undefined)
+  const [editError, setEditError] = useState<string | undefined>(undefined)
+
+  const { data: categories = [], isLoading } = useQuery({
+    queryKey: queryKeys.categories.list(),
+    queryFn: () => categoriesApi.list(),
+  })
+
+  const createMutation = useMutation({
+    mutationFn: (name: string) => categoriesApi.create({ name }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all })
+      setShowAddForm(false)
+      setAddError(undefined)
+    },
+    onError: (error: unknown) => {
+      setAddError(getErrorMessage(error))
+    },
+  })
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) => categoriesApi.update(id, { name }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all })
+      setEditingId(null)
+      setEditError(undefined)
+    },
+    onError: (error: unknown) => {
+      setEditError(getErrorMessage(error))
+    },
+  })
+
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => categoriesApi.remove(id),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.categories.all })
+      queryClient.invalidateQueries({ queryKey: queryKeys.todos.all })
+    },
+  })
+
+  const handleAddClick = () => {
+    setShowAddForm(true)
+    setEditingId(null)
+    setAddError(undefined)
+  }
+
+  const handleAddCancel = () => {
+    setShowAddForm(false)
+    setAddError(undefined)
+  }
+
+  const handleEditClick = (id: string) => {
+    setEditingId(id)
+    setShowAddForm(false)
+    setEditError(undefined)
+  }
+
+  const handleEditCancel = () => {
+    setEditingId(null)
+    setEditError(undefined)
+  }
+
+  const handleDelete = (id: string, name: string) => {
+    if (
+      window.confirm(
+        `'${name}' 카테고리를 삭제하시겠습니까?\n이 카테고리의 할 일이 '기본' 카테고리로 이동됩니다.`,
+      )
+    ) {
+      removeMutation.mutate(id)
+    }
+  }
+
+  const pageStyle: React.CSSProperties = {
+    maxWidth: '720px',
+    margin: '0 auto',
+    padding: '32px 16px',
+  }
+
+  const headerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '24px',
+  }
+
+  const titleStyle: React.CSSProperties = {
+    fontSize: '28px',
+    fontWeight: 700,
+    color: 'var(--text-primary)',
+    margin: 0,
+  }
+
+  const listContainerStyle: React.CSSProperties = {
+    background: 'var(--bg-tertiary)',
+    borderRadius: 'var(--radius-lg)',
+    overflow: 'hidden',
+  }
+
+  const itemStyle = (isFirst: boolean): React.CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: '52px',
+    padding: '0 16px',
+    borderTop: isFirst ? 'none' : '1px solid var(--separator)',
+  })
+
+  const itemNameStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    flex: 1,
+  }
+
+  const defaultBadgeStyle: React.CSSProperties = {
+    fontSize: '13px',
+    color: 'var(--text-secondary)',
+  }
+
+  const disabledButtonStyle: React.CSSProperties = {
+    opacity: 0.3,
+    pointerEvents: 'none',
+  }
+
+  const actionGroupStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+  }
+
+  return (
+    <div style={pageStyle}>
+      <div style={headerStyle}>
+        <h1 style={titleStyle}>카테고리 관리</h1>
+        <Button
+          onClick={handleAddClick}
+          style={{ height: '40px', fontSize: '15px', padding: '0 16px' }}
+        >
+          <Plus size={16} style={{ marginRight: '6px' }} />
+          카테고리 추가
+        </Button>
+      </div>
+
+      {isLoading ? (
+        <div data-testid="categories-skeleton" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <Skeleton height="52px" borderRadius="var(--radius-lg)" />
+          <Skeleton height="52px" borderRadius="var(--radius-lg)" />
+          <Skeleton height="52px" borderRadius="var(--radius-lg)" />
+        </div>
+      ) : (
+        <div data-testid="category-list" style={listContainerStyle}>
+          {categories.map((category, index) => {
+            const isFirst = index === 0
+            const isEditing = editingId === category.id
+
+            if (isEditing) {
+              return (
+                <div key={category.id} style={{ borderTop: isFirst ? 'none' : '1px solid var(--separator)' }}>
+                  <CategoryInlineForm
+                    initialValue={category.name}
+                    isLoading={updateMutation.isPending}
+                    error={editError}
+                    onSave={(name) => updateMutation.mutate({ id: category.id, name })}
+                    onCancel={handleEditCancel}
+                  />
+                </div>
+              )
+            }
+
+            return (
+              <div
+                key={category.id}
+                data-testid={category.isDefault ? 'default-category' : 'category-item'}
+                style={itemStyle(isFirst)}
+              >
+                <div style={itemNameStyle}>
+                  <span style={{ fontSize: '15px', color: 'var(--text-primary)' }}>{category.name}</span>
+                  {category.isDefault && (
+                    <span style={defaultBadgeStyle}>(기본값 · 삭제 불가)</span>
+                  )}
+                </div>
+                <div style={actionGroupStyle}>
+                  <button
+                    onClick={() => handleEditClick(category.id)}
+                    disabled={category.isDefault}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: category.isDefault ? 'default' : 'pointer',
+                      padding: '8px',
+                      color: 'var(--text-tint)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      ...(category.isDefault ? disabledButtonStyle : {}),
+                    }}
+                    aria-label={`${category.name} 수정`}
+                  >
+                    <Pencil size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(category.id, category.name)}
+                    disabled={category.isDefault || removeMutation.isPending}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: category.isDefault ? 'default' : 'pointer',
+                      padding: '8px',
+                      color: 'var(--color-red)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      ...(category.isDefault ? disabledButtonStyle : {}),
+                    }}
+                    aria-label={`${category.name} 삭제`}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+
+          {showAddForm && (
+            <div style={{ borderTop: categories.length > 0 ? '1px solid var(--separator)' : 'none' }}>
+              <CategoryInlineForm
+                isLoading={createMutation.isPending}
+                error={addError}
+                onSave={(name) => createMutation.mutate(name)}
+                onCancel={handleAddCancel}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}

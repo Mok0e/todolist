@@ -618,25 +618,25 @@ gantt
 
 #### 작업 목록
 
-- [ ] 인라인 편집 폼 컴포넌트 (항목 위치에서 바로 편집)
-- [ ] 삭제 확인 다이얼로그 (기본 카테고리로 이동 안내 포함)
-- [ ] **카테고리 목록** (`pages/CategoriesPage.tsx` 또는 설정 내 섹션)
-  - [ ] 카테고리 목록 조회
-  - [ ] 기본 카테고리는 수정/삭제 버튼 비활성화
-- [ ] **카테고리 생성 폼**
-  - [ ] 이름 1~30자 검증
-  - [ ] `CATEGORY_NAME_DUPLICATE` → 중복 안내
-- [ ] **카테고리 수정**
-  - [ ] 이름 수정 (기본 카테고리 제외)
-- [ ] **카테고리 삭제**
-  - [ ] 삭제 시 "해당 카테고리의 할 일이 기본으로 이동됩니다" 안내 다이얼로그
-  - [ ] 삭제 후 할 일 목록 캐시 무효화
+- [x] 인라인 편집 폼 컴포넌트 (항목 위치에서 바로 편집)
+- [x] 삭제 확인 다이얼로그 (기본 카테고리로 이동 안내 포함)
+- [x] **카테고리 목록** (`pages/CategoriesPage.tsx` 또는 설정 내 섹션)
+  - [x] 카테고리 목록 조회
+  - [x] 기본 카테고리는 수정/삭제 버튼 비활성화
+- [x] **카테고리 생성 폼**
+  - [x] 이름 1~30자 검증
+  - [x] `CATEGORY_NAME_DUPLICATE` → 중복 안내
+- [x] **카테고리 수정**
+  - [x] 이름 수정 (기본 카테고리 제외)
+- [x] **카테고리 삭제**
+  - [x] 삭제 시 "해당 카테고리의 할 일이 기본으로 이동됩니다" 안내 다이얼로그
+  - [x] 삭제 후 할 일 목록 캐시 무효화
 
 #### 완료 조건
 
-- [ ] 카테고리 삭제 후 해당 todos가 기본 카테고리로 이동됨 (목록 갱신 확인)
-- [ ] 기본 카테고리 수정/삭제 버튼 UI에서 비활성화
-- [ ] 동명 카테고리 생성 시 `409` 응답 후 오류 메시지 표시
+- [x] 카테고리 삭제 후 해당 todos가 기본 카테고리로 이동됨 (목록 갱신 확인)
+- [x] 기본 카테고리 수정/삭제 버튼 UI에서 비활성화
+- [x] 동명 카테고리 생성 시 `409` 응답 후 오류 메시지 표시
 
 ---
 
@@ -649,24 +649,23 @@ gantt
 
 #### 작업 목록
 
-- [ ] iOS 스타일 Toggle Switch 컴포넌트 (32×20px, System Blue/회색)
-- [ ] Grouped Settings List 레이아웃 (섹션별 Inset Grouped List)
-- [ ] **설정 페이지** (`pages/SettingsPage.tsx`)
-  - [ ] 테마 전환 토글 (LIGHT/DARK) — 낙관적 업데이트 적용
-  - [ ] 언어 선택 드롭다운 (ko/en) — 변경 즉시 i18n 적용
-- [ ] **테마 적용**
-  - [ ] Zustand store에 `theme` 상태 저장
-  - [ ] CSS class 또는 CSS 변수로 테마 전환
-- [ ] **언어 적용**
-  - [ ] `i18next.changeLanguage()` 호출
-  - [ ] 변경된 언어 서버 저장 후 localStorage 동기화
+- [x] iOS 스타일 Toggle Switch 컴포넌트 (32×20px, System Blue/회색)
+- [x] Grouped Settings List 레이아웃 (섹션별 Inset Grouped List)
+- [x] **설정 페이지** (`pages/SettingsPage.tsx`)
+  - [x] 테마 전환 토글 (LIGHT/DARK) — 낙관적 업데이트 적용
+  - [x] 언어 선택 드롭다운 (ko/en) — 변경 즉시 i18n 적용
+- [x] **테마 적용**
+  - [x] CSS 변수로 테마 전환 (`[data-theme]` 선택자, PrivateRoute useEffect)
+- [x] **언어 적용**
+  - [x] `i18next.changeLanguage()` 호출
+  - [x] 변경된 언어 서버 저장 (DB 동기화)
 
 #### 완료 조건
 
-- [ ] 테마 변경 즉시 UI 반영 (서버 응답 대기 없이 낙관적 업데이트)
-- [ ] 언어 변경 시 모든 UI 텍스트 즉시 전환
-- [ ] 새로고침 후에도 설정 유지 (DB 저장 확인)
-- [ ] 허용되지 않은 테마/언어 값 전송 → `400` 응답
+- [x] 테마 변경 즉시 UI 반영 (서버 응답 대기 없이 낙관적 업데이트)
+- [x] 언어 변경 시 모든 UI 텍스트 즉시 전환
+- [x] 새로고침 후에도 설정 유지 (DB 저장 확인)
+- [x] 허용되지 않은 테마/언어 값 전송 → `400` 응답
 
 ---
 
@@ -679,28 +678,28 @@ gantt
 
 #### 작업 목록
 
-- [ ] `pages/CalendarPage.tsx` 생성
-- [ ] `features/calendar/CalendarGrid.tsx` — 7열×5행 월별 그리드
-  - [ ] 각 셀: 날짜 숫자 + 할 일 dot indicator (최대 3개, 초과 시 "+N")
-  - [ ] 오늘 날짜: System Blue 외곽선 원 강조
-  - [ ] 상태별 dot 색상: DONE=green, IN_PROGRESS=blue, OVERDUE=red, NOT_STARTED=gray
-- [ ] `features/calendar/DayDetail.tsx` — 선택된 날짜 할 일 목록
-  - [ ] 데스크톱: 우측 패널 (Inset Grouped List)
-  - [ ] 모바일: Bottom Sheet (spring 400ms, grabber handle)
-- [ ] `features/calendar/api.ts` — TanStack Query로 월별 데이터 조회
-  - [ ] `GET /todos?dueDateFrom=YYYY-MM-01&dueDateTo=YYYY-MM-31`
-- [ ] 월 이동 (← →) — 달력 슬라이드 전환 spring 250ms
-- [ ] Router에 `/calendar` 경로 추가 (PrivateRoute)
-- [ ] 데스크톱 Sidebar / 모바일 TabBar에 "캘린더" 탭 추가
+- [x] `pages/CalendarPage.tsx` 생성
+- [x] `features/calendar/CalendarGrid.tsx` — 7열×5행 월별 그리드
+  - [x] 각 셀: 날짜 숫자 + 할 일 dot indicator (최대 3개, 초과 시 "+N")
+  - [x] 오늘 날짜: System Blue 외곽선 원 강조
+  - [x] 상태별 dot 색상: DONE=green, IN_PROGRESS=blue, OVERDUE=red, NOT_STARTED=gray
+- [x] `features/calendar/DayDetail.tsx` — 선택된 날짜 할 일 목록
+  - [x] 데스크톱: 우측 패널 (Inset Grouped List)
+  - [x] 모바일: Bottom Sheet (spring 400ms, grabber handle)
+- [x] `features/calendar/api.ts` — TanStack Query로 월별 데이터 조회
+  - [x] `GET /todos?dueDateFrom=YYYY-MM-01&dueDateTo=YYYY-MM-31`
+- [x] 월 이동 (← →) — 달력 슬라이드 전환 spring 250ms
+- [x] Router에 `/calendar` 경로 추가 (PrivateRoute)
+- [x] 데스크톱 Sidebar / 모바일 TabBar에 "캘린더" 탭 추가
 
 #### 완료 조건
 
-- [ ] 월별 달력 그리드 정상 렌더링 (7열 × 5행)
-- [ ] end_date 기준으로 해당 날짜 셀에 dot 표시
-- [ ] 날짜 탭/클릭 시 해당 날짜 할 일 목록 표시
-- [ ] 월 이동 시 API 재호출 및 달력 업데이트
-- [ ] 오늘 날짜 진입 시 자동 선택 및 Day Detail 표시
-- [ ] 모바일 Bottom Sheet spring 애니메이션 정상 동작
+- [x] 월별 달력 그리드 정상 렌더링 (7열 × 5행)
+- [x] end_date 기준으로 해당 날짜 셀에 dot 표시
+- [x] 날짜 탭/클릭 시 해당 날짜 할 일 목록 표시
+- [x] 월 이동 시 API 재호출 및 달력 업데이트
+- [x] 오늘 날짜 진입 시 자동 선택 및 Day Detail 표시
+- [x] 모바일 Bottom Sheet spring 애니메이션 정상 동작
 
 ---
 

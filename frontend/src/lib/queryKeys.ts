@@ -12,4 +12,7 @@ export const queryKeys = {
     all: ['categories'] as const,
     list: () => ['categories', 'list'] as const,
   },
+  calendar: {
+    month: (year: number, month: number) => ['calendar', 'month', year, month] as const,
+  },
 } as const
