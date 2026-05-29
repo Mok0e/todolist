@@ -48,7 +48,7 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
     height: '22px',
     borderRadius: '50%',
     marginTop: '2px',
-    background: isDone ? 'var(--color-green)' : 'transparent',
+    background: isDone ? 'var(--check-green)' : 'transparent',
     border: isDone ? 'none' : '2px solid var(--separator-opaque)',
     display: 'flex',
     alignItems: 'center',
