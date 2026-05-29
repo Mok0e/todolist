@@ -17,10 +17,10 @@ import {
 import type { Todo, TodoStatus } from '@/types'
 
 const STATUS_COLOR: Record<TodoStatus, string> = {
-  DONE: 'var(--color-green)',
-  IN_PROGRESS: 'var(--color-blue)',
-  OVERDUE: 'var(--color-red)',
-  NOT_STARTED: 'var(--color-gray)',
+  DONE: 'rgba(52, 199, 89, 0.72)',
+  IN_PROGRESS: 'rgba(0, 113, 227, 0.68)',
+  OVERDUE: 'rgba(255, 59, 48, 0.68)',
+  NOT_STARTED: 'rgba(142, 142, 147, 0.62)',
 }
 
 const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토']
@@ -236,7 +236,7 @@ export function CalendarGrid({
                         borderLeft: bar.isStart ? 'none' : 'none',
                         marginLeft: bar.isStart ? '2px' : '0',
                         marginRight: bar.isEnd ? '2px' : '0',
-                        opacity: 0.85,
+                        opacity: 1,
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 6px',
