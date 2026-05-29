@@ -193,7 +193,7 @@ function TodoList({
               height: "16px",
               borderRadius: "50%",
               border: todo.status === "DONE" ? "none" : "1.5px solid var(--separator-opaque)",
-              background: todo.status === "DONE" ? "var(--color-green)" : "transparent",
+              background: todo.status === "DONE" ? "var(--check-green)" : "transparent",
               flexShrink: 0,
               marginTop: "1px",
               cursor: "pointer",

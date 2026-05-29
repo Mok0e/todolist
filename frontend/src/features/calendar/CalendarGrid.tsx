@@ -17,10 +17,10 @@ import {
 import type { Todo, TodoStatus } from '@/types'
 
 const STATUS_COLOR: Record<TodoStatus, string> = {
-  DONE: 'rgba(52, 199, 89, 0.72)',
-  IN_PROGRESS: 'rgba(0, 113, 227, 0.68)',
-  OVERDUE: 'rgba(255, 59, 48, 0.68)',
-  NOT_STARTED: 'rgba(142, 142, 147, 0.62)',
+  DONE: 'var(--bar-green)',
+  IN_PROGRESS: 'var(--bar-blue)',
+  OVERDUE: 'var(--bar-red)',
+  NOT_STARTED: 'var(--bar-gray)',
 }
 
 const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토']
