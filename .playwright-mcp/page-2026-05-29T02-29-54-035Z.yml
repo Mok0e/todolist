@@ -1,0 +1,111 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]: TodoList
+    - link "할 일" [ref=e6] [cursor=pointer]:
+      - /url: /todos
+      - generic [ref=e7]:
+        - img [ref=e8]
+        - text: 할 일
+    - link "캘린더" [ref=e11] [cursor=pointer]:
+      - /url: /calendar
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - text: 캘린더
+    - link "카테고리" [ref=e15] [cursor=pointer]:
+      - /url: /categories
+      - generic [ref=e16]:
+        - img [ref=e17]
+        - text: 카테고리
+    - link "설정" [ref=e20] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e21]:
+        - img [ref=e22]
+        - text: 설정
+    - link "프로필" [ref=e27] [cursor=pointer]:
+      - /url: /profile
+      - generic [ref=e28]:
+        - img [ref=e29]
+        - text: 프로필
+    - button "로그아웃" [ref=e32] [cursor=pointer]
+  - main [ref=e33]:
+    - generic [ref=e34]:
+      - generic [ref=e35]:
+        - heading "할 일" [level=1] [ref=e36]
+        - button "+ 할 일 추가" [ref=e37] [cursor=pointer]:
+          - img [ref=e38]
+          - text: + 할 일 추가
+      - generic [ref=e39]:
+        - group [ref=e40]:
+          - button "전체" [pressed] [ref=e41] [cursor=pointer]
+          - button "시작전" [ref=e42] [cursor=pointer]
+          - button "진행중" [ref=e43] [cursor=pointer]
+          - button "기한초과" [ref=e44] [cursor=pointer]
+          - button "완료" [ref=e45] [cursor=pointer]
+        - combobox [ref=e46] [cursor=pointer]:
+          - option "전체 카테고리" [selected]
+          - option "기본"
+          - option "강의"
+      - generic [ref=e47]:
+        - generic [ref=e103]:
+          - button "완료로 표시" [ref=e104] [cursor=pointer]
+          - generic [ref=e105]:
+            - paragraph [ref=e106]: E2E 테스트 완료하기
+            - generic [ref=e107]:
+              - generic [ref=e108]: 기본
+              - generic [ref=e109]: ·
+              - generic [ref=e110]: 시작전
+              - generic [ref=e111]: ·
+              - generic [ref=e112]: 2026-06-01
+          - generic [ref=e113]:
+            - button "수정" [active] [ref=e114] [cursor=pointer]:
+              - img [ref=e115]
+            - button "삭제" [ref=e118] [cursor=pointer]:
+              - img [ref=e119]
+        - generic [ref=e52]:
+          - button "완료로 표시" [ref=e53] [cursor=pointer]
+          - generic [ref=e54]:
+            - paragraph [ref=e55]: 밥 먹기
+            - generic [ref=e56]:
+              - generic [ref=e57]: 기본
+              - generic [ref=e58]: ·
+              - generic [ref=e59]: 진행중
+              - generic [ref=e60]: ·
+              - generic [ref=e61]: 2026-05-29
+          - generic [ref=e62]:
+            - button "수정" [ref=e63] [cursor=pointer]:
+              - img [ref=e64]
+            - button "삭제" [ref=e67] [cursor=pointer]:
+              - img [ref=e68]
+      - dialog [ref=e123]:
+        - generic [ref=e124]:
+          - heading "할 일 수정" [level=2] [ref=e125]
+          - button "닫기" [ref=e126] [cursor=pointer]:
+            - img [ref=e127]
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]: 제목
+            - textbox "제목" [ref=e133]:
+              - /placeholder: 제목을 입력해주세요.
+              - text: E2E 테스트 완료하기
+            - generic [ref=e135]: 12/100
+          - generic [ref=e136]:
+            - generic [ref=e137]: 설명 (선택)
+            - textbox "설명 (선택)" [ref=e138]:
+              - /placeholder: 설명을 입력해주세요.
+              - text: Playwright를 이용한 E2E 테스트 시나리오 수행 중
+            - generic [ref=e140]: 33/1000
+          - generic [ref=e141]:
+            - generic [ref=e142]: 카테고리
+            - combobox "카테고리" [ref=e143] [cursor=pointer]:
+              - option "기본"
+              - option "강의"
+          - generic [ref=e144]:
+            - generic [ref=e145]:
+              - generic [ref=e146]: 시작일
+              - textbox "시작일" [ref=e147]
+            - generic [ref=e148]:
+              - generic [ref=e149]: 종료일
+              - textbox "종료일" [ref=e150]: 2026-06-01
+          - generic [ref=e151]:
+            - button "취소" [ref=e152] [cursor=pointer]
+            - button "저장" [ref=e153] [cursor=pointer]

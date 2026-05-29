@@ -1,0 +1,97 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]: TodoList
+    - link "할 일" [ref=e6] [cursor=pointer]:
+      - /url: /todos
+      - generic [ref=e7]:
+        - img [ref=e8]
+        - text: 할 일
+    - link "캘린더" [ref=e11] [cursor=pointer]:
+      - /url: /calendar
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - text: 캘린더
+    - link "카테고리" [ref=e15] [cursor=pointer]:
+      - /url: /categories
+      - generic [ref=e16]:
+        - img [ref=e17]
+        - text: 카테고리
+    - link "설정" [ref=e20] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e21]:
+        - img [ref=e22]
+        - text: 설정
+    - link "프로필" [ref=e27] [cursor=pointer]:
+      - /url: /profile
+      - generic [ref=e28]:
+        - img [ref=e29]
+        - text: 프로필
+    - button "로그아웃" [ref=e32] [cursor=pointer]
+  - main [ref=e33]:
+    - generic [ref=e200]:
+      - generic [ref=e201]:
+        - heading "할 일" [level=1] [ref=e202]
+        - button "+ 할 일 추가" [ref=e203] [cursor=pointer]:
+          - img [ref=e204]
+          - text: + 할 일 추가
+      - generic [ref=e205]:
+        - group [ref=e206]:
+          - button "전체" [ref=e207] [cursor=pointer]
+          - button "시작전" [ref=e208] [cursor=pointer]
+          - button "진행중" [pressed] [ref=e209] [cursor=pointer]
+          - button "기한초과" [ref=e210] [cursor=pointer]
+          - button "완료" [ref=e211] [cursor=pointer]
+        - combobox [ref=e212] [cursor=pointer]:
+          - option "전체 카테고리" [selected]
+          - option "기본"
+          - option "강의"
+          - option "운동"
+      - generic [ref=e233]:
+        - button "완료로 표시" [ref=e234] [cursor=pointer]
+        - generic [ref=e235]:
+          - paragraph [ref=e236]: 밥 먹기
+          - generic [ref=e237]:
+            - generic [ref=e238]: 기본
+            - generic [ref=e239]: ·
+            - generic [ref=e240]: 진행중
+            - generic [ref=e241]: ·
+            - generic [ref=e242]: 2026-05-29
+        - generic [ref=e243]:
+          - button "수정" [ref=e244] [cursor=pointer]:
+            - img [ref=e245]
+          - button "삭제" [ref=e248] [cursor=pointer]:
+            - img [ref=e249]
+      - dialog [ref=e253]:
+        - generic [ref=e254]:
+          - heading "새 할 일" [level=2] [ref=e255]
+          - button "닫기" [ref=e256] [cursor=pointer]:
+            - img [ref=e257]
+        - generic [ref=e260]:
+          - generic [ref=e261]:
+            - generic [ref=e262]: 제목
+            - textbox "제목" [active] [ref=e263]:
+              - /placeholder: 제목을 입력해주세요.
+            - generic [ref=e264]:
+              - generic [ref=e265]: 필수 입력 항목입니다.
+              - generic [ref=e266]: 0/100
+          - generic [ref=e267]:
+            - generic [ref=e268]: 설명 (선택)
+            - textbox "설명 (선택)" [ref=e269]:
+              - /placeholder: 설명을 입력해주세요.
+            - generic [ref=e271]: 0/1000
+          - generic [ref=e272]:
+            - generic [ref=e273]: 카테고리
+            - combobox "카테고리" [ref=e274] [cursor=pointer]:
+              - option "기본" [selected]
+              - option "강의"
+              - option "운동"
+          - generic [ref=e275]:
+            - generic [ref=e276]:
+              - generic [ref=e277]: 시작일
+              - textbox "시작일" [ref=e278]
+            - generic [ref=e279]:
+              - generic [ref=e280]: 종료일
+              - textbox "종료일" [ref=e281]
+          - generic [ref=e282]:
+            - button "취소" [ref=e283] [cursor=pointer]
+            - button "저장" [ref=e284] [cursor=pointer]

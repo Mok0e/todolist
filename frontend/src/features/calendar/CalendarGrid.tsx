@@ -44,9 +44,18 @@ function CalendarCell({ day, dateStr, dayTodos, isToday, isSelected, onDateSelec
 
   const getBackground = () => {
     if (isSelected || isToday) return 'transparent'
-    if (hovered) return 'var(--bg-tertiary)'
     return 'transparent'
   }
+
+  const hoverStyle: React.CSSProperties = !isSelected && !isToday && hovered ? {
+    background: 'var(--bg-tertiary)',
+    borderRadius: '50%',
+    width: '32px',
+    height: '32px',
+    position: 'absolute',
+    top: '8px',
+    zIndex: 0,
+  } : {}
 
   return (
     <button
@@ -62,13 +71,17 @@ function CalendarCell({ day, dateStr, dayTodos, isToday, isSelected, onDateSelec
         alignItems: 'center',
         padding: '8px 4px',
         gap: '4px',
-        background: getBackground(),
+        background: 'transparent',
         border: 'none',
         cursor: 'pointer',
         minWidth: 'unset',
         transition: 'background 150ms ease',
+        position: 'relative',
       }}
     >
+      {/* Hover Background Layer */}
+      <div style={hoverStyle} />
+
       <div
         style={{
           width: '32px',
@@ -78,15 +91,19 @@ function CalendarCell({ day, dateStr, dayTodos, isToday, isSelected, onDateSelec
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: '15px',
-          fontWeight: isToday || isSelected ? 600 : 400,
+          zIndex: 1,
+          fontWeight: isToday || isSelected ? 600 : 500,
           color: isSelected
             ? '#ffffff'
             : isToday
             ? 'var(--color-blue)'
             : 'var(--text-primary)',
-          background: isSelected ? 'var(--color-blue)' : 'transparent',
-          border: isToday && !isSelected ? '2px solid var(--color-blue)' : 'none',
+          background: isSelected 
+            ? 'var(--color-blue)' 
+            : 'transparent',
+          border: isToday && !isSelected ? '1px solid var(--color-blue)' : 'none',
           boxSizing: 'border-box',
+          boxShadow: isSelected ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
         }}
       >
         {day}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { ListTodo, Tag, Settings, User, Calendar } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
+import { useTranslation } from 'react-i18next'
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768)
@@ -13,27 +14,28 @@ function useIsDesktop() {
   return isDesktop
 }
 
-const sidebarItems = [
-  { to: '/todos', icon: <ListTodo size={18} />, label: '할 일' },
-  { to: '/calendar', icon: <Calendar size={18} />, label: '캘린더' },
-  { to: '/categories', icon: <Tag size={18} />, label: '카테고리' },
-  { to: '/settings', icon: <Settings size={18} />, label: '설정' },
-]
-
-const tabItems = [
-  { to: '/todos', icon: <ListTodo size={22} />, label: '할 일' },
-  { to: '/calendar', icon: <Calendar size={22} />, label: '캘린더' },
-  { to: '/categories', icon: <Tag size={22} />, label: '카테고리' },
-  { to: '/settings', icon: <Settings size={22} />, label: '설정' },
-  { to: '/profile', icon: <User size={22} />, label: '프로필' },
-]
-
 export function AppLayout() {
   const isDesktop = useIsDesktop()
   const clearToken = useAuthStore((s) => s.clearToken)
   const navigate = useNavigate()
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [logoutHovered, setLogoutHovered] = useState(false)
+  const { t } = useTranslation()
+
+  const sidebarItems = [
+    { to: '/todos', icon: <ListTodo size={18} />, label: t('todos.title') },
+    { to: '/calendar', icon: <Calendar size={18} />, label: t('calendar.title') },
+    { to: '/categories', icon: <Tag size={18} />, label: t('categories.title') },
+    { to: '/settings', icon: <Settings size={18} />, label: t('settings.title') },
+  ]
+
+  const tabItems = [
+    { to: '/todos', icon: <ListTodo size={22} />, label: t('todos.title') },
+    { to: '/calendar', icon: <Calendar size={22} />, label: t('calendar.title') },
+    { to: '/categories', icon: <Tag size={22} />, label: t('categories.title') },
+    { to: '/settings', icon: <Settings size={22} />, label: t('settings.title') },
+    { to: '/profile', icon: <User size={22} />, label: t('profile.title') },
+  ]
 
   const handleLogout = () => {
     clearToken()
@@ -70,7 +72,7 @@ export function AppLayout() {
               marginBottom: '20px',
             }}
           >
-            TodoList
+            {t('common.appName')}
           </div>
 
           {sidebarItems.map(({ to, icon, label }) => (
@@ -87,21 +89,28 @@ export function AppLayout() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
-                    padding: '10px 12px',
-                    borderRadius: 'var(--radius-full)',
+                    padding: `var(--spacing-xs) var(--spacing-sm)`,
+                    borderRadius: 'var(--radius-md)',
                     background: isActive
-                      ? 'var(--fill-tinted)'
+                      ? 'var(--bg-tertiary)'
                       : hoveredItem === to
-                        ? 'var(--fill-secondary)'
+                        ? 'var(--separator)'
                         : 'transparent',
-                    color: isActive ? 'var(--color-blue)' : 'var(--text-secondary)',
+                    color: 'var(--text-primary)',
                     fontSize: '15px',
-                    fontWeight: isActive ? 600 : 400,
+                    fontWeight: isActive ? 600 : 500,
                     cursor: 'pointer',
-                    transition: 'background 150ms ease, color 150ms ease',
+                    transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
                   }}
                 >
-                  {icon}
+                  <div style={{ 
+                    color: 'var(--text-primary)', 
+                    opacity: isActive ? 1 : 0.6,
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}>
+                    {icon}
+                  </div>
                   {label}
                 </div>
               )}
@@ -120,23 +129,30 @@ export function AppLayout() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  padding: '10px 12px',
-                  borderRadius: 'var(--radius-full)',
+                  gap: 'var(--spacing-sm)',
+                  padding: `var(--spacing-xs) var(--spacing-sm)`,
+                  borderRadius: 'var(--radius-md)',
                   background: isActive
-                    ? 'var(--fill-tinted)'
+                    ? 'var(--bg-tertiary)'
                     : hoveredItem === '/profile'
-                      ? 'var(--fill-secondary)'
+                      ? 'var(--separator)'
                       : 'transparent',
-                  color: isActive ? 'var(--color-blue)' : 'var(--text-secondary)',
+                  color: 'var(--text-primary)',
                   fontSize: '15px',
-                  fontWeight: isActive ? 600 : 400,
+                  fontWeight: isActive ? 600 : 500,
                   cursor: 'pointer',
-                  transition: 'background 150ms ease, color 150ms ease',
+                  transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               >
-                <User size={18} />
-                프로필
+                <div style={{ 
+                  color: 'var(--text-primary)', 
+                  opacity: isActive ? 1 : 0.6,
+                  display: 'flex',
+                  alignItems: 'center'
+                }}>
+                  <User size={18} />
+                </div>
+                {t('profile.title')}
               </div>
             )}
           </NavLink>
@@ -148,11 +164,11 @@ export function AppLayout() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              padding: '10px 12px',
-              borderRadius: 'var(--radius-full)',
+              gap: 'var(--spacing-sm)',
+              padding: `var(--spacing-xs) var(--spacing-sm)`,
+              borderRadius: 'var(--radius-md)',
               background: 'transparent',
-              color: logoutHovered ? 'var(--color-red)' : 'var(--text-tertiary)',
+              color: logoutHovered ? 'var(--color-red)' : 'var(--text-secondary)',
               fontSize: '15px',
               fontWeight: 400,
               cursor: 'pointer',
@@ -161,9 +177,10 @@ export function AppLayout() {
               textAlign: 'left',
               minHeight: 'unset',
               minWidth: 'unset',
+              transition: 'background 150ms ease, color 150ms ease',
             }}
           >
-            로그아웃
+            {t('auth.logout')}
           </button>
         </nav>
 
@@ -212,9 +229,9 @@ export function AppLayout() {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: '2px',
-                  padding: '4px 0',
-                  color: isActive ? 'var(--color-blue)' : 'var(--color-gray)',
+                  gap: 'var(--spacing-xs)',
+                  padding: `var(--spacing-xs) 0`,
+                  color: isActive ? 'var(--text-tint)' : 'var(--text-secondary)',
                   fontSize: '10px',
                   fontWeight: isActive ? 600 : 400,
                   transition: 'color 150ms ease',

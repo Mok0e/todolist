@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { AppleCalendar } from './AppleCalendar'
 import type { Todo, Category } from '@/types'
 import { todosApi } from './api'
 import { queryKeys } from '@/lib/queryKeys'
@@ -36,6 +38,7 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<TodoFormValues>({
     resolver: zodResolver(todoSchema),
@@ -50,6 +53,7 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
 
   const titleValue = watch('title') ?? ''
   const descriptionValue = watch('description') ?? ''
+  const selectedCategoryId = watch('categoryId') ?? ''
 
   const { mutate, isPending } = useMutation({
     mutationFn: (values: TodoFormValues) => {
@@ -96,14 +100,16 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    padding: '10px 12px',
+    padding: '12px 14px',
     borderRadius: 'var(--radius-md)',
-    border: '1px solid var(--separator)',
+    border: '1px solid var(--separator-opaque)',
     background: 'var(--bg-secondary)',
     color: 'var(--text-primary)',
     fontSize: '17px',
     fontFamily: 'var(--font-text)',
     boxSizing: 'border-box',
+    outline: 'none',
+    transition: 'border-color 150ms ease, box-shadow 150ms ease',
   }
 
   const textareaStyle: React.CSSProperties = {
@@ -128,10 +134,78 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
     color: 'var(--color-red)',
   }
 
+  const categoryContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    gap: '8px',
+    overflowX: 'auto',
+    padding: '4px 0',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
+  }
+
+  const categoryPillStyle = (isActive: boolean): React.CSSProperties => ({
+    padding: '8px 16px',
+    borderRadius: 'var(--radius-full)',
+    fontSize: '14px',
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    border: '1.5px solid var(--separator)',
+    transition: 'all 200ms ease',
+    background: isActive ? 'var(--fill-tinted)' : 'var(--bg-secondary)',
+    color: isActive ? 'var(--color-blue)' : 'var(--text-secondary)',
+    borderColor: isActive ? 'var(--color-blue)' : 'var(--separator)',
+  })
+
   const dateRowStyle: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
     gap: 'var(--spacing-sm)',
+  }
+
+  const dateInputWrapperStyle = (isFocused: boolean): React.CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: '12px 14px',
+    borderRadius: 'var(--radius-md)',
+    border: isFocused ? '1.5px solid var(--color-blue)' : '1px solid var(--separator-opaque)',
+    background: 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
+    fontSize: '16px',
+    fontFamily: 'var(--font-mono)',
+    cursor: 'pointer',
+    position: 'relative',
+    transition: 'all 150ms ease',
+    boxShadow: isFocused ? '0 0 0 3px var(--fill-tinted)' : 'none',
+  })
+
+  const hiddenInputStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    opacity: 0,
+    cursor: 'pointer',
+    zIndex: 1,
+  }
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return 'YYYY / MM / DD'
+    return dateStr.replace(/-/g, ' / ')
+  }
+
+  const startDateValue = watch('startDate')
+  const endDateValue = watch('endDate')
+  const [openCalendar, setOpenCalendar] = React.useState<'startDate' | 'endDate' | null>(null)
+  const [anchorRect, setAnchorRect] = React.useState<DOMRect | null>(null)
+
+  const handleDateClick = (e: React.MouseEvent, field: 'startDate' | 'endDate') => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setAnchorRect(rect)
+    setOpenCalendar(openCalendar === field ? null : field)
   }
 
   const footerStyle: React.CSSProperties = {
@@ -173,37 +247,102 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
 
       {/* 카테고리 */}
       <div style={fieldStyle}>
-        <label htmlFor="todo-category" style={labelStyle}>카테고리</label>
-        <select id="todo-category" {...register('categoryId')} style={selectStyle}>
-          <option value="">기본</option>
+        <label style={labelStyle}>카테고리</label>
+        <div style={categoryContainerStyle}>
+          <button
+            type="button"
+            onClick={() => setValue('categoryId', '')}
+            style={categoryPillStyle(selectedCategoryId === '')}
+          >
+            기본
+          </button>
           {categories.filter((cat) => !cat.isDefault).map((cat) => (
-            <option key={cat.id} value={cat.id}>
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => setValue('categoryId', cat.id)}
+              style={categoryPillStyle(selectedCategoryId === cat.id)}
+            >
               {cat.name}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
       </div>
 
       {/* 날짜 */}
       <div style={dateRowStyle}>
         <div style={fieldStyle}>
-          <label htmlFor="todo-startDate" style={labelStyle}>시작일</label>
-          <input id="todo-startDate" {...register('startDate')} type="date" style={inputStyle} />
+          <label style={labelStyle}>시작일</label>
+          <div 
+            style={dateInputWrapperStyle(openCalendar === 'startDate')}
+            onClick={(e) => handleDateClick(e, 'startDate')}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CalendarIcon size={16} color="var(--text-tertiary)" />
+              <span style={{ color: startDateValue ? 'var(--text-primary)' : 'var(--text-tertiary)' }}>
+                {formatDate(startDateValue)}
+              </span>
+            </div>
+          </div>
+          {openCalendar === 'startDate' && (
+            <AppleCalendar 
+              selectedDate={startDateValue}
+              anchorRect={anchorRect}
+              onSelect={(date) => setValue('startDate', date)}
+              onClose={() => setOpenCalendar(null)}
+            />
+          )}
         </div>
         <div style={fieldStyle}>
-          <label htmlFor="todo-endDate" style={labelStyle}>종료일</label>
-          <input id="todo-endDate" {...register('endDate')} type="date" style={inputStyle} />
+          <label style={labelStyle}>종료일</label>
+          <div 
+            style={dateInputWrapperStyle(openCalendar === 'endDate')}
+            onClick={(e) => handleDateClick(e, 'endDate')}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CalendarIcon size={16} color="var(--text-tertiary)" />
+              <span style={{ color: endDateValue ? 'var(--text-primary)' : 'var(--text-tertiary)' }}>
+                {formatDate(endDateValue)}
+              </span>
+            </div>
+          </div>
+          {openCalendar === 'endDate' && (
+            <AppleCalendar 
+              selectedDate={endDateValue}
+              anchorRect={anchorRect}
+              onSelect={(date) => setValue('endDate', date)}
+              onClose={() => setOpenCalendar(null)}
+            />
+          )}
           {errors.endDate && <span style={errorStyle}>{errors.endDate.message}</span>}
         </div>
       </div>
 
       {/* 버튼 */}
       <div style={footerStyle}>
-        <Button type="button" variant="tint" onClick={onCancel}>
-          취소
-        </Button>
-        <Button type="submit" loading={isPending}>
+        <Button 
+          type="submit" 
+          loading={isPending}
+          style={{ 
+            height: '44px', 
+            background: 'var(--color-blue)', 
+            color: '#ffffff',
+            padding: '0 24px'
+          }}
+        >
           저장
+        </Button>
+        <Button 
+          type="button" 
+          variant="tint" 
+          onClick={onCancel}
+          style={{ 
+            height: '44px', 
+            color: 'var(--text-primary)',
+            padding: '0 16px'
+          }}
+        >
+          취소
         </Button>
       </div>
     </form>

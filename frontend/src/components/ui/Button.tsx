@@ -40,8 +40,8 @@ export function Button({
     variant === 'primary'
       ? {
           height: '50px',
-          background: 'var(--color-blue)',
-          color: '#ffffff',
+          background: 'var(--button-primary-background)',
+          color: 'var(--text-primary)',
           padding: '0 24px',
         }
       : variant === 'tint'
@@ -62,7 +62,7 @@ export function Button({
     if (isDisabled) return {}
     if (isPressed) return { transform: 'scale(0.97)', opacity: 0.9 }
     if (isHovered) {
-      if (variant === 'primary') return { transform: 'scale(1.01)', boxShadow: '0 4px 16px rgba(0, 113, 227, 0.35)' }
+      if (variant === 'primary') return { transform: 'scale(1.01)', boxShadow: 'var(--shadow-md)' }
       return { opacity: 0.8 }
     }
     return {}

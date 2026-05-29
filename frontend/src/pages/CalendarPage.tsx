@@ -10,6 +10,7 @@ import { Modal } from '@/components/ui/Modal'
 import { TodoForm } from '@/features/todos/TodoForm'
 import { queryKeys } from '@/lib/queryKeys'
 import type { Todo } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 768)
@@ -30,12 +31,15 @@ function getTodayStr(): string {
   return toISODate(now.getFullYear(), now.getMonth() + 1, now.getDate())
 }
 
-const MONTH_NAMES = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+
 
 export function CalendarPage() {
   const today = getTodayStr()
   const todayDate = new Date(today + 'T00:00:00')
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
+
+
 
   const [year, setYear] = useState(todayDate.getFullYear())
   const [month, setMonth] = useState(todayDate.getMonth() + 1)
@@ -87,7 +91,7 @@ export function CalendarPage() {
   }
 
   const handleDeleteTodo = (id: string) => {
-    if (window.confirm('이 할 일을 삭제하시겠습니까?')) {
+    if (window.confirm(t('todos.deleteConfirm'))) {
       deleteMutation.mutate(id)
     }
   }
@@ -151,19 +155,19 @@ export function CalendarPage() {
             margin: 0,
           }}
         >
-          캘린더
+          {t('calendar.title')}
         </h1>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             data-testid="prev-month-btn"
             onClick={handlePrevMonth}
-            aria-label="이전 달"
+            aria-label={t('calendar.prevMonth')}
             style={{
               background: 'transparent',
               border: 'none',
               cursor: 'pointer',
-              color: 'var(--color-blue)',
+              color: 'var(--text-primary)',
               padding: '8px',
               borderRadius: 'var(--radius-full)',
               display: 'flex',
@@ -186,18 +190,18 @@ export function CalendarPage() {
               textAlign: 'center',
             }}
           >
-            {year}년 {MONTH_NAMES[month - 1]}
+            {t('calendar.monthYear', { year, month: t(`calendar.month_${month}`) })}
           </span>
 
           <button
             data-testid="next-month-btn"
             onClick={handleNextMonth}
-            aria-label="다음 달"
+            aria-label={t('calendar.nextMonth')}
             style={{
               background: 'transparent',
               border: 'none',
               cursor: 'pointer',
-              color: 'var(--color-blue)',
+              color: 'var(--text-primary)',
               padding: '8px',
               borderRadius: 'var(--radius-full)',
               display: 'flex',
@@ -268,7 +272,7 @@ export function CalendarPage() {
       <Modal
         isOpen={showForm}
         onClose={handleFormCancel}
-        title="할 일 수정"
+        title={t('todos.editTodo')}
       >
         <TodoForm
           todo={editingTodo ?? undefined}

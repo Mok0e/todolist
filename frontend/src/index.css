@@ -1,7 +1,6 @@
 /* Apple Design Tokens */
 :root {
-  /* System Colors */
-  --color-blue: #0071e3;
+    --color-blue: #007AFF;
   --color-green: #28cd41;
   --color-red: #ff3b30;
   --color-orange: #ff9500;
@@ -14,13 +13,10 @@
   --color-gray5: #e5e5ea;
   --color-gray6: #f2f2f7;
 
-  /* Background */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f7;
-  --bg-tertiary: #f2f2f7;
-  --bg-grouped: #f2f2f7;
+    --bg-grouped: #f2f2f7;
   --bg-elevated: #ffffff;
   --bg-overlay: rgba(0, 0, 0, 0.4);
+  --button-primary-background: #ffffff;
 
   /* Text */
   --text-primary: #1d1d1f;
@@ -52,8 +48,8 @@
   --spacing-3xl: 64px;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
 
   /* Shadows */
@@ -76,8 +72,8 @@
 
   /* Aliases & Interactive */
   --font-text: var(--font-sans);
-  --fill-tinted: rgba(0, 113, 227, 0.10);
-  --fill-tinted-hover: rgba(0, 113, 227, 0.16);
+  --fill-tinted: rgba(0, 122, 255, 0.10);
+  --fill-tinted-hover: rgba(0, 122, 255, 0.16);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -88,6 +84,7 @@
     --bg-grouped: #1c1c1e;
     --bg-elevated: #1c1c1e;
     --bg-overlay: rgba(0, 0, 0, 0.6);
+    --button-primary-background: #3a3a3c;
 
     --text-primary: #f5f5f7;
     --text-secondary: #a1a1a6;
@@ -97,7 +94,7 @@
     --separator: rgba(255, 255, 255, 0.08);
     --separator-opaque: #38383a;
 
-    --color-blue: #0a84ff;
+    --color-blue: #0A84FF;
     --color-green: #30d158;
     --color-red: #ff453a;
     --color-orange: #ff9f0a;
@@ -113,8 +110,8 @@
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.25);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
-    --fill-tinted: rgba(10, 132, 255, 0.12);
-    --fill-tinted-hover: rgba(10, 132, 255, 0.18);
+    --fill-tinted: rgba(10, 132, 255, 0.15);
+    --fill-tinted-hover: rgba(10, 132, 255, 0.25);
   }
 }
 
@@ -126,13 +123,14 @@ html[data-theme='LIGHT'] {
   --bg-grouped: #f2f2f7;
   --bg-elevated: #ffffff;
   --bg-overlay: rgba(0, 0, 0, 0.4);
+  --button-primary-background: #ffffff;
   --text-primary: #1d1d1f;
   --text-secondary: #6e6e73;
   --text-tertiary: #86868b;
   --text-placeholder: #aeaeb2;
   --separator: rgba(0, 0, 0, 0.1);
   --separator-opaque: #c6c6c8;
-  --color-blue: #0071e3;
+  --color-blue: #007AFF;
   --color-green: #28cd41;
   --color-red: #ff3b30;
   --color-orange: #ff9500;
@@ -155,13 +153,14 @@ html[data-theme='DARK'] {
   --bg-grouped: #1c1c1e;
   --bg-elevated: #1c1c1e;
   --bg-overlay: rgba(0, 0, 0, 0.6);
+  --button-primary-background: #3a3a3c;
   --text-primary: #f5f5f7;
   --text-secondary: #a1a1a6;
   --text-tertiary: #6d6d72;
   --text-placeholder: #6d6d72;
   --separator: rgba(255, 255, 255, 0.08);
   --separator-opaque: #38383a;
-  --color-blue: #0a84ff;
+  --color-blue: #0A84FF;
   --color-green: #30d158;
   --color-red: #ff453a;
   --color-orange: #ff9f0a;
@@ -175,8 +174,8 @@ html[data-theme='DARK'] {
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
-  --fill-tinted: rgba(10, 132, 255, 0.12);
-  --fill-tinted-hover: rgba(10, 132, 255, 0.18);
+  --fill-tinted: rgba(10, 132, 255, 0.15);
+  --fill-tinted-hover: rgba(10, 132, 255, 0.25);
 }
 
 /* CSS Reset + Base */
@@ -223,6 +222,13 @@ button {
 :focus-visible {
   outline: 2px solid var(--color-blue);
   outline-offset: 2px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 3px var(--fill-tinted);
 }
 
 /* Animations */

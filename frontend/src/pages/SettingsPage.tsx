@@ -39,9 +39,15 @@ export function SettingsPage() {
         document.documentElement.setAttribute('data-theme', patch.theme)
       }
       if (patch.language != null) {
-        void i18n.changeLanguage(patch.language)
+        // Optimistically update the query cache, but don't change i18n language yet
+        // The language will be changed in onSuccess after successful API call
       }
       return { previousUser }
+    },
+    onSuccess: (_, variables) => {
+      if (variables.language != null) {
+        void i18n.changeLanguage(variables.language)
+      }
     },
     onError: (_, __, context) => {
       if (context?.previousUser != null) {
@@ -108,7 +114,7 @@ export function SettingsPage() {
       <h1 style={titleStyle}>{t('settings.title')}</h1>
 
       <div style={{ fontSize: '13px', color: 'var(--text-secondary)', padding: '0 4px', marginBottom: '6px' }}>
-        외관
+        {t('settings.appearance')}
       </div>
       <div style={sectionStyle}>
         <div style={rowStyle}>

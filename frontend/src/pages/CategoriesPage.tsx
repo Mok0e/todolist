@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, Folder } from 'lucide-react'
 import { categoriesApi } from '@/features/categories/api'
 import { queryKeys } from '@/lib/queryKeys'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { Button } from '@/components/ui/Button'
 import { CategoryInlineForm } from '@/features/categories/CategoryInlineForm'
 import type { ApiErrorData } from '@/lib/apiClient'
+import { useTranslation, type TFunction } from 'react-i18next'
 
 function isDuplicateError(error: unknown): boolean {
   if (error != null && typeof error === 'object' && 'code' in error) {
@@ -15,14 +16,14 @@ function isDuplicateError(error: unknown): boolean {
   return false
 }
 
-function getErrorMessage(error: unknown): string {
+function getErrorMessage(error: unknown, t: TFunction<'translation', undefined>) {
   if (isDuplicateError(error)) {
-    return '이미 존재하는 카테고리 이름입니다.'
+    return t('categories.errors.nameDuplicate')
   }
   if (error != null && typeof error === 'object' && 'message' in error) {
     return String((error as ApiErrorData).message)
   }
-  return '오류가 발생했습니다.'
+  return t('common.error')
 }
 
 export function CategoriesPage() {
@@ -32,6 +33,7 @@ export function CategoriesPage() {
   const [addError, setAddError] = useState<string | undefined>(undefined)
   const [editError, setEditError] = useState<string | undefined>(undefined)
   const [hoveredButton, setHoveredButton] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   const { data: categories = [], isLoading } = useQuery({
     queryKey: queryKeys.categories.list(),
@@ -46,7 +48,7 @@ export function CategoriesPage() {
       setAddError(undefined)
     },
     onError: (error: unknown) => {
-      setAddError(getErrorMessage(error))
+      setAddError(getErrorMessage(error, t))
     },
   })
 
@@ -58,7 +60,7 @@ export function CategoriesPage() {
       setEditError(undefined)
     },
     onError: (error: unknown) => {
-      setEditError(getErrorMessage(error))
+      setEditError(getErrorMessage(error, t))
     },
   })
 
@@ -95,7 +97,7 @@ export function CategoriesPage() {
   const handleDelete = (id: string, name: string) => {
     if (
       window.confirm(
-        `'${name}' 카테고리를 삭제하시겠습니까?\n이 카테고리의 할 일이 '기본' 카테고리로 이동됩니다.`,
+        t('categories.deleteConfirm', { categoryName: name }),
       )
     ) {
       removeMutation.mutate(id)
@@ -133,15 +135,15 @@ export function CategoriesPage() {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: '56px',
-    padding: '0 16px',
+    minHeight: '64px',
+    padding: `0 var(--spacing-md)`,
     borderTop: isFirst ? 'none' : '1px solid var(--separator)',
   })
 
   const itemNameStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: 'var(--spacing-sm)',
     flex: 1,
   }
 
@@ -158,24 +160,24 @@ export function CategoriesPage() {
   const actionGroupStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: '4px',
+    gap: 'var(--spacing-xs)',
   }
 
   return (
     <div style={pageStyle}>
       <div style={headerStyle}>
-        <h1 style={titleStyle}>카테고리 관리</h1>
+        <h1 style={titleStyle}>{t('categories.title')}</h1>
         <Button
           onClick={handleAddClick}
-          style={{ height: '40px', fontSize: '15px', padding: '0 16px' }}
+          style={{ padding: `0 var(--spacing-md)` }}
         >
-          <Plus size={16} style={{ marginRight: '6px' }} />
-          카테고리 추가
+          <Plus size={16} style={{ marginRight: 'var(--spacing-xs)' }} />
+          {t('categories.add')}
         </Button>
       </div>
 
       {isLoading ? (
-        <div data-testid="categories-skeleton" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div data-testid="categories-skeleton" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
           <Skeleton height="52px" borderRadius="var(--radius-lg)" />
           <Skeleton height="52px" borderRadius="var(--radius-lg)" />
           <Skeleton height="52px" borderRadius="var(--radius-lg)" />
@@ -207,10 +209,26 @@ export function CategoriesPage() {
                 style={itemStyle(isFirst)}
               >
                 <div style={itemNameStyle}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: category.isDefault ? 'var(--color-gray)' : 'var(--color-blue)', flexShrink: 0 }} />
-                  <span style={{ fontSize: '15px', color: 'var(--text-primary)' }}>{category.name}</span>
+                  <div style={{ 
+                    width: '32px', 
+                    height: '32px', 
+                    borderRadius: 'var(--radius-sm)', 
+                    background: category.isDefault ? 'var(--bg-tertiary)' : 'var(--fill-tinted)', 
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0 
+                  }}>
+                    <Folder 
+                      size={16} 
+                      color={category.isDefault ? 'var(--text-tertiary)' : 'var(--color-blue)'} 
+                      fill={category.isDefault ? 'var(--text-tertiary)' : 'var(--color-blue)'}
+                      style={{ opacity: 0.8 }}
+                    />
+                  </div>
+                  <span style={{ fontSize: '15px', color: 'var(--text-primary)', fontWeight: 500 }}>{category.name}</span>
                   {category.isDefault && (
-                    <span style={defaultBadgeStyle}>(기본값 · 삭제 불가)</span>
+                    <span style={defaultBadgeStyle}>{t('categories.defaultImmutable')}</span>
                   )}
                 </div>
                 <div style={actionGroupStyle}>
@@ -220,17 +238,21 @@ export function CategoriesPage() {
                     onMouseEnter={() => !category.isDefault && setHoveredButton(`edit-${category.id}`)}
                     onMouseLeave={() => setHoveredButton(null)}
                     style={{
-                      background: hoveredButton === `edit-${category.id}` ? 'var(--bg-secondary)' : 'none',
-                      borderRadius: hoveredButton === `edit-${category.id}` ? 'var(--radius-sm)' : undefined,
+                      background: 'transparent',
+                      borderRadius: 'var(--radius-sm)',
                       border: 'none',
                       cursor: category.isDefault ? 'default' : 'pointer',
-                      padding: '8px',
-                      color: 'var(--text-tint)',
+                      padding: 0,
+                      color: hoveredButton === `edit-${category.id}` ? 'var(--text-secondary)' : 'var(--text-tertiary)',
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '32px',
+                      height: '32px',
+                      transition: 'color 150ms ease',
                       ...(category.isDefault ? disabledButtonStyle : {}),
                     }}
-                    aria-label={`${category.name} 수정`}
+                    aria-label={t('categories.editButton', { categoryName: category.name })}
                   >
                     <Pencil size={16} />
                   </button>
@@ -240,17 +262,21 @@ export function CategoriesPage() {
                     onMouseEnter={() => !category.isDefault && setHoveredButton(`delete-${category.id}`)}
                     onMouseLeave={() => setHoveredButton(null)}
                     style={{
-                      background: hoveredButton === `delete-${category.id}` ? 'var(--bg-secondary)' : 'none',
-                      borderRadius: hoveredButton === `delete-${category.id}` ? 'var(--radius-sm)' : undefined,
+                      background: 'transparent',
+                      borderRadius: 'var(--radius-sm)',
                       border: 'none',
                       cursor: category.isDefault ? 'default' : 'pointer',
-                      padding: '8px',
-                      color: 'var(--color-red)',
+                      padding: 0,
+                      color: hoveredButton === `delete-${category.id}` ? 'var(--color-red)' : 'var(--text-tertiary)',
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '32px',
+                      height: '32px',
+                      transition: 'color 150ms ease',
                       ...(category.isDefault ? disabledButtonStyle : {}),
                     }}
-                    aria-label={`${category.name} 삭제`}
+                    aria-label={t('categories.deleteButton', { categoryName: category.name })}
                   >
                     <Trash2 size={16} />
                   </button>

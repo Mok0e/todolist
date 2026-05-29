@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Check, Pencil, Trash2 } from 'lucide-react'
 import type { Todo, TodoStatus } from '@/types'
 
 const STATUS_COLOR: Record<TodoStatus, string> = {
@@ -156,6 +157,8 @@ function TodoList({
   onToggleComplete: (todo: Todo) => void
   onDeleteTodo: (id: string) => void
 }) {
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null)
+
   if (todos.length === 0) {
     return (
       <div
@@ -179,77 +182,97 @@ function TodoList({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
       {todos.map((todo, idx) => (
         <div key={todo.id}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '12px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '0' }}>
             {/* 완료 토글 버튼 */}
             <button
               onClick={() => onToggleComplete(todo)}
               aria-label={todo.status === 'DONE' ? '완료 취소' : '완료'}
               style={{
-                width: '20px',
-                height: '20px',
+                width: '14px',
+                height: '14px',
                 borderRadius: '50%',
-                border: `2px solid ${STATUS_COLOR[todo.status]}`,
-                background: todo.status === 'DONE' ? STATUS_COLOR[todo.status] : 'transparent',
+                border: todo.status === 'DONE' ? 'none' : '1px solid var(--separator-opaque)',
+                background: todo.status === 'DONE' ? 'var(--color-green)' : 'transparent',
                 flexShrink: 0,
-                marginTop: '1px',
+                marginTop: '2px',
                 cursor: 'pointer',
                 padding: 0,
                 minHeight: 'unset',
                 minWidth: 'unset',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-            />
-            <div style={{ flex: 1 }}>
+            >
+              {todo.status === 'DONE' && <Check size={8} strokeWidth={1.5} color="white" />}
+            </button>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
                 <div
                   style={{
-                    fontSize: '15px',
+                    fontSize: '14px',
                     fontWeight: 500,
-                    color: 'var(--text-primary)',
+                    lineHeight: '18px',
+                    color: todo.status === 'DONE' ? 'var(--text-tertiary)' : 'var(--text-primary)',
                     textDecoration: todo.status === 'DONE' ? 'line-through' : 'none',
                     flex: 1,
+                    minWidth: 0,
+                    wordBreak: 'break-all',
                   }}
                 >
                   {todo.title}
                 </div>
-                <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
                   <button
                     onClick={() => onEditTodo(todo)}
+                    onMouseEnter={() => setHoveredButton(`edit-${todo.id}`)}
+                    onMouseLeave={() => setHoveredButton(null)}
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: 'var(--color-blue)',
-                      fontSize: '13px',
-                      fontWeight: 500,
+                      color: hoveredButton === `edit-${todo.id}` ? 'var(--text-secondary)' : 'var(--text-tertiary)',
                       cursor: 'pointer',
                       padding: '0',
-                      minHeight: 'unset',
-                      minWidth: 'unset',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '22px',
+                      height: '22px',
+                      borderRadius: 'var(--radius-sm)',
+                      transition: 'color 150ms ease',
                     }}
+                    aria-label="수정"
                   >
-                    수정
+                    <Pencil size={12} />
                   </button>
                   <button
                     onClick={() => onDeleteTodo(todo.id)}
+                    onMouseEnter={() => setHoveredButton(`delete-${todo.id}`)}
+                    onMouseLeave={() => setHoveredButton(null)}
                     style={{
                       background: 'transparent',
                       border: 'none',
-                      color: 'var(--color-red)',
-                      fontSize: '13px',
-                      fontWeight: 500,
+                      color: hoveredButton === `delete-${todo.id}` ? 'var(--color-red)' : 'var(--text-tertiary)',
                       cursor: 'pointer',
                       padding: '0',
-                      minHeight: 'unset',
-                      minWidth: 'unset',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '22px',
+                      height: '22px',
+                      borderRadius: 'var(--radius-sm)',
+                      transition: 'color 150ms ease',
                     }}
+                    aria-label="삭제"
                   >
-                    삭제
+                    <Trash2 size={12} />
                   </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0px' }}>
                 <span
                   style={{
-                    fontSize: '12px',
+                    fontSize: '11px',
                     color: STATUS_COLOR[todo.status],
                     fontWeight: 500,
                   }}
@@ -257,7 +280,7 @@ function TodoList({
                   {STATUS_LABEL[todo.status]}
                 </span>
                 {todo.category?.name && (
-                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
                     {todo.category.name}
                   </span>
                 )}
@@ -265,7 +288,7 @@ function TodoList({
             </div>
           </div>
           {idx < todos.length - 1 && (
-            <div style={{ height: '1px', background: 'var(--separator)', marginLeft: '32px' }} />
+            <div style={{ height: '1px', background: 'var(--separator)', marginLeft: '22px' }} />
           )}
         </div>
       ))}

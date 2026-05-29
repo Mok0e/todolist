@@ -38,23 +38,24 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
     boxShadow: isHovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '12px',
+    gap: 'var(--spacing-md)',
     transition: 'box-shadow 200ms ease',
     cursor: 'default',
   }
 
   const checkButtonStyle: React.CSSProperties = {
-    width: '20px',
-    height: '20px',
+    width: '22px',
+    height: '22px',
     borderRadius: '50%',
     marginTop: '2px',
     background: isDone ? 'var(--color-green)' : 'transparent',
-    border: isDone ? 'none' : '1.5px solid var(--color-gray3)',
+    border: isDone ? 'none' : '2px solid var(--separator-opaque)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
     flexShrink: 0,
+    transition: 'all 200ms ease',
   }
 
   const contentStyle: React.CSSProperties = {
@@ -114,7 +115,7 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
         aria-label={isDone ? '완료 취소' : '완료로 표시'}
         onClick={() => (isDone ? onIncomplete(todo.id) : onComplete(todo.id))}
       >
-        {isDone && <Check size={11} strokeWidth={3} color="white" />}
+        {isDone && <Check size={14} strokeWidth={3.5} color="white" />}
       </button>
 
       <div style={contentStyle}>

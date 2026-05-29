@@ -1,0 +1,60 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]: TodoList
+    - link "할 일" [ref=e6] [cursor=pointer]:
+      - /url: /todos
+      - generic [ref=e7]:
+        - img [ref=e8]
+        - text: 할 일
+    - link "캘린더" [ref=e11] [cursor=pointer]:
+      - /url: /calendar
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - text: 캘린더
+    - link "카테고리" [ref=e15] [cursor=pointer]:
+      - /url: /categories
+      - generic [ref=e16]:
+        - img [ref=e17]
+        - text: 카테고리
+    - link "설정" [ref=e20] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e21]:
+        - img [ref=e22]
+        - text: 설정
+    - link "프로필" [ref=e27] [cursor=pointer]:
+      - /url: /profile
+      - generic [ref=e28]:
+        - img [ref=e29]
+        - text: 프로필
+    - button "로그아웃" [ref=e32] [cursor=pointer]
+  - main [ref=e33]:
+    - generic [ref=e154]:
+      - generic [ref=e155]:
+        - heading "카테고리" [level=1] [ref=e156]
+        - button "카테고리 추가" [ref=e157] [cursor=pointer]:
+          - img [ref=e158]
+          - text: 카테고리 추가
+      - generic [ref=e159]:
+        - generic [ref=e160]:
+          - generic [ref=e161]:
+            - generic [ref=e163]: 기본
+            - generic [ref=e164]: (기본값 · 삭제 불가)
+          - generic [ref=e165]:
+            - button "'기본' 수정" [disabled]:
+              - img
+            - button "'기본' 삭제" [disabled]:
+              - img
+        - generic [ref=e166]:
+          - generic [ref=e169]: 강의
+          - generic [ref=e170]:
+            - button "'강의' 수정" [ref=e171] [cursor=pointer]:
+              - img [ref=e172]
+            - button "'강의' 삭제" [ref=e175] [cursor=pointer]:
+              - img [ref=e176]
+        - generic [ref=e187]:
+          - generic [ref=e190]: 운동
+          - generic [ref=e191]:
+            - button "'운동' 수정" [ref=e192] [cursor=pointer]:
+              - img [ref=e193]
+            - button "'운동' 삭제" [ref=e196] [cursor=pointer]:
+              - img [ref=e197]

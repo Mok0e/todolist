@@ -1,4 +1,7 @@
 {
+  "experimental": {
+    "skills": true
+  },
   "mcpServers": {
     "context7": {
       "command": "cmd",

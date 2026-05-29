@@ -87,7 +87,13 @@ export function CategoryInlineForm({
           variant="primary"
           loading={isLoading}
           disabled={isSaveDisabled}
-          style={{ height: '38px', fontSize: '15px', padding: '0 16px' }}
+          style={{ 
+            height: '38px', 
+            fontSize: '15px', 
+            padding: '0 16px',
+            background: 'var(--color-blue)',
+            color: '#ffffff'
+          }}
         >
           {isAddMode ? '추가' : '저장'}
         </Button>
@@ -96,7 +102,12 @@ export function CategoryInlineForm({
           variant="tint"
           onClick={onCancel}
           disabled={isLoading}
-          style={{ height: '38px', fontSize: '15px', padding: '0 16px' }}
+          style={{ 
+            height: '38px', 
+            fontSize: '15px', 
+            padding: '0 16px',
+            color: 'var(--text-primary)'
+          }}
         >
           취소
         </Button>

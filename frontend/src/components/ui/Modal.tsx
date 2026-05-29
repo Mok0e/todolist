@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { X } from 'lucide-react'
 
 export interface ModalProps {
@@ -9,6 +9,18 @@ export interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    if (isOpen) {
+      window.addEventListener('keydown', handleEsc)
+    }
+    return () => {
+      window.removeEventListener('keydown', handleEsc)
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   const overlayStyle: React.CSSProperties = {
@@ -29,7 +41,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
     borderRadius: 'var(--radius-xl)',
     padding: 'var(--spacing-xl)',
     width: '100%',
-    maxWidth: '480px',
+    maxWidth: '600px',
     maxHeight: '90vh',
     overflowY: 'auto',
     boxShadow: 'var(--shadow-xl)',

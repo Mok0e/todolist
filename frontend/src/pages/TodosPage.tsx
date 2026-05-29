@@ -12,20 +12,22 @@ import { Modal } from '@/components/ui/Modal'
 import { TodoCard } from '@/features/todos/TodoCard'
 import { TodoForm } from '@/features/todos/TodoForm'
 import { Button } from '@/components/ui/Button'
-
-const statusOptions = [
-  { value: '', label: '전체' },
-  { value: 'NOT_STARTED', label: '시작전' },
-  { value: 'IN_PROGRESS', label: '진행중' },
-  { value: 'OVERDUE', label: '기한초과' },
-  { value: 'DONE', label: '완료' },
-]
+import { useTranslation } from 'react-i18next'
 
 export function TodosPage() {
   const queryClient = useQueryClient()
   const [filters, setFilters] = useState<TodoFilters>({})
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const { t } = useTranslation()
+
+  const statusOptions = [
+    { value: '', label: t('todos.filterAll') },
+    { value: 'NOT_STARTED', label: t('todos.filterNotStarted') },
+    { value: 'IN_PROGRESS', label: t('todos.filterInProgress') },
+    { value: 'OVERDUE', label: t('todos.filterOverdue') },
+    { value: 'DONE', label: t('todos.filterDone') },
+  ]
 
   const { data: todos = [], isLoading } = useQuery({
     queryKey: queryKeys.todos.list(filters),
@@ -64,8 +66,7 @@ export function TodosPage() {
     }))
   }
 
-  const handleCategoryFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
+  const handleCategoryFilter = (value: string) => {
     setFilters((prev) => ({
       ...prev,
       categoryId: value === '' ? undefined : value,
@@ -123,20 +124,31 @@ export function TodosPage() {
   const filterRowStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    gap: 'var(--spacing-sm)',
+    gap: 'var(--spacing-md)',
   }
 
-  const selectStyle: React.CSSProperties = {
-    padding: '8px 12px',
-    borderRadius: 'var(--radius-md)',
-    border: '1px solid var(--separator)',
-    background: 'var(--bg-secondary)',
-    color: 'var(--text-primary)',
-    fontSize: '15px',
-    fontFamily: 'var(--font-text)',
-    cursor: 'pointer',
-    width: '160px',
+  const categoryFilterStyle: React.CSSProperties = {
+    display: 'flex',
+    gap: 'var(--spacing-sm)',
+    overflowX: 'auto',
+    paddingBottom: '4px',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
   }
+
+  const pillStyle = (isActive: boolean): React.CSSProperties => ({
+    padding: '6px 16px',
+    borderRadius: 'var(--radius-full)',
+    fontSize: '14px',
+    fontWeight: 500,
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    border: 'none',
+    transition: 'all 200ms var(--spring-default)',
+    background: isActive ? 'var(--fill-tinted)' : 'var(--bg-secondary)',
+    color: isActive ? 'var(--color-blue)' : 'var(--text-secondary)',
+    boxShadow: isActive ? '0 2px 8px rgba(10, 132, 255, 0.15)' : 'none',
+  })
 
   const listStyle: React.CSSProperties = {
     display: 'flex',
@@ -150,10 +162,10 @@ export function TodosPage() {
     <div style={pageStyle}>
       {/* 헤더 */}
       <div style={headerStyle}>
-        <h1 style={titleStyle}>할 일 목록</h1>
+        <h1 style={titleStyle}>{t('todos.title')}</h1>
         <Button onClick={handleAddClick}>
           <Plus size={18} style={{ marginRight: '6px' }} />
-          할 일 추가
+          {t('todos.add')}
         </Button>
       </div>
 
@@ -164,14 +176,23 @@ export function TodosPage() {
           value={currentStatus}
           onChange={handleStatusFilter}
         />
-        <select style={selectStyle} value={filters.categoryId ?? ''} onChange={handleCategoryFilter}>
-          <option value="">전체 카테고리</option>
+        <div style={categoryFilterStyle}>
+          <button
+            onClick={() => handleCategoryFilter('')}
+            style={pillStyle(filters.categoryId === undefined)}
+          >
+            {t('todos.filterAll')}
+          </button>
           {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
+            <button
+              key={cat.id}
+              onClick={() => handleCategoryFilter(cat.id)}
+              style={pillStyle(filters.categoryId === cat.id)}
+            >
               {cat.name}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
       </div>
 
       {/* 목록 */}
@@ -185,9 +206,8 @@ export function TodosPage() {
         ) : todos.length === 0 ? (
           <div data-testid="todos-empty">
             <EmptyState
-              title="등록된 할 일이 없습니다."
-              description="할 일을 추가해서 오늘의 목표를 관리해 보세요."
-              action={{ label: '+ 첫 번째 할 일 추가', onClick: handleAddClick }}
+              title={t('todos.empty')}
+              description={t('todos.emptyDescription')}
             />
           </div>
         ) : (
@@ -208,7 +228,7 @@ export function TodosPage() {
       <Modal
         isOpen={showForm}
         onClose={handleFormCancel}
-        title={editingTodo != null ? '할 일 수정' : '새 할 일'}
+        title={editingTodo != null ? t('todos.editTodo') : t('todos.newTodo')}
       >
         <TodoForm
           todo={editingTodo ?? undefined}

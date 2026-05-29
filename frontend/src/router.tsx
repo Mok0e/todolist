@@ -53,6 +53,7 @@ const router = createBrowserRouter([
           { path: '/categories', element: <CategoriesPage /> },
           { path: '/settings', element: <SettingsPage /> },
           { path: '/calendar', element: <CalendarPage /> },
+
           { path: '/profile', element: <ProfilePage /> },
         ],
       },

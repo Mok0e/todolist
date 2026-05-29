@@ -1,0 +1,37 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]: TodoList
+    - link "할 일" [ref=e6] [cursor=pointer]:
+      - /url: /todos
+      - generic [ref=e7]:
+        - img [ref=e8]
+        - text: 할 일
+    - link "카테고리" [ref=e11] [cursor=pointer]:
+      - /url: /categories
+      - generic [ref=e12]:
+        - img [ref=e13]
+        - text: 카테고리
+    - link "설정" [active] [ref=e16] [cursor=pointer]:
+      - /url: /settings
+      - generic [ref=e17]:
+        - img [ref=e18]
+        - text: 설정
+    - link "프로필" [ref=e22] [cursor=pointer]:
+      - /url: /profile
+      - generic [ref=e23]:
+        - img [ref=e24]
+        - text: 프로필
+    - button "로그아웃" [ref=e27] [cursor=pointer]
+  - main [ref=e28]:
+    - generic [ref=e65]:
+      - heading "설정" [level=1] [ref=e66]
+      - generic [ref=e68]:
+        - generic [ref=e69]:
+          - generic [ref=e70]: 테마
+          - generic [ref=e71]: 라이트 모드
+        - switch "테마" [ref=e72] [cursor=pointer]
+      - generic [ref=e74]:
+        - generic [ref=e75]: 언어
+        - group [ref=e76]:
+          - button "한국어" [pressed] [ref=e77] [cursor=pointer]
+          - button "English" [ref=e78] [cursor=pointer]
