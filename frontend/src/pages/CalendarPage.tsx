@@ -137,7 +137,7 @@ export function CalendarPage() {
   }
 
   return (
-    <div style={{ padding: '24px 20px', maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ padding: '24px 20px', maxWidth: '1100px', margin: '0 auto' }}>
       {/* Header */}
       <div
         style={{
@@ -230,7 +230,7 @@ export function CalendarPage() {
         <div
           style={{
             display: isDesktop ? 'grid' : 'block',
-            gridTemplateColumns: isDesktop ? '1fr 320px' : undefined,
+            gridTemplateColumns: isDesktop ? '1.2fr 320px' : undefined,
             gap: '16px',
           }}
         >
