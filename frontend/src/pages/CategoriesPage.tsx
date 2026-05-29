@@ -31,6 +31,7 @@ export function CategoriesPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [addError, setAddError] = useState<string | undefined>(undefined)
   const [editError, setEditError] = useState<string | undefined>(undefined)
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null)
 
   const { data: categories = [], isLoading } = useQuery({
     queryKey: queryKeys.categories.list(),
@@ -125,13 +126,14 @@ export function CategoriesPage() {
     background: 'var(--bg-tertiary)',
     borderRadius: 'var(--radius-lg)',
     overflow: 'hidden',
+    border: '1px solid var(--separator)',
   }
 
   const itemStyle = (isFirst: boolean): React.CSSProperties => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: '52px',
+    minHeight: '56px',
     padding: '0 16px',
     borderTop: isFirst ? 'none' : '1px solid var(--separator)',
   })
@@ -205,6 +207,7 @@ export function CategoriesPage() {
                 style={itemStyle(isFirst)}
               >
                 <div style={itemNameStyle}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: category.isDefault ? 'var(--color-gray)' : 'var(--color-blue)', flexShrink: 0 }} />
                   <span style={{ fontSize: '15px', color: 'var(--text-primary)' }}>{category.name}</span>
                   {category.isDefault && (
                     <span style={defaultBadgeStyle}>(기본값 · 삭제 불가)</span>
@@ -214,8 +217,11 @@ export function CategoriesPage() {
                   <button
                     onClick={() => handleEditClick(category.id)}
                     disabled={category.isDefault}
+                    onMouseEnter={() => !category.isDefault && setHoveredButton(`edit-${category.id}`)}
+                    onMouseLeave={() => setHoveredButton(null)}
                     style={{
-                      background: 'none',
+                      background: hoveredButton === `edit-${category.id}` ? 'var(--bg-secondary)' : 'none',
+                      borderRadius: hoveredButton === `edit-${category.id}` ? 'var(--radius-sm)' : undefined,
                       border: 'none',
                       cursor: category.isDefault ? 'default' : 'pointer',
                       padding: '8px',
@@ -231,8 +237,11 @@ export function CategoriesPage() {
                   <button
                     onClick={() => handleDelete(category.id, category.name)}
                     disabled={category.isDefault || removeMutation.isPending}
+                    onMouseEnter={() => !category.isDefault && setHoveredButton(`delete-${category.id}`)}
+                    onMouseLeave={() => setHoveredButton(null)}
                     style={{
-                      background: 'none',
+                      background: hoveredButton === `delete-${category.id}` ? 'var(--bg-secondary)' : 'none',
+                      borderRadius: hoveredButton === `delete-${category.id}` ? 'var(--radius-sm)' : undefined,
                       border: 'none',
                       cursor: category.isDefault ? 'default' : 'pointer',
                       padding: '8px',

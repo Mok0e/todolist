@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Check, Pencil, Trash2 } from 'lucide-react'
 import type { Todo } from '@/types'
 import { StatusBadge } from './StatusBadge'
@@ -13,6 +13,7 @@ export interface TodoCardProps {
 
 export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: TodoCardProps) {
   const isDone = todo.status === 'DONE'
+  const [isHovered, setIsHovered] = useState(false)
 
   const cardStyle: React.CSSProperties = {
     background: 'var(--bg-tertiary)',
@@ -21,6 +22,10 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
     display: 'flex',
     flexDirection: 'column',
     gap: 'var(--spacing-sm)',
+    transition: 'transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 200ms ease',
+    transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+    boxShadow: isHovered ? 'var(--shadow-md)' : 'none',
+    cursor: 'default',
   }
 
   const topRowStyle: React.CSSProperties = {
@@ -105,7 +110,7 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
   })()
 
   return (
-    <div style={cardStyle}>
+    <div style={cardStyle} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <div style={topRowStyle}>
         <button
           type="button"

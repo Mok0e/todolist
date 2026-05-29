@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'tint' | 'destructive'
@@ -16,6 +16,9 @@ export function Button({
   style,
   ...rest
 }: ButtonProps) {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+
   const isDisabled = loading || disabled
 
   const baseStyle: React.CSSProperties = {
@@ -28,7 +31,7 @@ export function Button({
     fontWeight: 600,
     fontSize: '17px',
     borderRadius: 'var(--radius-full)',
-    transition: 'opacity 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: 'opacity 200ms ease, transform 150ms ease, box-shadow 200ms ease',
     opacity: isDisabled ? 0.4 : 1,
     width: fullWidth ? '100%' : undefined,
   }
@@ -55,11 +58,25 @@ export function Button({
             padding: '0 16px',
           }
 
+  const getInteractionStyle = (): React.CSSProperties => {
+    if (isDisabled) return {}
+    if (isPressed) return { transform: 'scale(0.97)', opacity: 0.9 }
+    if (isHovered) {
+      if (variant === 'primary') return { transform: 'scale(1.01)', boxShadow: '0 4px 16px rgba(0, 113, 227, 0.35)' }
+      return { opacity: 0.8 }
+    }
+    return {}
+  }
+
   return (
     <button
       {...rest}
       disabled={isDisabled}
-      style={{ ...baseStyle, ...variantStyle, ...style }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setIsPressed(false) }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      style={{ ...baseStyle, ...variantStyle, ...getInteractionStyle(), ...style }}
     >
       {loading ? '로딩 중...' : children}
     </button>

@@ -32,6 +32,7 @@ export function AppLayout() {
   const isDesktop = useIsDesktop()
   const clearToken = useAuthStore((s) => s.clearToken)
   const navigate = useNavigate()
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
   const handleLogout = () => {
     clearToken()
@@ -44,7 +45,7 @@ export function AppLayout() {
         {/* Sidebar */}
         <nav
           style={{
-            width: '200px',
+            width: '220px',
             flexShrink: 0,
             borderRight: '1px solid var(--separator)',
             background: 'var(--bg-secondary)',
@@ -59,8 +60,10 @@ export function AppLayout() {
         >
           <div
             style={{
-              fontSize: '20px',
+              fontSize: '22px',
               fontWeight: 700,
+              fontFamily: 'var(--font-display)',
+              letterSpacing: '-0.3px',
               color: 'var(--text-primary)',
               padding: '0 12px',
               marginBottom: '20px',
@@ -77,13 +80,19 @@ export function AppLayout() {
             >
               {({ isActive }) => (
                 <div
+                  onMouseEnter={() => setHoveredItem(to)}
+                  onMouseLeave={() => setHoveredItem(null)}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '10px',
                     padding: '10px 12px',
                     borderRadius: 'var(--radius-full)',
-                    background: isActive ? 'rgba(0, 113, 227, 0.12)' : 'transparent',
+                    background: isActive
+                      ? 'var(--fill-tinted)'
+                      : hoveredItem === to
+                        ? 'var(--fill-secondary)'
+                        : 'transparent',
                     color: isActive ? 'var(--color-blue)' : 'var(--text-secondary)',
                     fontSize: '15px',
                     fontWeight: isActive ? 600 : 400,
@@ -100,16 +109,24 @@ export function AppLayout() {
 
           <div style={{ flex: 1 }} />
 
+          <div style={{ borderTop: '1px solid var(--separator)', marginBottom: '8px' }} />
+
           <NavLink to="/profile" style={{ textDecoration: 'none' }}>
             {({ isActive }) => (
               <div
+                onMouseEnter={() => setHoveredItem('/profile')}
+                onMouseLeave={() => setHoveredItem(null)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
                   padding: '10px 12px',
                   borderRadius: 'var(--radius-full)',
-                  background: isActive ? 'rgba(0, 113, 227, 0.12)' : 'transparent',
+                  background: isActive
+                    ? 'var(--fill-tinted)'
+                    : hoveredItem === '/profile'
+                      ? 'var(--fill-secondary)'
+                      : 'transparent',
                   color: isActive ? 'var(--color-blue)' : 'var(--text-secondary)',
                   fontSize: '15px',
                   fontWeight: isActive ? 600 : 400,
@@ -169,14 +186,15 @@ export function AppLayout() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: '60px',
+          height: 'calc(60px + env(safe-area-inset-bottom, 0px))',
+          paddingBottom: 'calc(4px + env(safe-area-inset-bottom, 0px))',
           background: 'var(--bg-secondary)',
           borderTop: '1px solid var(--separator)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-around',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
         }}
       >
         {tabItems.map(({ to, icon, label }) => (

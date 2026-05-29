@@ -11,17 +11,18 @@ export function AuthCard({ children, title }: AuthCardProps) {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'var(--bg-primary)',
+    background: 'var(--bg-grouped)',
     padding: 'var(--spacing-md)',
   }
 
   const cardStyle: React.CSSProperties = {
     width: '100%',
     maxWidth: '480px',
-    background: 'var(--bg-secondary)',
+    background: 'var(--bg-elevated)',
     borderRadius: 'var(--radius-xl)',
     padding: 'var(--spacing-xl)',
-    boxShadow: '0 4px 24px rgba(0, 0, 0, 0.08)',
+    boxShadow: 'var(--shadow-lg)',
+    border: '1px solid var(--separator)',
   }
 
   const titleStyle: React.CSSProperties = {

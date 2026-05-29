@@ -73,6 +73,11 @@
 
   /* Blur */
   --blur-nav: blur(20px) saturate(180%);
+
+  /* Aliases & Interactive */
+  --font-text: var(--font-sans);
+  --fill-tinted: rgba(0, 113, 227, 0.10);
+  --fill-tinted-hover: rgba(0, 113, 227, 0.16);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -108,6 +113,8 @@
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.25);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
+    --fill-tinted: rgba(10, 132, 255, 0.12);
+    --fill-tinted-hover: rgba(10, 132, 255, 0.18);
   }
 }
 
@@ -168,6 +175,8 @@ html[data-theme='DARK'] {
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --fill-tinted: rgba(10, 132, 255, 0.12);
+  --fill-tinted-hover: rgba(10, 132, 255, 0.18);
 }
 
 /* CSS Reset + Base */
@@ -214,4 +223,32 @@ button {
 :focus-visible {
   outline: 2px solid var(--color-blue);
   outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes overlay-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

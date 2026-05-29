@@ -14,13 +14,14 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
-    background: 'var(--overlay-dim)',
+    background: 'var(--bg-overlay)',
     backdropFilter: 'blur(4px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
     padding: 'var(--spacing-md)',
+    animation: 'overlay-appear 200ms ease',
   }
 
   const cardStyle: React.CSSProperties = {
@@ -31,6 +32,8 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
     maxWidth: '480px',
     maxHeight: '90vh',
     overflowY: 'auto',
+    boxShadow: 'var(--shadow-xl)',
+    animation: 'modal-appear 280ms var(--spring-default)',
   }
 
   const headerStyle: React.CSSProperties = {

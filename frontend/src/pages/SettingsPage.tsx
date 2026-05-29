@@ -76,6 +76,7 @@ export function SettingsPage() {
     borderRadius: 'var(--radius-lg)',
     overflow: 'hidden',
     marginBottom: '20px',
+    border: '1px solid var(--separator)',
   }
 
   const rowStyle: React.CSSProperties = {
@@ -106,6 +107,9 @@ export function SettingsPage() {
     <div style={pageStyle}>
       <h1 style={titleStyle}>{t('settings.title')}</h1>
 
+      <div style={{ fontSize: '13px', color: 'var(--text-secondary)', padding: '0 4px', marginBottom: '6px' }}>
+        외관
+      </div>
       <div style={sectionStyle}>
         <div style={rowStyle}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>

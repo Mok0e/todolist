@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { Todo, TodoStatus } from '@/types'
 
 const DOT_COLORS: Record<TodoStatus, string> = {
@@ -25,6 +25,101 @@ interface CalendarGridProps {
   selectedDate: string | null
   today: string
   onDateSelect: (dateStr: string) => void
+}
+
+interface CalendarCellProps {
+  day: number
+  dateStr: string
+  dayTodos: Todo[]
+  isToday: boolean
+  isSelected: boolean
+  onDateSelect: (dateStr: string) => void
+}
+
+function CalendarCell({ day, dateStr, dayTodos, isToday, isSelected, onDateSelect }: CalendarCellProps) {
+  const [hovered, setHovered] = useState(false)
+
+  const visibleDots = dayTodos.slice(0, 3)
+  const extraCount = dayTodos.length - 3
+
+  const getBackground = () => {
+    if (isSelected || isToday) return 'transparent'
+    if (hovered) return 'var(--bg-tertiary)'
+    return 'transparent'
+  }
+
+  return (
+    <button
+      key={dateStr}
+      data-testid={`calendar-cell-${dateStr}`}
+      onClick={() => onDateSelect(dateStr)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        minHeight: '64px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '8px 4px',
+        gap: '4px',
+        background: getBackground(),
+        border: 'none',
+        cursor: 'pointer',
+        minWidth: 'unset',
+        transition: 'background 150ms ease',
+      }}
+    >
+      <div
+        style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '15px',
+          fontWeight: isToday || isSelected ? 600 : 400,
+          color: isSelected
+            ? '#ffffff'
+            : isToday
+            ? 'var(--color-blue)'
+            : 'var(--text-primary)',
+          background: isSelected ? 'var(--color-blue)' : 'transparent',
+          border: isToday && !isSelected ? '2px solid var(--color-blue)' : 'none',
+          boxSizing: 'border-box',
+        }}
+      >
+        {day}
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{ display: 'flex', gap: '2px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+        {visibleDots.map((todo) => (
+          <div
+            key={todo.id}
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              background: DOT_COLORS[todo.status],
+              flexShrink: 0,
+            }}
+          />
+        ))}
+        {extraCount > 0 && (
+          <span
+            style={{
+              fontSize: '9px',
+              color: 'var(--text-secondary)',
+              lineHeight: 1,
+            }}
+          >
+            +{extraCount}
+          </span>
+        )}
+      </div>
+    </button>
+  )
 }
 
 export function CalendarGrid({
@@ -87,77 +182,17 @@ export function CalendarGrid({
           const dayTodos = getTodosForDate(todos, dateStr)
           const isToday = dateStr === today
           const isSelected = dateStr === selectedDate
-          const visibleDots = dayTodos.slice(0, 3)
-          const extraCount = dayTodos.length - 3
 
           return (
-            <button
+            <CalendarCell
               key={dateStr}
-              data-testid={`calendar-cell-${dateStr}`}
-              onClick={() => onDateSelect(dateStr)}
-              style={{
-                minHeight: '64px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '8px 4px',
-                gap: '4px',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                minWidth: 'unset',
-              }}
-            >
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '15px',
-                  fontWeight: isToday || isSelected ? 600 : 400,
-                  color: isSelected
-                    ? '#ffffff'
-                    : isToday
-                    ? 'var(--color-blue)'
-                    : 'var(--text-primary)',
-                  background: isSelected ? 'var(--color-blue)' : 'transparent',
-                  border: isToday && !isSelected ? '2px solid var(--color-blue)' : 'none',
-                  boxSizing: 'border-box',
-                }}
-              >
-                {day}
-              </div>
-
-              {/* Dot indicators */}
-              <div style={{ display: 'flex', gap: '2px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                {visibleDots.map((todo) => (
-                  <div
-                    key={todo.id}
-                    style={{
-                      width: '6px',
-                      height: '6px',
-                      borderRadius: '50%',
-                      background: DOT_COLORS[todo.status],
-                      flexShrink: 0,
-                    }}
-                  />
-                ))}
-                {extraCount > 0 && (
-                  <span
-                    style={{
-                      fontSize: '9px',
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1,
-                    }}
-                  >
-                    +{extraCount}
-                  </span>
-                )}
-              </div>
-            </button>
+              day={day}
+              dateStr={dateStr}
+              dayTodos={dayTodos}
+              isToday={isToday}
+              isSelected={isSelected}
+              onDateSelect={onDateSelect}
+            />
           )
         })}
       </div>
