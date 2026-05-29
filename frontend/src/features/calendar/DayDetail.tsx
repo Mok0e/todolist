@@ -22,10 +22,15 @@ const STATUS_LABEL: Record<TodoStatus, string> = {
   NOT_STARTED: '시작전',
 }
 
-function formatDateLabel(dateStr: string): string {
+const DAY_NAMES = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일']
+
+function parseDateLabel(dateStr: string) {
   const d = new Date(dateStr + 'T00:00:00')
-  const dayNames = ['일', '월', '화', '수', '목', '금', '토']
-  return `${d.getMonth() + 1}월 ${d.getDate()}일 (${dayNames[d.getDay()]})`
+  return {
+    month: d.getMonth() + 1,
+    day: d.getDate(),
+    dayName: DAY_NAMES[d.getDay()],
+  }
 }
 
 interface DayDetailProps {
@@ -50,9 +55,7 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onE
       })
     : []
 
-  const title = selectedDate
-    ? `${formatDateLabel(selectedDate)} — 할 일 ${dayTodos.length}개`
-    : ''
+  const dateLabel = selectedDate ? parseDateLabel(selectedDate) : null
 
   useEffect(() => {
     if (!isDesktop && isOpen) {
@@ -70,22 +73,13 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onE
       <div
         data-testid="day-detail-panel"
         style={{
-          background: 'var(--bg-secondary)',
+          background: 'var(--bg-grouped)',
           borderRadius: 'var(--radius-lg)',
           padding: '20px',
           minHeight: '200px',
         }}
       >
-        <div
-          style={{
-            fontSize: '17px',
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            marginBottom: '16px',
-          }}
-        >
-          {title}
-        </div>
+        <DayHeader dateLabel={dateLabel} count={dayTodos.length} />
         <TodoList todos={dayTodos} onEditTodo={onEditTodo} onToggleComplete={onToggleComplete} onDeleteTodo={onDeleteTodo} />
       </div>
     )
@@ -113,7 +107,7 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onE
           bottom: 0,
           left: 0,
           right: 0,
-          background: 'var(--bg-secondary)',
+          background: 'var(--bg-grouped)',
           borderRadius: 'var(--radius-xl) var(--radius-xl) 0 0',
           zIndex: 50,
           paddingBottom: '60px',
@@ -141,16 +135,7 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onE
         </div>
 
         <div style={{ padding: '12px 20px 20px' }}>
-          <div
-            style={{
-              fontSize: '17px',
-              fontWeight: 600,
-              color: 'var(--text-primary)',
-              marginBottom: '16px',
-            }}
-          >
-            {title}
-          </div>
+          <DayHeader dateLabel={dateLabel} count={dayTodos.length} />
           <TodoList todos={dayTodos} onEditTodo={onEditTodo} onToggleComplete={onToggleComplete} onDeleteTodo={onDeleteTodo} />
         </div>
       </div>
@@ -191,119 +176,168 @@ function TodoList({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-      {todos.map((todo, idx) => (
-        <div key={todo.id}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '10px 0' }}>
-            {/* 완료 토글 버튼 */}
-            <button
-              onClick={() => onToggleComplete(todo)}
-              aria-label={todo.status === 'DONE' ? '완료 취소' : '완료'}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      {todos.map((todo) => (
+        <div
+          key={todo.id}
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '10px',
+            padding: '12px 14px',
+            background: 'var(--bg-elevated)',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: 'var(--shadow-sm)',
+          }}
+        >
+          {/* 완료 토글 버튼 */}
+          <button
+            onClick={() => onToggleComplete(todo)}
+            aria-label={todo.status === 'DONE' ? '완료 취소' : '완료'}
+            style={{
+              width: '16px',
+              height: '16px',
+              borderRadius: '50%',
+              border: todo.status === 'DONE' ? 'none' : '1.5px solid var(--separator-opaque)',
+              background: todo.status === 'DONE' ? 'var(--color-green)' : 'transparent',
+              flexShrink: 0,
+              marginTop: '1px',
+              cursor: 'pointer',
+              padding: 0,
+              minHeight: 'unset',
+              minWidth: 'unset',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'background 150ms ease, border-color 150ms ease',
+            }}
+          >
+            {todo.status === 'DONE' && <Check size={9} strokeWidth={2} color="white" />}
+          </button>
+
+          {/* 제목 + 상태·카테고리 */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
               style={{
-                width: '14px',
-                height: '14px',
-                borderRadius: '50%',
-                border: todo.status === 'DONE' ? 'none' : '1px solid var(--separator-opaque)',
-                background: todo.status === 'DONE' ? 'var(--color-green)' : 'transparent',
-                flexShrink: 0,
-                marginTop: '2px',
+                fontSize: '14px',
+                fontWeight: 500,
+                lineHeight: '18px',
+                color: todo.status === 'DONE' ? 'var(--text-tertiary)' : 'var(--text-primary)',
+                textDecoration: todo.status === 'DONE' ? 'line-through' : 'none',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {todo.title}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '3px' }}>
+              <span style={{ fontSize: '11px', color: STATUS_COLOR[todo.status], fontWeight: 500 }}>
+                {STATUS_LABEL[todo.status]}
+              </span>
+              {todo.category?.name && (
+                <>
+                  <span style={{ fontSize: '10px', color: 'var(--text-quaternary)' }}>·</span>
+                  <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
+                    {todo.category.name}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* 수정·삭제 버튼 */}
+          <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
+            <button
+              onClick={() => onEditTodo(todo)}
+              onMouseEnter={() => setHoveredButton(`edit-${todo.id}`)}
+              onMouseLeave={() => setHoveredButton(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: hoveredButton === `edit-${todo.id}` ? 'var(--text-secondary)' : 'var(--text-quaternary)',
                 cursor: 'pointer',
-                padding: 0,
-                minHeight: 'unset',
-                minWidth: 'unset',
+                padding: '0',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                width: '24px',
+                height: '24px',
+                borderRadius: 'var(--radius-sm)',
+                transition: 'color 150ms ease',
               }}
+              aria-label="수정"
             >
-              {todo.status === 'DONE' && <Check size={8} strokeWidth={1.5} color="white" />}
+              <Pencil size={13} />
             </button>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
-                <div
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '18px',
-                    color: todo.status === 'DONE' ? 'var(--text-tertiary)' : 'var(--text-primary)',
-                    textDecoration: todo.status === 'DONE' ? 'line-through' : 'none',
-                    flex: 1,
-                    minWidth: 0,
-                    wordBreak: 'break-all',
-                  }}
-                >
-                  {todo.title}
-                </div>
-                <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
-                  <button
-                    onClick={() => onEditTodo(todo)}
-                    onMouseEnter={() => setHoveredButton(`edit-${todo.id}`)}
-                    onMouseLeave={() => setHoveredButton(null)}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: hoveredButton === `edit-${todo.id}` ? 'var(--text-secondary)' : 'var(--text-tertiary)',
-                      cursor: 'pointer',
-                      padding: '0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '22px',
-                      height: '22px',
-                      borderRadius: 'var(--radius-sm)',
-                      transition: 'color 150ms ease',
-                    }}
-                    aria-label="수정"
-                  >
-                    <Pencil size={12} />
-                  </button>
-                  <button
-                    onClick={() => onDeleteTodo(todo.id)}
-                    onMouseEnter={() => setHoveredButton(`delete-${todo.id}`)}
-                    onMouseLeave={() => setHoveredButton(null)}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: hoveredButton === `delete-${todo.id}` ? 'var(--color-red)' : 'var(--text-tertiary)',
-                      cursor: 'pointer',
-                      padding: '0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '22px',
-                      height: '22px',
-                      borderRadius: 'var(--radius-sm)',
-                      transition: 'color 150ms ease',
-                    }}
-                    aria-label="삭제"
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '0px' }}>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    color: STATUS_COLOR[todo.status],
-                    fontWeight: 500,
-                  }}
-                >
-                  {STATUS_LABEL[todo.status]}
-                </span>
-                {todo.category?.name && (
-                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                    {todo.category.name}
-                  </span>
-                )}
-              </div>
-            </div>
+            <button
+              onClick={() => onDeleteTodo(todo.id)}
+              onMouseEnter={() => setHoveredButton(`delete-${todo.id}`)}
+              onMouseLeave={() => setHoveredButton(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: hoveredButton === `delete-${todo.id}` ? 'var(--color-red)' : 'var(--text-quaternary)',
+                cursor: 'pointer',
+                padding: '0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '24px',
+                height: '24px',
+                borderRadius: 'var(--radius-sm)',
+                transition: 'color 150ms ease',
+              }}
+              aria-label="삭제"
+            >
+              <Trash2 size={13} />
+            </button>
           </div>
-          {idx < todos.length - 1 && (
-            <div style={{ height: '1px', background: 'var(--separator)', marginLeft: '22px' }} />
-          )}
         </div>
       ))}
+    </div>
+  )
+}
+
+function DayHeader({
+  dateLabel,
+  count,
+}: {
+  dateLabel: { month: number; day: number; dayName: string } | null
+  count: number
+}) {
+  if (!dateLabel) return null
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'baseline',
+        justifyContent: 'space-between',
+        marginBottom: '14px',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+        <span style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-primary)' }}>
+          {dateLabel.month}월 {dateLabel.day}일
+        </span>
+        <span style={{ fontSize: '13px', fontWeight: 400, color: 'var(--text-secondary)' }}>
+          {dateLabel.dayName}
+        </span>
+      </div>
+      {count > 0 && (
+        <span
+          style={{
+            fontSize: '12px',
+            fontWeight: 600,
+            color: 'var(--text-tertiary)',
+            background: 'var(--bg-tertiary)',
+            padding: '2px 9px',
+            borderRadius: 'var(--radius-full)',
+          }}
+        >
+          {count}
+        </span>
+      )}
     </div>
   )
 }
