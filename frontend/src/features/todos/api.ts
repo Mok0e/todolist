@@ -3,18 +3,18 @@ import type { Todo, TodoFilters } from '@/types'
 
 export interface CreateTodoRequest {
   title: string
-  description?: string
-  categoryId?: string
-  startDate?: string
-  endDate?: string
+  description?: string | undefined
+  categoryId?: string | undefined
+  startDate?: string | undefined
+  endDate?: string | undefined
 }
 
 export interface UpdateTodoRequest {
-  title?: string
-  description?: string | null
-  categoryId?: string
-  startDate?: string | null
-  endDate?: string | null
+  title?: string | undefined
+  description?: string | null | undefined
+  categoryId?: string | undefined
+  startDate?: string | null | undefined
+  endDate?: string | null | undefined
 }
 
 export const todosApi = {

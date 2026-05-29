@@ -3,7 +3,7 @@ import { Eye, EyeOff } from 'lucide-react'
 
 export interface FloatingLabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
-  error?: string
+  error?: string | undefined
   hint?: string
 }
 

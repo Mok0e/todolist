@@ -64,7 +64,7 @@ beforeEach(() => {
   mockedUseTranslation.mockReturnValue({
     t: (key: string) => translations[key] ?? key,
     i18n: { language: 'ko', changeLanguage: mockChangeLanguage },
-  } as ReturnType<typeof useTranslation>)
+  } as unknown as ReturnType<typeof useTranslation>)
 })
 
 describe('SettingsPage', () => {

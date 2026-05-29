@@ -7,7 +7,7 @@ import { queryKeys } from '@/lib/queryKeys'
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch'
 import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { Skeleton } from '@/components/ui/Skeleton'
-import type { Theme, Language, User } from '@/types'
+import type { Language, User } from '@/types'
 
 export function SettingsPage() {
   const queryClient = useQueryClient()

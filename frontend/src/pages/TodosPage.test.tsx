@@ -97,7 +97,7 @@ describe('TodosPage', () => {
       expect(screen.getByText('API 명세서 검토')).toBeInTheDocument()
     })
 
-    mockedTodosApi.list.mockResolvedValue([mockTodos[0]])
+    mockedTodosApi.list.mockResolvedValue([mockTodos[0]!])
     await user.click(screen.getByRole('button', { name: '진행중' }))
 
     await waitFor(() => {

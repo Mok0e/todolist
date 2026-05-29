@@ -7,7 +7,8 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { Button } from '@/components/ui/Button'
 import { CategoryInlineForm } from '@/features/categories/CategoryInlineForm'
 import type { ApiErrorData } from '@/lib/apiClient'
-import { useTranslation, type TFunction } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 
 function isDuplicateError(error: unknown): boolean {
   if (error != null && typeof error === 'object' && 'code' in error) {

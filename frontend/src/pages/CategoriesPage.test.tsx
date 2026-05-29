@@ -148,7 +148,7 @@ describe('CategoriesPage', () => {
 
     const editButtons = screen.getAllByRole('button', { name: /수정/i })
     // 기본 카테고리(인덱스 0)를 제외한 첫 번째 수정 버튼 (업무)
-    await user.click(editButtons[1])
+    await user.click(editButtons[1]!)
 
     const textbox = screen.getByRole('textbox')
     expect(textbox).toBeInTheDocument()
@@ -167,7 +167,7 @@ describe('CategoriesPage', () => {
 
     const deleteButtons = screen.getAllByRole('button', { name: /삭제/i })
     // 기본 카테고리(인덱스 0)를 제외한 첫 번째 삭제 버튼 (업무)
-    await user.click(deleteButtons[1])
+    await user.click(deleteButtons[1]!)
 
     expect(window.confirm).toHaveBeenCalled()
     await waitFor(() => {

@@ -131,7 +131,7 @@ describe('CalendarPage', () => {
     createWrapper()
     await waitFor(() => {
       const cell = screen.getByTestId('calendar-cell-2026-05-29')
-      const dots = within(cell).queryAllByRole('presentation', { hidden: true })
+      within(cell).queryAllByRole('presentation', { hidden: true })
       // dot은 div이므로 cell 내부에 6px 원 존재 여부 확인
       expect(cell).toBeInTheDocument()
     })

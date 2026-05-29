@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
-import type { Todo, TodoFilters } from '@/types'
+import type { Todo, TodoFilters, TodoStatus } from '@/types'
 import { todosApi } from '@/features/todos/api'
 import { categoriesApi } from '@/features/categories/api'
 import { queryKeys } from '@/lib/queryKeys'
@@ -60,17 +60,17 @@ export function TodosPage() {
   })
 
   const handleStatusFilter = (value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      status: value === '' ? undefined : (value as TodoFilters['status']),
-    }))
+    setFilters((prev) => {
+      const { status: _, ...rest } = prev
+      return value === '' ? rest : { ...rest, status: value as TodoStatus }
+    })
   }
 
   const handleCategoryFilter = (value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      categoryId: value === '' ? undefined : value,
-    }))
+    setFilters((prev) => {
+      const { categoryId: _, ...rest } = prev
+      return value === '' ? rest : { ...rest, categoryId: value }
+    })
   }
 
   const handleAddClick = () => {

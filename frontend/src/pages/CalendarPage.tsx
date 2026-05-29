@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { calendarApi } from '@/features/calendar/api'
@@ -84,7 +84,7 @@ export function CalendarPage() {
 
   const moveMutation = useMutation({
     mutationFn: ({ id, startDate, endDate }: { id: string; startDate: string | null; endDate: string }) =>
-      todosApi.update(id, { startDate: startDate ?? undefined, endDate }),
+      todosApi.update(id, { startDate: startDate ?? null, endDate }),
     onSettled: invalidateCalendar,
   })
 
@@ -275,6 +275,8 @@ export function CalendarPage() {
           onClose={() => setSheetOpen(false)}
           isDesktop={false}
           onEditTodo={handleEditTodo}
+          onToggleComplete={handleToggleComplete}
+          onDeleteTodo={handleDeleteTodo}
         />
       )}
 

@@ -24,7 +24,7 @@ const todoSchema = z.object({
 type TodoFormValues = z.infer<typeof todoSchema>
 
 export interface TodoFormProps {
-  todo?: Todo
+  todo?: Todo | undefined
   categories: Category[]
   onSuccess: () => void
   onCancel: () => void
@@ -118,11 +118,6 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
     resize: 'vertical',
   }
 
-  const selectStyle: React.CSSProperties = {
-    ...inputStyle,
-    cursor: 'pointer',
-  }
-
   const counterStyle: React.CSSProperties = {
     fontSize: '12px',
     color: 'var(--text-secondary)',
@@ -180,17 +175,6 @@ export function TodoForm({ todo, categories, onSuccess, onCancel }: TodoFormProp
     transition: 'all 150ms ease',
     boxShadow: isFocused ? '0 0 0 3px var(--fill-tinted)' : 'none',
   })
-
-  const hiddenInputStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    opacity: 0,
-    cursor: 'pointer',
-    zIndex: 1,
-  }
 
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return 'YYYY / MM / DD'

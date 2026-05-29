@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 interface CategoryInlineFormProps {
   initialValue?: string
   isLoading?: boolean
-  error?: string
+  error?: string | undefined
   onSave: (name: string) => void
   onCancel: () => void
 }

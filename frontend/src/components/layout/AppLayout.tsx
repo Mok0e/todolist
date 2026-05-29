@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { ListTodo, Tag, Settings, User, Calendar } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'

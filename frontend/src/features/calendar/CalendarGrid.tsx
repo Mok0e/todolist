@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   parseISO,
-  isWithinInterval,
   isSameDay,
   startOfDay,
   endOfDay,
@@ -24,10 +23,6 @@ const STATUS_COLOR: Record<TodoStatus, string> = {
 }
 
 const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토']
-
-function toDateStr(year: number, month: number, day: number): string {
-  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-}
 
 interface CalendarGridProps {
   year: number
@@ -63,7 +58,7 @@ export function CalendarGrid({
   // Group todos by rows (weeks) and assign vertical slots
   const weeks: Date[][] = []
   let currentWeek: Date[] = []
-  calendarDays.forEach((day, i) => {
+  calendarDays.forEach((day) => {
     currentWeek.push(day)
     if (currentWeek.length === 7) {
       weeks.push(currentWeek)
@@ -214,7 +209,7 @@ export function CalendarGrid({
                     onDragStart={(e) => {
                       e.dataTransfer.setData('todo-id', bar.todo.id)
                       e.dataTransfer.setData('todo-startDate', bar.todo.startDate ?? '')
-                      e.dataTransfer.setData('todo-endDate', bar.todo.endDate)
+                      e.dataTransfer.setData('todo-endDate', bar.todo.endDate ?? '')
                       e.dataTransfer.effectAllowed = 'move'
                     }}
                     style={{
@@ -269,8 +264,8 @@ export function CalendarGrid({
  * 특정 주(week) 동안 표시되어야 할 할 일 바(Bar) 정보들을 계산합니다.
  */
 function getWeekBars(todos: Todo[], week: Date[]) {
-  const weekStart = startOfDay(week[0])
-  const weekEnd = endOfDay(week[6])
+  const weekStart = startOfDay(week[0]!)
+  const weekEnd = endOfDay(week[6]!)
   
   const bars: { 
     todo: Todo; 
@@ -291,16 +286,18 @@ function getWeekBars(todos: Todo[], week: Date[]) {
            (isAfter(end, weekStart) || isSameDay(end, weekStart))
   }).sort((a, b) => {
     // 시작일이 빠른 순, 시작일이 같으면 기간이 긴 순
-    const aStart = a.startDate || a.endDate
-    const bStart = b.startDate || b.endDate
+    const aStart = a.startDate ?? a.endDate ?? ''
+    const bStart = b.startDate ?? b.endDate ?? ''
     if (aStart !== bStart) return aStart.localeCompare(bStart)
-    return (b.endDate.localeCompare(b.startDate || b.endDate)) - (a.endDate.localeCompare(a.startDate || a.endDate))
+    const aEnd = a.endDate ?? ''
+    const bEnd = b.endDate ?? ''
+    return bEnd.localeCompare(b.startDate ?? bEnd) - aEnd.localeCompare(a.startDate ?? aEnd)
   })
 
   // 2. 바 위치 계산
   visibleTodos.forEach(todo => {
-    const start = todo.startDate ? startOfDay(parseISO(todo.startDate)) : startOfDay(parseISO(todo.endDate))
-    const end = endOfDay(parseISO(todo.endDate))
+    const start = todo.startDate ? startOfDay(parseISO(todo.startDate)) : startOfDay(parseISO(todo.endDate!))
+    const end = endOfDay(parseISO(todo.endDate!))
     
     const actualStart = isBefore(start, weekStart) ? weekStart : start
     const actualEnd = isAfter(end, weekEnd) ? weekEnd : end

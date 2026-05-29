@@ -18,7 +18,7 @@ import { ko } from 'date-fns/locale'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface AppleCalendarProps {
-  selectedDate?: string
+  selectedDate?: string | undefined
   anchorRect: DOMRect | null
   onSelect: (date: string) => void
   onClose: () => void
