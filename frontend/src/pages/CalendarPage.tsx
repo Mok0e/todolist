@@ -82,6 +82,12 @@ export function CalendarPage() {
     onSettled: invalidateCalendar,
   })
 
+  const moveMutation = useMutation({
+    mutationFn: ({ id, startDate, endDate }: { id: string; startDate: string | null; endDate: string }) =>
+      todosApi.update(id, { startDate: startDate ?? undefined, endDate }),
+    onSettled: invalidateCalendar,
+  })
+
   const handleToggleComplete = (todo: Todo) => {
     if (todo.status === 'DONE') {
       incompleteMutation.mutate(todo.id)
@@ -241,6 +247,9 @@ export function CalendarPage() {
             selectedDate={selectedDate}
             today={today}
             onDateSelect={handleDateSelect}
+            onMoveTodo={(todoId, newStartDate, newEndDate) => {
+              moveMutation.mutate({ id: todoId, startDate: newStartDate, endDate: newEndDate })
+            }}
           />
 
           {isDesktop && (

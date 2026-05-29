@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { 
-  parseISO, 
-  isWithinInterval, 
-  isSameDay, 
-  startOfDay, 
+import {
+  parseISO,
+  isWithinInterval,
+  isSameDay,
+  startOfDay,
   endOfDay,
   eachDayOfInterval,
   format,
@@ -11,7 +11,8 @@ import {
   isAfter,
   addDays,
   startOfWeek,
-  endOfWeek
+  endOfWeek,
+  differenceInDays
 } from 'date-fns'
 import type { Todo, TodoStatus } from '@/types'
 
@@ -35,6 +36,7 @@ interface CalendarGridProps {
   selectedDate: string | null
   today: string
   onDateSelect: (dateStr: string) => void
+  onMoveTodo?: (todoId: string, newStartDate: string | null, newEndDate: string) => void
 }
 
 export function CalendarGrid({
@@ -44,6 +46,7 @@ export function CalendarGrid({
   selectedDate,
   today,
   onDateSelect,
+  onMoveTodo,
 }: CalendarGridProps) {
   const [hoveredDate, setHoveredDate] = useState<string | null>(null)
 
@@ -123,6 +126,22 @@ export function CalendarGrid({
                   onClick={() => onDateSelect(dateStr)}
                   onMouseEnter={() => setHoveredDate(dateStr)}
                   onMouseLeave={() => setHoveredDate(null)}
+                  onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move' }}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    const todoId = e.dataTransfer.getData('todo-id')
+                    const origStart = e.dataTransfer.getData('todo-startDate') || null
+                    const origEnd = e.dataTransfer.getData('todo-endDate')
+                    if (!todoId || !origEnd || !onMoveTodo) return
+                    const diffDays = origStart
+                      ? differenceInDays(parseISO(origEnd), parseISO(origStart))
+                      : 0
+                    const newEnd = dateStr
+                    const newStart = origStart
+                      ? format(addDays(parseISO(dateStr), -diffDays), 'yyyy-MM-dd')
+                      : null
+                    onMoveTodo(todoId, newStart, newEnd)
+                  }}
                   style={{
                     padding: '8px 4px',
                     display: 'flex',
@@ -191,13 +210,22 @@ export function CalendarGrid({
               return (
                 <div key={`${bar.todo.id}-${barIdx}`} style={{ height: '18px', position: 'relative' }}>
                   <div
+                    draggable={true}
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData('todo-id', bar.todo.id)
+                      e.dataTransfer.setData('todo-startDate', bar.todo.startDate ?? '')
+                      e.dataTransfer.setData('todo-endDate', bar.todo.endDate)
+                      e.dataTransfer.effectAllowed = 'move'
+                    }}
                     style={{
                       position: 'absolute',
                       left: `${(bar.startCol * 100) / 7}%`,
                       width: `${(bar.span * 100) / 7}%`,
                       height: '100%',
                       padding: '0 4px',
-                      boxSizing: 'border-box'
+                      boxSizing: 'border-box',
+                      cursor: 'grab',
+                      pointerEvents: 'auto'
                     }}
                   >
                     <div
@@ -216,7 +244,8 @@ export function CalendarGrid({
                         color: '#ffffff',
                         fontSize: '11px',
                         fontWeight: 600,
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis'
                       }}
                     >
                       {bar.isStart && bar.todo.title}
