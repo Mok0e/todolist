@@ -1,5 +1,8 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
+import { LoginPage } from '@/pages/LoginPage'
+import { RegisterPage } from '@/pages/RegisterPage'
+import { ProfilePage } from '@/pages/ProfilePage'
 
 function PrivateRoute() {
   const accessToken = useAuthStore((s) => s.accessToken)
@@ -15,8 +18,8 @@ const router = createBrowserRouter([
   {
     element: <PublicOnlyRoute />,
     children: [
-      { path: '/login', element: <div>Login</div> },
-      { path: '/register', element: <div>Register</div> },
+      { path: '/login', element: <LoginPage /> },
+      { path: '/register', element: <RegisterPage /> },
     ],
   },
   {
@@ -26,6 +29,7 @@ const router = createBrowserRouter([
       { path: '/categories', element: <div>Categories</div> },
       { path: '/settings', element: <div>Settings</div> },
       { path: '/calendar', element: <div>Calendar</div> },
+      { path: '/profile', element: <ProfilePage /> },
     ],
   },
   { path: '/', element: <Navigate to="/todos" replace /> },
