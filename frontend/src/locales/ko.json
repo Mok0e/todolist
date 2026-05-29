@@ -74,10 +74,10 @@
     "default": "기본",
     "deleteConfirm": "'{{categoryName}}' 카테고리를 삭제하시겠습니까?\n이 카테고리의 할 일이 '기본' 카테고리로 이동됩니다.",
     "defaultImmutable": "(기본값 · 삭제 불가)",
-    "editButton": "'{{categoryName}}' 수정",
-    "deleteButton": "'{{categoryName}}' 삭제",
+    "editButton": "{{categoryName}} 수정",
+    "deleteButton": "{{categoryName}} 삭제",
     "errors": {
-      "nameDuplicate": "이미 존재하는 카테고리 이름입니다",
+      "nameDuplicate": "이미 존재하는 카테고리 이름입니다.",
       "nameTooLong": "카테고리명은 30자 이하여야 합니다",
       "defaultImmutable": "기본 카테고리는 수정하거나 삭제할 수 없습니다"
     }

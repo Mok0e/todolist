@@ -194,7 +194,7 @@ function TodoList({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
       {todos.map((todo, idx) => (
         <div key={todo.id}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '0' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '10px 0' }}>
             {/* 완료 토글 버튼 */}
             <button
               onClick={() => onToggleComplete(todo)}

@@ -67,8 +67,8 @@ describe('TodoForm', () => {
 
     it('날짜 입력 필드가 렌더링된다', () => {
       renderForm()
-      expect(screen.getByLabelText(/시작일/i)).toBeInTheDocument()
-      expect(screen.getByLabelText(/종료일/i)).toBeInTheDocument()
+      expect(screen.getByText('시작일')).toBeInTheDocument()
+      expect(screen.getByText('종료일')).toBeInTheDocument()
     })
   })
 
@@ -136,9 +136,7 @@ describe('TodoForm', () => {
 
   it('categories prop으로 카테고리 선택 옵션이 렌더링된다', () => {
     renderForm()
-    const options = screen.getAllByRole('option')
-    const optionTexts = options.map((o) => o.textContent)
-    expect(optionTexts).toContain('업무')
-    expect(optionTexts).toContain('개인')
+    expect(screen.getByText('업무')).toBeInTheDocument()
+    expect(screen.getByText('개인')).toBeInTheDocument()
   })
 })

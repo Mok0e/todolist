@@ -119,6 +119,7 @@ export function CalendarGrid({
               return (
                 <div
                   key={dateStr}
+                  data-testid={`calendar-cell-${dateStr}`}
                   onClick={() => onDateSelect(dateStr)}
                   onMouseEnter={() => setHoveredDate(dateStr)}
                   onMouseLeave={() => setHoveredDate(null)}
