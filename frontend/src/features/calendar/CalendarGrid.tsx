@@ -108,7 +108,7 @@ export function CalendarGrid({
       {weeks.map((week, weekIdx) => (
         <div key={weekIdx} style={{ position: 'relative', borderBottom: weekIdx === weeks.length - 1 ? 'none' : '1px solid var(--separator)' }}>
           {/* 날짜 숫자 레이어 */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', minHeight: '100px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', minHeight: '120px' }}>
             {week.map((day) => {
               const dateStr = format(day, 'yyyy-MM-dd')
               const isToday = dateStr === today
@@ -176,13 +176,13 @@ export function CalendarGrid({
           {/* 할 일 바(Bar) 레이어 */}
           <div style={{ 
             position: 'absolute', 
-            top: '44px', 
+            top: '48px', 
             left: 0, 
             right: 0, 
             pointerEvents: 'none',
             display: 'flex',
             flexDirection: 'column',
-            gap: '2px'
+            gap: '4px'
           }}>
             {getWeekBars(todos, week).map((bar, barIdx) => {
               if (barIdx >= 3) return null // 최대 3개까지만 표시 (디자인상)
