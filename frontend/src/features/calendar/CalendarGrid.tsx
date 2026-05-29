@@ -1,7 +1,21 @@
 import React, { useState } from 'react'
+import { 
+  parseISO, 
+  isWithinInterval, 
+  isSameDay, 
+  startOfDay, 
+  endOfDay,
+  eachDayOfInterval,
+  format,
+  isBefore,
+  isAfter,
+  addDays,
+  startOfWeek,
+  endOfWeek
+} from 'date-fns'
 import type { Todo, TodoStatus } from '@/types'
 
-const DOT_COLORS: Record<TodoStatus, string> = {
+const STATUS_COLOR: Record<TodoStatus, string> = {
   DONE: 'var(--color-green)',
   IN_PROGRESS: 'var(--color-blue)',
   OVERDUE: 'var(--color-red)',
@@ -9,10 +23,6 @@ const DOT_COLORS: Record<TodoStatus, string> = {
 }
 
 const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토']
-
-function getTodosForDate(todos: Todo[], dateStr: string): Todo[] {
-  return todos.filter((t) => t.endDate === dateStr)
-}
 
 function toDateStr(year: number, month: number, day: number): string {
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -27,118 +37,6 @@ interface CalendarGridProps {
   onDateSelect: (dateStr: string) => void
 }
 
-interface CalendarCellProps {
-  day: number
-  dateStr: string
-  dayTodos: Todo[]
-  isToday: boolean
-  isSelected: boolean
-  onDateSelect: (dateStr: string) => void
-}
-
-function CalendarCell({ day, dateStr, dayTodos, isToday, isSelected, onDateSelect }: CalendarCellProps) {
-  const [hovered, setHovered] = useState(false)
-
-  const visibleDots = dayTodos.slice(0, 3)
-  const extraCount = dayTodos.length - 3
-
-  const getBackground = () => {
-    if (isSelected || isToday) return 'transparent'
-    return 'transparent'
-  }
-
-  const hoverStyle: React.CSSProperties = !isSelected && !isToday && hovered ? {
-    background: 'var(--bg-tertiary)',
-    borderRadius: '50%',
-    width: '32px',
-    height: '32px',
-    position: 'absolute',
-    top: '8px',
-    zIndex: 0,
-  } : {}
-
-  return (
-    <button
-      key={dateStr}
-      data-testid={`calendar-cell-${dateStr}`}
-      onClick={() => onDateSelect(dateStr)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        minHeight: '64px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '8px 4px',
-        gap: '4px',
-        background: 'transparent',
-        border: 'none',
-        cursor: 'pointer',
-        minWidth: 'unset',
-        transition: 'background 150ms ease',
-        position: 'relative',
-      }}
-    >
-      {/* Hover Background Layer */}
-      <div style={hoverStyle} />
-
-      <div
-        style={{
-          width: '32px',
-          height: '32px',
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '15px',
-          zIndex: 1,
-          fontWeight: isToday || isSelected ? 600 : 500,
-          color: isSelected
-            ? '#ffffff'
-            : isToday
-            ? 'var(--color-blue)'
-            : 'var(--text-primary)',
-          background: isSelected 
-            ? 'var(--color-blue)' 
-            : 'transparent',
-          border: isToday && !isSelected ? '1px solid var(--color-blue)' : 'none',
-          boxSizing: 'border-box',
-          boxShadow: isSelected ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',
-        }}
-      >
-        {day}
-      </div>
-
-      {/* Dot indicators */}
-      <div style={{ display: 'flex', gap: '2px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {visibleDots.map((todo) => (
-          <div
-            key={todo.id}
-            style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              background: DOT_COLORS[todo.status],
-              flexShrink: 0,
-            }}
-          />
-        ))}
-        {extraCount > 0 && (
-          <span
-            style={{
-              fontSize: '9px',
-              color: 'var(--text-secondary)',
-              lineHeight: 1,
-            }}
-          >
-            +{extraCount}
-          </span>
-        )}
-      </div>
-    </button>
-  )
-}
-
 export function CalendarGrid({
   year,
   month,
@@ -147,14 +45,28 @@ export function CalendarGrid({
   today,
   onDateSelect,
 }: CalendarGridProps) {
-  const firstDayOfWeek = new Date(year, month - 1, 1).getDay()
-  const daysInMonth = new Date(year, month, 0).getDate()
+  const [hoveredDate, setHoveredDate] = useState<string | null>(null)
 
-  const cells: (number | null)[] = [
-    ...Array<null>(firstDayOfWeek).fill(null),
-    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
-  ]
-  while (cells.length % 7 !== 0) cells.push(null)
+  const monthStart = new Date(year, month - 1, 1)
+  const monthEnd = new Date(year, month, 0)
+  const calendarStart = startOfWeek(monthStart)
+  const calendarEnd = endOfWeek(monthEnd)
+
+  const calendarDays = eachDayOfInterval({
+    start: calendarStart,
+    end: calendarEnd,
+  })
+
+  // Group todos by rows (weeks) and assign vertical slots
+  const weeks: Date[][] = []
+  let currentWeek: Date[] = []
+  calendarDays.forEach((day, i) => {
+    currentWeek.push(day)
+    if (currentWeek.length === 7) {
+      weeks.push(currentWeek)
+      currentWeek = []
+    }
+  })
 
   return (
     <div
@@ -164,6 +76,8 @@ export function CalendarGrid({
         overflow: 'hidden',
         border: '1px solid var(--separator)',
         boxShadow: 'var(--shadow-sm)',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       {/* 요일 헤더 */}
@@ -179,10 +93,10 @@ export function CalendarGrid({
             key={label}
             style={{
               textAlign: 'center',
-              padding: '8px 0',
-              fontSize: '12px',
+              padding: '12px 0',
+              fontSize: '13px',
               color: i === 0 ? 'var(--color-red)' : i === 6 ? 'var(--color-blue)' : 'var(--text-secondary)',
-              fontWeight: 500,
+              fontWeight: 600,
             }}
           >
             {label}
@@ -190,31 +104,186 @@ export function CalendarGrid({
         ))}
       </div>
 
-      {/* 날짜 셀 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
-        {cells.map((day, idx) => {
-          if (day === null) {
-            return <div key={`empty-${idx}`} style={{ minHeight: '64px' }} />
-          }
+      {/* 주 단위 렌더링 */}
+      {weeks.map((week, weekIdx) => (
+        <div key={weekIdx} style={{ position: 'relative', borderBottom: weekIdx === weeks.length - 1 ? 'none' : '1px solid var(--separator)' }}>
+          {/* 날짜 숫자 레이어 */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', minHeight: '100px' }}>
+            {week.map((day) => {
+              const dateStr = format(day, 'yyyy-MM-dd')
+              const isToday = dateStr === today
+              const isSelected = dateStr === selectedDate
+              const isCurrentMonth = day.getMonth() === month - 1
+              const hovered = hoveredDate === dateStr
 
-          const dateStr = toDateStr(year, month, day)
-          const dayTodos = getTodosForDate(todos, dateStr)
-          const isToday = dateStr === today
-          const isSelected = dateStr === selectedDate
+              return (
+                <div
+                  key={dateStr}
+                  onClick={() => onDateSelect(dateStr)}
+                  onMouseEnter={() => setHoveredDate(dateStr)}
+                  onMouseLeave={() => setHoveredDate(null)}
+                  style={{
+                    padding: '8px 4px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    position: 'relative',
+                  }}
+                >
+                  {/* Hover/Selection Background */}
+                  {!isSelected && !isToday && hovered && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '6px',
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: 'var(--bg-tertiary)',
+                      zIndex: 0
+                    }} />
+                  )}
 
-          return (
-            <CalendarCell
-              key={dateStr}
-              day={day}
-              dateStr={dateStr}
-              dayTodos={dayTodos}
-              isToday={isToday}
-              isSelected={isSelected}
-              onDateSelect={onDateSelect}
-            />
-          )
-        })}
-      </div>
+                  <div
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '15px',
+                      zIndex: 1,
+                      fontWeight: isToday || isSelected ? 600 : 500,
+                      color: isSelected
+                        ? '#ffffff'
+                        : isToday
+                        ? 'var(--color-blue)'
+                        : isCurrentMonth ? 'var(--text-primary)' : 'var(--text-placeholder)',
+                      background: isSelected ? 'var(--color-blue)' : 'transparent',
+                      border: isToday && !isSelected ? '1px solid var(--color-blue)' : 'none',
+                      boxSizing: 'border-box',
+                      transition: 'all 150ms ease',
+                    }}
+                  >
+                    {day.getDate()}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* 할 일 바(Bar) 레이어 */}
+          <div style={{ 
+            position: 'absolute', 
+            top: '44px', 
+            left: 0, 
+            right: 0, 
+            pointerEvents: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px'
+          }}>
+            {getWeekBars(todos, week).map((bar, barIdx) => {
+              if (barIdx >= 3) return null // 최대 3개까지만 표시 (디자인상)
+              
+              return (
+                <div key={`${bar.todo.id}-${barIdx}`} style={{ height: '18px', position: 'relative' }}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: `${(bar.startCol * 100) / 7}%`,
+                      width: `${(bar.span * 100) / 7}%`,
+                      height: '100%',
+                      padding: '0 4px',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: STATUS_COLOR[bar.todo.status],
+                        height: '100%',
+                        borderRadius: bar.isStart ? '4px 0 0 4px' : bar.isEnd ? '0 4px 4px 0' : '0',
+                        borderLeft: bar.isStart ? 'none' : 'none',
+                        marginLeft: bar.isStart ? '2px' : '0',
+                        marginRight: bar.isEnd ? '2px' : '0',
+                        opacity: 0.85,
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '0 6px',
+                        overflow: 'hidden',
+                        color: '#ffffff',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {bar.isStart && bar.todo.title}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   )
+}
+
+/**
+ * 특정 주(week) 동안 표시되어야 할 할 일 바(Bar) 정보들을 계산합니다.
+ */
+function getWeekBars(todos: Todo[], week: Date[]) {
+  const weekStart = startOfDay(week[0])
+  const weekEnd = endOfDay(week[6])
+  
+  const bars: { 
+    todo: Todo; 
+    startCol: number; 
+    span: number; 
+    isStart: boolean; 
+    isEnd: boolean;
+  }[] = []
+
+  // 1. 해당 주에 걸쳐 있는 할 일 필터링 및 정렬
+  const visibleTodos = todos.filter(todo => {
+    const start = todo.startDate ? startOfDay(parseISO(todo.startDate)) : (todo.endDate ? startOfDay(parseISO(todo.endDate)) : null)
+    const end = todo.endDate ? endOfDay(parseISO(todo.endDate)) : null
+    
+    if (!start || !end) return false
+    
+    return (isBefore(start, weekEnd) || isSameDay(start, weekEnd)) && 
+           (isAfter(end, weekStart) || isSameDay(end, weekStart))
+  }).sort((a, b) => {
+    // 시작일이 빠른 순, 시작일이 같으면 기간이 긴 순
+    const aStart = a.startDate || a.endDate
+    const bStart = b.startDate || b.endDate
+    if (aStart !== bStart) return aStart.localeCompare(bStart)
+    return (b.endDate.localeCompare(b.startDate || b.endDate)) - (a.endDate.localeCompare(a.startDate || a.endDate))
+  })
+
+  // 2. 바 위치 계산
+  visibleTodos.forEach(todo => {
+    const start = todo.startDate ? startOfDay(parseISO(todo.startDate)) : startOfDay(parseISO(todo.endDate))
+    const end = endOfDay(parseISO(todo.endDate))
+    
+    const actualStart = isBefore(start, weekStart) ? weekStart : start
+    const actualEnd = isAfter(end, weekEnd) ? weekEnd : end
+    
+    const startCol = week.findIndex(day => isSameDay(day, actualStart))
+    const endCol = week.findIndex(day => isSameDay(day, actualEnd))
+    
+    if (startCol !== -1 && endCol !== -1) {
+      bars.push({
+        todo,
+        startCol,
+        span: endCol - startCol + 1,
+        isStart: isSameDay(start, actualStart),
+        isEnd: isSameDay(end, actualEnd)
+      })
+    }
+  })
+
+  return bars
 }
