@@ -165,7 +165,7 @@ export function AppLayout() {
         </nav>
 
         {/* Main content */}
-        <main style={{ flex: 1, overflowY: 'auto' }}>
+        <main style={{ flex: 1, overflowY: 'auto', background: 'var(--bg-grouped)' }}>
           <Outlet />
         </main>
       </div>
@@ -175,7 +175,7 @@ export function AppLayout() {
   // Mobile layout
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
-      <main style={{ flex: 1, paddingBottom: '60px' }}>
+      <main style={{ flex: 1, paddingBottom: '60px', background: 'var(--bg-grouped)' }}>
         <Outlet />
       </main>
 

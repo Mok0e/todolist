@@ -123,7 +123,7 @@ export function CategoriesPage() {
   }
 
   const listContainerStyle: React.CSSProperties = {
-    background: 'var(--bg-tertiary)',
+    background: 'var(--bg-elevated)',
     borderRadius: 'var(--radius-lg)',
     overflow: 'hidden',
     border: '1px solid var(--separator)',

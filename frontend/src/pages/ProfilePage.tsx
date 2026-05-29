@@ -22,7 +22,6 @@ export function ProfilePage() {
 
   const pageStyle: React.CSSProperties = {
     minHeight: '100vh',
-    background: 'var(--bg-primary)',
     padding: 'var(--spacing-xl) var(--spacing-md)',
   }
 

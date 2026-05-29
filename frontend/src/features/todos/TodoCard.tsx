@@ -16,7 +16,7 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
   const [isHovered, setIsHovered] = useState(false)
 
   const cardStyle: React.CSSProperties = {
-    background: 'var(--bg-tertiary)',
+    background: 'var(--bg-elevated)',
     borderRadius: 'var(--radius-lg)',
     padding: 'var(--spacing-md)',
     display: 'flex',
@@ -24,7 +24,8 @@ export function TodoCard({ todo, onComplete, onIncomplete, onEdit, onDelete }: T
     gap: 'var(--spacing-sm)',
     transition: 'transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 200ms ease',
     transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-    boxShadow: isHovered ? 'var(--shadow-md)' : 'none',
+    boxShadow: isHovered ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+    border: '1px solid var(--separator)',
     cursor: 'default',
   }
 

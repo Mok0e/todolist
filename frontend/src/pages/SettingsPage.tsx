@@ -72,7 +72,7 @@ export function SettingsPage() {
   }
 
   const sectionStyle: React.CSSProperties = {
-    background: 'var(--bg-tertiary)',
+    background: 'var(--bg-elevated)',
     borderRadius: 'var(--radius-lg)',
     overflow: 'hidden',
     marginBottom: '20px',
