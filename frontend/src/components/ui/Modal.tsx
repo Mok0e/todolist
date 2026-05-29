@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 
 export interface ModalProps {
@@ -76,14 +76,20 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
     flexShrink: 0,
   }
 
+  const mouseDownTarget = useRef<EventTarget | null>(null)
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    mouseDownTarget.current = e.target
+  }
+
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && mouseDownTarget.current === e.currentTarget) {
       onClose()
     }
   }
 
   return (
-    <div style={overlayStyle} data-testid="modal-overlay" onClick={handleOverlayClick}>
+    <div style={overlayStyle} data-testid="modal-overlay" onMouseDown={handleMouseDown} onClick={handleOverlayClick}>
       <div style={cardStyle} role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
         <div style={headerStyle}>
           {title && <h2 style={titleStyle}>{title}</h2>}
