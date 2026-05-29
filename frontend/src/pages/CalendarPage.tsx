@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { calendarApi } from '@/features/calendar/api'
 import { categoriesApi } from '@/features/categories/api'
+import { todosApi } from '@/features/todos/api'
 import { CalendarGrid } from '@/features/calendar/CalendarGrid'
 import { DayDetail } from '@/features/calendar/DayDetail'
 import { Modal } from '@/components/ui/Modal'
@@ -56,6 +57,40 @@ export function CalendarPage() {
     queryKey: queryKeys.categories.list(),
     queryFn: () => categoriesApi.list(),
   })
+
+  const invalidateCalendar = () => {
+    void queryClient.invalidateQueries({ queryKey: queryKeys.calendar.month(year, month) })
+    void queryClient.invalidateQueries({ queryKey: queryKeys.todos.all })
+  }
+
+  const completeMutation = useMutation({
+    mutationFn: (id: string) => todosApi.complete(id),
+    onSettled: invalidateCalendar,
+  })
+
+  const incompleteMutation = useMutation({
+    mutationFn: (id: string) => todosApi.incomplete(id),
+    onSettled: invalidateCalendar,
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => todosApi.remove(id),
+    onSettled: invalidateCalendar,
+  })
+
+  const handleToggleComplete = (todo: Todo) => {
+    if (todo.status === 'DONE') {
+      incompleteMutation.mutate(todo.id)
+    } else {
+      completeMutation.mutate(todo.id)
+    }
+  }
+
+  const handleDeleteTodo = (id: string) => {
+    if (window.confirm('이 할 일을 삭제하시겠습니까?')) {
+      deleteMutation.mutate(id)
+    }
+  }
 
   const handlePrevMonth = () => {
     if (month === 1) {
@@ -212,6 +247,8 @@ export function CalendarPage() {
               onClose={() => setSheetOpen(false)}
               isDesktop={true}
               onEditTodo={handleEditTodo}
+              onToggleComplete={handleToggleComplete}
+              onDeleteTodo={handleDeleteTodo}
             />
           )}
         </div>

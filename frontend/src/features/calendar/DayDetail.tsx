@@ -28,9 +28,11 @@ interface DayDetailProps {
   onClose: () => void
   isDesktop: boolean
   onEditTodo: (todo: Todo) => void
+  onToggleComplete: (todo: Todo) => void
+  onDeleteTodo: (id: string) => void
 }
 
-export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onEditTodo }: DayDetailProps) {
+export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onEditTodo, onToggleComplete, onDeleteTodo }: DayDetailProps) {
   const dayTodos = selectedDate
     ? todos.filter((t) => t.endDate === selectedDate)
     : []
@@ -71,7 +73,7 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onE
         >
           {title}
         </div>
-        <TodoList todos={dayTodos} onEditTodo={onEditTodo} />
+        <TodoList todos={dayTodos} onEditTodo={onEditTodo} onToggleComplete={onToggleComplete} onDeleteTodo={onDeleteTodo} />
       </div>
     )
   }
@@ -136,14 +138,24 @@ export function DayDetail({ selectedDate, todos, isOpen, onClose, isDesktop, onE
           >
             {title}
           </div>
-          <TodoList todos={dayTodos} onEditTodo={onEditTodo} />
+          <TodoList todos={dayTodos} onEditTodo={onEditTodo} onToggleComplete={onToggleComplete} onDeleteTodo={onDeleteTodo} />
         </div>
       </div>
     </>
   )
 }
 
-function TodoList({ todos, onEditTodo }: { todos: Todo[]; onEditTodo: (todo: Todo) => void }) {
+function TodoList({
+  todos,
+  onEditTodo,
+  onToggleComplete,
+  onDeleteTodo,
+}: {
+  todos: Todo[]
+  onEditTodo: (todo: Todo) => void
+  onToggleComplete: (todo: Todo) => void
+  onDeleteTodo: (id: string) => void
+}) {
   if (todos.length === 0) {
     return (
       <div
@@ -168,7 +180,10 @@ function TodoList({ todos, onEditTodo }: { todos: Todo[]; onEditTodo: (todo: Tod
       {todos.map((todo, idx) => (
         <div key={todo.id}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '12px 0' }}>
-            <div
+            {/* 완료 토글 버튼 */}
+            <button
+              onClick={() => onToggleComplete(todo)}
+              aria-label={todo.status === 'DONE' ? '완료 취소' : '완료'}
               style={{
                 width: '20px',
                 height: '20px',
@@ -177,6 +192,10 @@ function TodoList({ todos, onEditTodo }: { todos: Todo[]; onEditTodo: (todo: Tod
                 background: todo.status === 'DONE' ? STATUS_COLOR[todo.status] : 'transparent',
                 flexShrink: 0,
                 marginTop: '1px',
+                cursor: 'pointer',
+                padding: 0,
+                minHeight: 'unset',
+                minWidth: 'unset',
               }}
             />
             <div style={{ flex: 1 }}>
@@ -192,23 +211,40 @@ function TodoList({ todos, onEditTodo }: { todos: Todo[]; onEditTodo: (todo: Tod
                 >
                   {todo.title}
                 </div>
-                <button
-                  onClick={() => onEditTodo(todo)}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--color-blue)',
-                    fontSize: '13px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    padding: '0',
-                    minHeight: 'unset',
-                    minWidth: 'unset',
-                    flexShrink: 0,
-                  }}
-                >
-                  수정
-                </button>
+                <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                  <button
+                    onClick={() => onEditTodo(todo)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--color-blue)',
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      padding: '0',
+                      minHeight: 'unset',
+                      minWidth: 'unset',
+                    }}
+                  >
+                    수정
+                  </button>
+                  <button
+                    onClick={() => onDeleteTodo(todo.id)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--color-red)',
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      padding: '0',
+                      minHeight: 'unset',
+                      minWidth: 'unset',
+                    }}
+                  >
+                    삭제
+                  </button>
+                </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
                 <span
